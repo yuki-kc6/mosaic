@@ -25,14 +25,20 @@ void Player::Initialize()
 //更新
 void Player::Update()
 {
+    XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
+    XMVECTOR vMove = { 0,0,0.1f,0 };
+    XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+    float speed = 0.1;
 
     if (Input::IsKey(DIK_W))
     {
-        transform_.position_.z += 0.1;
+        vPos += vMove;
+        XMStoreFloat3(&transform_.position_, vPos);
     }
     if (Input::IsKey(DIK_S))
     {
-        transform_.position_.z -= 0.1;
+        vPos -= vMove;
+        XMStoreFloat3(&transform_.position_, vPos);
     }
     if (Input::IsKey(DIK_D))
     {
@@ -52,17 +58,20 @@ void Player::Update()
         transform_.rotate_.y -= 1.0;
     }
 
+    XMStoreFloat3(&transform_.position_, vPos);
+
+
+
     //三人称
-   /*XMVECTOR vCam = { 0, 5.0f, -10.0f, 0 };
+   XMVECTOR vCam = { 0, 5.0f, -10.0f, 0 };
    vCam = XMVector3TransformCoord(vCam, mRotate);
    XMFLOAT3 camPos;
    XMStoreFloat3(&camPos, vPos + vCam);
-   Camera::SetPosition(camPos);
+   Camera::SetPosition(camPos);//カメラの場所
 
    XMFLOAT3 camTarget = transform_.position_;
 
-   Camera::SetTarget(camTarget);
-*/
+   Camera::SetTarget(camTarget);//カメラのターゲット
 
 }
 
