@@ -16,7 +16,7 @@ void TestScene::Initialize()
 	//Instantiate<Ground>(this);
 	Instantiate<Player>(this);
 	Instantiate<Enemy>(this);
-	Instantiate<Ground>(this);
+	//Instantiate<Ground>(this);
 }
 
 //XV

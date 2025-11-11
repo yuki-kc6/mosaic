@@ -2,6 +2,7 @@
 #include "Engine/Model.h"
 #include "Engine/Input.h"
 #include "Engine/Camera.h"
+#include "Bullet.h"
 //コンストラクタ
 Player::Player(GameObject* parent)
     :GameObject(parent, "Player"), hModel_(-1)
@@ -26,27 +27,33 @@ void Player::Initialize()
 void Player::Update()
 {
     XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
-    XMVECTOR vMove = { 0,0,0.1f,0 };
+    XMVECTOR vMove1 = { 0,0,0.1f,0 };
+    XMVECTOR vMove2 = { 0.1f,0,0,0 };
+
     XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
-    float speed = 0.1;
+
+    vMove1 = XMVector3TransformCoord(vMove1, mRotate);
+    vMove2 = XMVector3TransformCoord(vMove2, mRotate);
 
     if (Input::IsKey(DIK_W))
     {
-        vPos += vMove;
+        vPos += vMove1;
         XMStoreFloat3(&transform_.position_, vPos);
     }
     if (Input::IsKey(DIK_S))
     {
-        vPos -= vMove;
+        vPos -= vMove1;
         XMStoreFloat3(&transform_.position_, vPos);
     }
     if (Input::IsKey(DIK_D))
     {
-        transform_.position_.x+= 0.1;
+        vPos += vMove2;
+        XMStoreFloat3(&transform_.position_, vPos);
     }
     if (Input::IsKey(DIK_A))
     {
-        transform_.position_.x -= 0.1;
+        vPos -= vMove2;
+        XMStoreFloat3(&transform_.position_, vPos);
     }
   
     if (Input::IsKey(DIK_RIGHT))
@@ -60,13 +67,18 @@ void Player::Update()
 
     XMStoreFloat3(&transform_.position_, vPos);
 
+    if (Input::IsKey(DIK_RETURN))
+    {
+        GameObject* pBullet=Instantiate<Bullet>(GetParent());
+        pBullet->SetPosition(transform_.position_);
+    }
 
 
-    //三人称
-   XMVECTOR vCam = { 0, 5.0f, -10.0f, 0 };
+   //三人称
+   XMVECTOR vCam = { 0, 10.0f, -10.0f, 0 };
    vCam = XMVector3TransformCoord(vCam, mRotate);
    XMFLOAT3 camPos;
-   XMStoreFloat3(&camPos, vPos + vCam);
+    XMStoreFloat3(&camPos, vPos + vCam);
    Camera::SetPosition(camPos);//カメラの場所
 
    XMFLOAT3 camTarget = transform_.position_;
