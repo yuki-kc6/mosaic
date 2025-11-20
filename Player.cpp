@@ -41,7 +41,7 @@ void Player::Update()
 
 
     XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
-    XMMATRIX mRotateX = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));
+
 
     vMove1 = XMVector3TransformCoord(vMove1, mRotate);
     vMove2 = XMVector3TransformCoord(vMove2, mRotate);
@@ -83,8 +83,7 @@ void Player::Update()
     //縦軸の視点移動
     if (Input::GetMouseMove().y&&camTarY<100&&camTarY>0)
     {
-        camTarY -= (mousePos.y- PrevMousePos.y) * 0.01;
-        transform_.rotate_.x += (mousePos.x - PrevMousePos.x) * 0.01;
+        transform_.rotate_.x = (mousePos.y- PrevMousePos.y) * 0.01;
     }
 
     PrevMousePos = mousePos;//PrevMousePosの更新
@@ -99,7 +98,7 @@ void Player::Update()
     }
 
     XMVECTOR vCam = { 0, 3.0f, 5.0f, 0 };//カメラ位置ベクトル
-    XMVECTOR vCamT = { 0, camTarY,6.0f, 0 };//カメラターゲットのベクトル
+    XMVECTOR vCamT = { 0, 3.0f,6.0f, 0 };//カメラターゲットのベクトル
     //カメラ位置をセット
     vCam = XMVector3TransformCoord(vCam, mRotate);
     XMFLOAT3 camPos;

@@ -10,6 +10,7 @@ Bullet::Bullet(GameObject* parent)
 
 Bullet::~Bullet()
 {
+
 }
 
 
