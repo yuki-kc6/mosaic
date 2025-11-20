@@ -1,6 +1,13 @@
 #pragma once
 #include "Engine/GameObject.h"
 
+struct Mouse
+{
+	int x=0;
+	int y=0;
+};
+
+
 class Player:public GameObject
 {
 public:
@@ -12,5 +19,9 @@ public:
 	void Release() override;
 private:
 	int hModel_;
+	XMFLOAT3 mousePos;
+	XMFLOAT3 PrevMousePos;
+	float camTarY;
+	float gravity;
 };
 

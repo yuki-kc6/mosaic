@@ -3,6 +3,8 @@
 #include "Engine/Input.h"
 #include "Engine/Camera.h"
 #include "Bullet.h"
+#include "Ground.h"
+
 //コンストラクタ
 Player::Player(GameObject* parent)
     :GameObject(parent, "Player"), hModel_(-1)
@@ -21,69 +23,119 @@ void Player::Initialize()
     assert(hModel_ >= 0);
   
     transform_.position_.y = 1;
+    Input::SetMousePosition(50,50);
+    camTarY = 3.0;
+    gravity = 3.0;
+
 }
 
 //更新
 void Player::Update()
 {
+    mousePos = Input::GetMousePosition();//現在のマウスの座標
+
     XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
     XMVECTOR vMove1 = { 0,0,0.1f,0 };
     XMVECTOR vMove2 = { 0.1f,0,0,0 };
+    XMVECTOR vMove3 = { 0,1.0f,0,0 };
+
 
     XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+    XMMATRIX mRotateX = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));
 
     vMove1 = XMVector3TransformCoord(vMove1, mRotate);
     vMove2 = XMVector3TransformCoord(vMove2, mRotate);
+    vMove3 = XMVector3TransformCoord(vMove3, mRotate);
 
-    if (Input::IsKey(DIK_W))
+    
+
+    //移動
     {
-        vPos += vMove1;
-        XMStoreFloat3(&transform_.position_, vPos);
+        if (Input::IsKey(DIK_W))
+        {
+            vPos += vMove1;
+            XMStoreFloat3(&transform_.position_, vPos);
+        }
+        if (Input::IsKey(DIK_S))
+        {
+            vPos -= vMove1;
+            XMStoreFloat3(&transform_.position_, vPos);
+        }
+        if (Input::IsKey(DIK_D))
+        {
+            vPos += vMove2;
+            XMStoreFloat3(&transform_.position_, vPos);
+        }
+        if (Input::IsKey(DIK_A))
+        {
+            vPos -= vMove2;
+            XMStoreFloat3(&transform_.position_, vPos);
+        }
     }
-    if (Input::IsKey(DIK_S))
+
+
+    //横軸の視点移動
+    if (Input::GetMouseMove().x)
     {
-        vPos -= vMove1;
-        XMStoreFloat3(&transform_.position_, vPos);
+        transform_.rotate_.y += (mousePos.x - PrevMousePos.x) * 0.5;
     }
-    if (Input::IsKey(DIK_D))
+
+    //縦軸の視点移動
+    if (Input::GetMouseMove().y&&camTarY<100&&camTarY>0)
     {
-        vPos += vMove2;
-        XMStoreFloat3(&transform_.position_, vPos);
+        camTarY -= (mousePos.y- PrevMousePos.y) * 0.01;
+        transform_.rotate_.x += (mousePos.x - PrevMousePos.x) * 0.01;
     }
-    if (Input::IsKey(DIK_A))
-    {
-        vPos -= vMove2;
-        XMStoreFloat3(&transform_.position_, vPos);
-    }
-  
-    if (Input::IsKey(DIK_RIGHT))
-    {
-        transform_.rotate_.y += 1.0;
-    }
-    if (Input::IsKey(DIK_LEFT))
-    {
-        transform_.rotate_.y -= 1.0;
-    }
+
+    PrevMousePos = mousePos;//PrevMousePosの更新
 
     XMStoreFloat3(&transform_.position_, vPos);
 
-    if (Input::IsKey(DIK_RETURN))
+    if (Input::IsMouseButton(0))
     {
-        GameObject* pBullet=Instantiate<Bullet>(GetParent());
-        pBullet->SetPosition(transform_.position_);
+        Bullet* pBullet=Instantiate<Bullet>(GetParent());
+        pBullet->SetPosition(transform_.position_.x, transform_.position_.y + 3.0f, transform_.position_.z);
+        pBullet->SetDir(mRotate);
     }
 
-
-   //三人称
-   XMVECTOR vCam = { 0, 10.0f, -10.0f, 0 };
-   vCam = XMVector3TransformCoord(vCam, mRotate);
-   XMFLOAT3 camPos;
+    XMVECTOR vCam = { 0, 3.0f, 5.0f, 0 };//カメラ位置ベクトル
+    XMVECTOR vCamT = { 0, camTarY,6.0f, 0 };//カメラターゲットのベクトル
+    //カメラ位置をセット
+    vCam = XMVector3TransformCoord(vCam, mRotate);
+    XMFLOAT3 camPos;
     XMStoreFloat3(&camPos, vPos + vCam);
-   Camera::SetPosition(camPos);//カメラの場所
+    Camera::SetPosition(camPos);
 
-   XMFLOAT3 camTarget = transform_.position_;
+    //カメラターゲットのセット
+    vCamT = XMVector3TransformCoord(vCamT, mRotate);
+    XMFLOAT3 camTarget;
+    XMStoreFloat3(&camTarget, vPos + vCamT);
+    Camera::SetTarget(camTarget);
 
-   Camera::SetTarget(camTarget);//カメラのターゲット
+
+
+
+
+
+
+   Ground* pGround = (Ground*)FindObject("Ground");    //ステージオブジェクトを探す
+   int hGroundModel = pGround->GetModelHandle();    //モデル番号を取得
+
+   RayCastData data;
+   data.start = transform_.position_;   //レイの発射位置
+   data.start.y = 0;
+
+   data.dir = XMFLOAT3(0, -1, 0);       //レイの方向
+   Model::RayCast(hGroundModel, &data); //レイを発射
+
+   //レイが当たったら
+   if (data.hit)
+   {
+       //その分位置を下げる
+       transform_.position_.y = -data.dist;//当たった距離のマイナス、ステージの最高点が0より低い
+   }
+
+
 
 }
 

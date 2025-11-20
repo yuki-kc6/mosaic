@@ -10,9 +10,12 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Release() override;
+	void OnCollision(GameObject* pTarget) override;
+	void SetDir(XMMATRIX rotate);
 private:
 	int hModel_;
 	int life_;
+	XMMATRIX mRotate;
 };
 
 

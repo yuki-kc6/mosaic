@@ -149,6 +149,8 @@ public:
 	void SetScale(float x, float y, float z) { SetScale(XMFLOAT3(x, y, z)); }
 
 
+	void PaintMosaic();
+
 private:
 
 	//オブジェクト削除（再帰）
