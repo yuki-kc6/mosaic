@@ -1,12 +1,6 @@
 #pragma once
 #include "Engine/GameObject.h"
 
-struct Mouse
-{
-	int x=0;
-	int y=0;
-};
-
 
 class Player:public GameObject
 {

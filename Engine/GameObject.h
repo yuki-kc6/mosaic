@@ -31,6 +31,9 @@ protected:
 	//衝突判定リスト
 	std::list<Collider*>	colliderList_;	
 
+	//モデルのハンドル
+	int						hModel_;
+
 public:
 	//コンストラクタ
 	GameObject();
@@ -148,6 +151,7 @@ public:
 	void SetScale(XMFLOAT3 scale) { transform_.scale_ = scale; }
 	void SetScale(float x, float y, float z) { SetScale(XMFLOAT3(x, y, z)); }
 
+	int GetModelHandle() { return hModel_; }
 
 	void PaintMosaic();
 

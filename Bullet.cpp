@@ -3,7 +3,7 @@
 #include "Engine/SphereCollider.h"
 
 Bullet::Bullet(GameObject* parent)
-	:GameObject(parent, "Bullet"), hModel_(-1),life_(100)
+	:GameObject(parent, "Bullet"), hModel_(-1),life_(100),tModel(-1)
 {
 
 }
@@ -21,15 +21,13 @@ void Bullet::Initialize()
     SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), 1.2f);
     AddCollider(collision);
    
-    move_ = XMVectorSet(0, 0.1f, 0, 0);
+    move_ = XMVectorSet(0, 100.0f, 0, 0);
 }
 
 void Bullet::Update()
 {
     XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
  
- 
-
     vPos += move_;
     XMStoreFloat3(&transform_.position_, vPos);
 
@@ -39,6 +37,8 @@ void Bullet::Update()
     {
         KillMe();//Ž€
     }
+
+   
 
 }
 
@@ -55,7 +55,7 @@ void Bullet::Release()
 
 void Bullet::OnCollision(GameObject* pTarget)
 {
-    pTarget->PaintMosaic();
+   tModel= pTarget->GetModelHandle();
 }
 
 

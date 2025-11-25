@@ -12,8 +12,11 @@ public:
 	void Release() override;
 	void OnCollision(GameObject* pTarget) override;
 	void SetMove(XMVECTOR v) { move_ = v; }
+	int GetTargetModel() { return tModel; }
 private:
 	int hModel_;
+
+	int tModel;
 	int life_;
 	XMVECTOR move_;
 };
