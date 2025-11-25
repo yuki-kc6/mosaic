@@ -1,9 +1,10 @@
 #include "Player.h"
 #include "Engine/Model.h"
 #include "Engine/Input.h"
+#include "Ground.h"
 #include "Engine/Camera.h"
 #include "Bullet.h"
-#include "Ground.h"
+
 
 //コンストラクタ
 Player::Player(GameObject* parent)
@@ -83,6 +84,7 @@ void Player::Update()
     //縦軸の視点移動
     if (Input::GetMouseMove().y&&camTarY<100&&camTarY>0)
     {
+        camTarY -= (mousePos.y - PrevMousePos.y) * 0.01;
         transform_.rotate_.x = (mousePos.y- PrevMousePos.y) * 0.01;
     }
 
@@ -90,20 +92,18 @@ void Player::Update()
 
     XMStoreFloat3(&transform_.position_, vPos);
 
-    if (Input::IsMouseButton(0))
-    {
-        Bullet* pBullet=Instantiate<Bullet>(GetParent());
-        pBullet->SetPosition(transform_.position_.x, transform_.position_.y + 3.0f, transform_.position_.z);
-        pBullet->SetDir(mRotate);
-    }
+    
 
     XMVECTOR vCam = { 0, 3.0f, 5.0f, 0 };//カメラ位置ベクトル
-    XMVECTOR vCamT = { 0, 3.0f,6.0f, 0 };//カメラターゲットのベクトル
+    XMVECTOR vCamT = { 0, camTarY,6.0f, 0 };//カメラターゲットのベクトル
+
+
     //カメラ位置をセット
     vCam = XMVector3TransformCoord(vCam, mRotate);
     XMFLOAT3 camPos;
     XMStoreFloat3(&camPos, vPos + vCam);
     Camera::SetPosition(camPos);
+
 
     //カメラターゲットのセット
     vCamT = XMVector3TransformCoord(vCamT, mRotate);
@@ -111,7 +111,14 @@ void Player::Update()
     XMStoreFloat3(&camTarget, vPos + vCamT);
     Camera::SetTarget(camTarget);
 
+    XMVECTOR vBullet = vCamT - vCam;
 
+    if (Input::IsMouseButton(0))
+    {
+        Bullet* pBullet = Instantiate<Bullet>(GetParent());
+        pBullet->SetPosition(transform_.position_.x, transform_.position_.y+3.0f , transform_.position_.z);
+        pBullet->SetMove(vBullet);
+    }
 
 
 

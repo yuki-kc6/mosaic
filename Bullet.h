@@ -11,11 +11,11 @@ public:
 	void Draw() override;
 	void Release() override;
 	void OnCollision(GameObject* pTarget) override;
-	void SetDir(XMMATRIX rotate);
+	void SetMove(XMVECTOR v) { move_ = v; }
 private:
 	int hModel_;
 	int life_;
-	XMMATRIX mRotate;
+	XMVECTOR move_;
 };
 
 
