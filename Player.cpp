@@ -28,6 +28,7 @@ void Player::Initialize()
     camTarY = 3.0;
     gravity = 3.0;
 
+  
 }
 
 //更新
@@ -113,25 +114,16 @@ void Player::Update()
 
     XMVECTOR vBullet = vCamT - vCam;
 
-    int count=0;
+    
     if (Input::IsMouseButton(0))
     {
-        if (count < 5)
-        {
-            Bullet* pBullet = Instantiate<Bullet>(GetParent());
-            pBullet->SetPosition(transform_.position_.x, transform_.position_.y + 3.0f, transform_.position_.z);
-            pBullet->SetMove(vBullet);
-            pBullet->SetStart(transform_.position_);
-            count++;
-        }
-        
+       Bullet* pBullet = Instantiate<Bullet>(GetParent());
+       pBullet->SetPosition(transform_.position_.x, transform_.position_.y + 3.0f, transform_.position_.z);
+       pBullet->SetMove(vBullet);
+       pBullet->SetStart(transform_.position_);   
     }
 
-    if (Input::IsKeyDown(DIK_R))
-    {
-        count = 0;
-    }
-
+ 
    Ground* pGround = (Ground*)FindObject("Ground");    //ステージオブジェクトを探す
    int hGroundModel = pGround->GetModelHandle();    //モデル番号を取得
 

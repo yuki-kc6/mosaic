@@ -1,6 +1,7 @@
 #include "Bullet.h"
 #include "Engine/Model.h"
 #include "Engine/SphereCollider.h"
+#include "Engine/Camera.h"
 
 Bullet::Bullet(GameObject* parent)
 	:GameObject(parent, "Bullet"), hModel_(-1),life_(100),tModel(-1)
@@ -88,9 +89,18 @@ void Bullet::Update()
              
                 if (suc1=suc2)
                 {
-                    
+                    XMVECTOR uv1 = XMLoadFloat3(&data.ver[0]);
+                    XMVECTOR uv2 = XMLoadFloat3(&data.ver[1]);
+                    XMVECTOR uv3 = XMLoadFloat3(&data.ver[2]);
 
+                    XMMATRIX mvp = Camera::GetProjectionMatrix() * Camera::GetViewMatrix() * GetWorldMatrix();
 
+                    XMVECTOR p1_p = XMVector3TransformCoord(p1, mvp);
+                    XMVECTOR p2_p = XMVector3TransformCoord(p2, mvp);
+                    XMVECTOR p3_p = XMVector3TransformCoord(p3, mvp);
+                    XMVECTOR p_p = XMVector3TransformCoord(hitPos, mvp);
+
+                    XMFLOAT2 p1_n=
 
                 }
                 
