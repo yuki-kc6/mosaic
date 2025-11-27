@@ -191,5 +191,9 @@ namespace Model
 			XMStoreFloat3(&data->dir, vecDir);
 
 			_datas[handle]->pFbx->RayCast(data); 
+
+
+
+
 	}
 }

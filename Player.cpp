@@ -113,16 +113,24 @@ void Player::Update()
 
     XMVECTOR vBullet = vCamT - vCam;
 
+    int count=0;
     if (Input::IsMouseButton(0))
     {
-        Bullet* pBullet = Instantiate<Bullet>(GetParent());
-        pBullet->SetPosition(transform_.position_.x, transform_.position_.y+3.0f , transform_.position_.z);
-        pBullet->SetMove(vBullet);
+        if (count < 5)
+        {
+            Bullet* pBullet = Instantiate<Bullet>(GetParent());
+            pBullet->SetPosition(transform_.position_.x, transform_.position_.y + 3.0f, transform_.position_.z);
+            pBullet->SetMove(vBullet);
+            pBullet->SetStart(transform_.position_);
+            count++;
+        }
+        
     }
 
-
-
-
+    if (Input::IsKeyDown(DIK_R))
+    {
+        count = 0;
+    }
 
    Ground* pGround = (Ground*)FindObject("Ground");    //ステージオブジェクトを探す
    int hGroundModel = pGround->GetModelHandle();    //モデル番号を取得
@@ -133,6 +141,8 @@ void Player::Update()
 
    data.dir = XMFLOAT3(0, -1, 0);       //レイの方向
    Model::RayCast(hGroundModel, &data); //レイを発射
+
+
 
    //レイが当たったら
    if (data.hit)

@@ -15,6 +15,7 @@ struct RayCastData
 	float       dist;	//Õ“Ë“_‚Ü‚Å‚Ì‹——£
 	BOOL        hit;	//ƒŒƒC‚ª“–‚½‚Á‚½‚©
 	XMFLOAT3 normal;	//–@ü
+	XMFLOAT3 ver[3];
 
 	RayCastData() { dist = 99999.0f; }
 };

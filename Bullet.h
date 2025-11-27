@@ -1,6 +1,6 @@
 #pragma once
 #include "Engine/GameObject.h"
-
+#include "Engine/Model.h"
 class Bullet :public GameObject
 {
 public:
@@ -12,13 +12,14 @@ public:
 	void Release() override;
 	void OnCollision(GameObject* pTarget) override;
 	void SetMove(XMVECTOR v) { move_ = v; }
-	int GetTargetModel() { return tModel; }
+	void SetStart(XMFLOAT3 start);
 private:
 	int hModel_;
-
 	int tModel;
 	int life_;
 	XMVECTOR move_;
+	GameObject* pTarget_;
+	RayCastData data;
 };
 
 
