@@ -34,6 +34,7 @@ void Player::Initialize()
 //更新
 void Player::Update()
 {
+
     mousePos = Input::GetMousePosition();//現在のマウスの座標
 
     XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
@@ -118,9 +119,9 @@ void Player::Update()
     if (Input::IsMouseButton(0))
     {
        Bullet* pBullet = Instantiate<Bullet>(GetParent());
-       pBullet->SetPosition(transform_.position_.x, transform_.position_.y + 3.0f, transform_.position_.z);
+       pBullet->SetPosition(transform_.position_.x, transform_.position_.y+3.0, transform_.position_.z);
+       pBullet->SetStart(transform_.position_);
        pBullet->SetMove(vBullet);
-       pBullet->SetStart(transform_.position_);   
     }
 
  

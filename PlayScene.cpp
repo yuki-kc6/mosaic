@@ -1,17 +1,17 @@
-#include "TestScene.h"
+#include "PlayScene.h"
 #include "Ground.h"
 #include "Player.h"
 #include "Enemy.h"
 
 
 //コンストラクタ
-TestScene::TestScene(GameObject * parent)
-	: GameObject(parent, "TestScene")
+PlayScene::PlayScene(GameObject * parent)
+	: GameObject(parent, "PlayScene")
 {
 }
 
 //初期化
-void TestScene::Initialize()
+void PlayScene::Initialize()
 {
 	Instantiate<Ground>(this);
 	Instantiate<Player>(this);
@@ -19,16 +19,16 @@ void TestScene::Initialize()
 }
 
 //更新
-void TestScene::Update()
+void PlayScene::Update()
 {
 }
 
 //描画
-void TestScene::Draw()
+void PlayScene::Draw()
 {
 }
 
 //開放
-void TestScene::Release()
+void PlayScene::Release()
 {
 }

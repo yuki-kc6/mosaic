@@ -12,7 +12,7 @@ public:
 	void Release() override;
 	void OnCollision(GameObject* pTarget) override;
 	void SetMove(XMVECTOR v) { move_ = v; }
-	void SetStart(XMFLOAT3 start);
+	void SetStart(XMFLOAT3 start) { data.start = start; }
 private:
 	int hModel_;
 	int tModel;
