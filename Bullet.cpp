@@ -22,9 +22,15 @@ void Bullet::Initialize()
     SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), 1.2f);
     AddCollider(collision);
    
-    move_ = XMVectorSet(0, 100.0f, 0, 0);
+    XMFLOAT3 cameraPos = Camera::GetPosition();
+    XMFLOAT3 targetPos = Camera::GetTarget();
 
-
+    XMVECTOR vCameraTarget = XMLoadFloat3(&targetPos);
+    XMVECTOR vCameraPos = XMLoadFloat3(&cameraPos);
+    
+    vCameraTarget = vCameraTarget - vCameraPos;
+    
+    move_ = XMVector3Normalize(vCameraTarget);
 }
 
 void Bullet::Update()
@@ -47,13 +53,33 @@ void Bullet::Update()
         XMFLOAT3 dir;
         XMStoreFloat3(&dir, move_);
         data.dir = dir;//レイの方向
+        data.start = Camera::GetPosition();
         Model::RayCast(tModel, &data); //レイを発射
 
-
+        
         //レイが当たったら
         if (data.hit)
         {
-            pTarget_->KillMe();
+            XMVECTOR vStart = XMLoadFloat3(&data.start);
+            XMVECTOR vDir = XMLoadFloat3(&data.dir);
+
+            XMVECTOR vHitPos = XMVectorAdd(vStart, XMVectorScale(vDir, data.dist));
+
+            XMFLOAT3 hitPos;
+            XMStoreFloat3(&hitPos, vHitPos);
+
+            
+            auto uv1 = data.uv[0];
+            auto uv2 = data.uv[1];
+            auto uv3 = data.uv[2];
+            //透視投影を考慮したUV補間
+            XMMATRIX mvp = Camera::GetProjectionMatrix() * Camera::GetViewMatrix() * pTarget_->GetWorldMatrix();
+
+            
+
+
+
+
         }
         else
         {

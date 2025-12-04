@@ -5,11 +5,17 @@
 #include "Engine/Camera.h"
 #include "Bullet.h"
 
+namespace
+{
+
+}
+
 
 //コンストラクタ
 Player::Player(GameObject* parent)
     :GameObject(parent, "Player"), hModel_(-1)
 {
+
 }
 
 //デストラクタ
@@ -22,13 +28,11 @@ void Player::Initialize()
 {
     hModel_ = Model::Load("Models/PlayerKari.fbx");
     assert(hModel_ >= 0);
-  
+
     transform_.position_.y = 1;
-    Input::SetMousePosition(50,50);
+    Input::SetMousePosition(50, 50);
     camTarY = 3.0;
     gravity = 3.0;
-
-  
 }
 
 //更新
@@ -119,9 +123,9 @@ void Player::Update()
     if (Input::IsMouseButton(0))
     {
        Bullet* pBullet = Instantiate<Bullet>(GetParent());
-       pBullet->SetPosition(transform_.position_.x, transform_.position_.y+3.0, transform_.position_.z);
-       pBullet->SetStart(transform_.position_);
-       pBullet->SetMove(vBullet);
+       pBullet->SetPosition(Camera::GetPosition());
+       //pBullet->SetStart(transform_.position_);
+       //pBullet->SetMove(vBullet);
     }
 
  

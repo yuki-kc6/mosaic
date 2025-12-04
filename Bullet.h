@@ -11,8 +11,7 @@ public:
 	void Draw() override;
 	void Release() override;
 	void OnCollision(GameObject* pTarget) override;
-	void SetMove(XMVECTOR v) { move_ = v; }
-	void SetStart(XMFLOAT3 start) { data.start = start; }
+	//void SetMove(XMVECTOR v) { move_ = v; }
 private:
 	int hModel_;
 	int tModel;
