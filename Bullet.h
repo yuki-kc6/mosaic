@@ -1,6 +1,13 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include "Engine/Model.h"
+
+struct Vector2
+{
+	float x;
+	float y;
+};
+
 class Bullet :public GameObject
 {
 public:
