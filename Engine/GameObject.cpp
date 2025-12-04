@@ -192,10 +192,7 @@ void GameObject::KillAllChildren(void)
 	childList_.clear();
 }
 
-void GameObject::PaintMosaic()
-{
 
-}
 
 //オブジェクト削除（再帰）
 void GameObject::KillObjectSub(GameObject * obj)
@@ -374,4 +371,9 @@ XMMATRIX GameObject::GetWorldMatrix(void)
 	return transform_.GetWorldMatrix();
 }
 
+
+void GameObject::PaintMosaic(XMFLOAT3 uv)
+{
+
+}
 

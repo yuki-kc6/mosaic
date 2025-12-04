@@ -593,12 +593,7 @@ void FbxParts::RayCast(RayCastData * data)
 			ver[1] = pVertexData_[ppIndexData_[i][j * 3 + 1]].position;
 			ver[2] = pVertexData_[ppIndexData_[i][j * 3 + 2]].position;
 
-			//’¸“_‚Ìuv
-			XMFLOAT3 uv[3];
-			uv[0] = pVertexData_[ppIndexData_[i][j * 3 + 0]].uv;
-			uv[1] = pVertexData_[ppIndexData_[i][j * 3 + 1]].uv;
-			uv[2] = pVertexData_[ppIndexData_[i][j * 3 + 2]].uv;
-
+			
 			BOOL  hit = FALSE;
 			float dist = 0.0f;
 
@@ -609,8 +604,8 @@ void FbxParts::RayCast(RayCastData * data)
 			{
 				data->hit = TRUE;
 				data->dist = dist;
-				std::memcpy(data->ver, &ver, sizeof(ver));
-				std::memcpy(data->uv, &uv, sizeof(uv));
+				//std::memcpy(data->ver, &ver, sizeof(ver));
+				//std::memcpy(data->uv, &uv, sizeof(uv));
 			}
 		}
 	}
