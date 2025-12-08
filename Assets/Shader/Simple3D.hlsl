@@ -22,6 +22,25 @@ cbuffer global
 	bool		g_isTexture;		// テクスチャ貼ってあるかどうか
 
 };
+//───────────────────────────────────────
+// デカール直方体
+//───────────────────────────────────────
+
+struct DecalBox
+{
+    float3 pos;//中心点
+    int enable;//有効フラグ
+    float4 right;//右（および幅）
+    float4 up;//上（および高さ）
+    float4 front;//前（および奥行）
+};
+
+#define bullet_hole_num 16
+cbuffer ConstatnBuffer : register(b4)
+{
+    DecalBox g_decalBox[bullet_hole_num];
+}
+
 
 //───────────────────────────────────────
 // 頂点シェーダー出力＆ピクセルシェーダー入力データ構造体

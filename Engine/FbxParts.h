@@ -23,6 +23,8 @@ class FbxParts
 		XMFLOAT3 uv;
 	};
 
+	
+
 	//【コンスタントバッファー】
 	// GPU(シェーダ側)へ送る数値をまとめた構造体
 	//Simple3D.hlslのグローバル変数と対応させる

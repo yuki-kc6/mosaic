@@ -18,4 +18,3 @@ private:
 	float camTarY;
 	float gravity;
 };
-

@@ -69,10 +69,9 @@ void Bullet::Update()
             XMFLOAT3 hitPos;
             XMStoreFloat3(&hitPos, vHitPos);
 
-            XMMATRIX decalWorld
+            XMMATRIX decalWorld;
 
-
-
+            
         }
         else
         {

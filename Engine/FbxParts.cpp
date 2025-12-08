@@ -415,6 +415,9 @@ void FbxParts::IntConstantBuffer()
 	Direct3D::pDevice_->CreateBuffer(&cb, NULL, &pConstantBuffer_);
 }
 
+
+
+
 //•`‰æ
 void FbxParts::Draw(Transform& transform)
 {
