@@ -2,6 +2,7 @@
 #include "Engine/Model.h"
 #include "Engine/SphereCollider.h"
 #include "Engine/Camera.h"
+#include "DecalManager.h"
 
 Bullet::Bullet(GameObject* parent)
 	:GameObject(parent, "Bullet"), hModel_(-1),life_(100),tModel(-1)
@@ -57,20 +58,18 @@ void Bullet::Update()
         Model::RayCast(tModel, &data); //ƒŒƒC‚ð”­ŽË
 
         
+        
         //ƒŒƒC‚ª“–‚½‚Á‚½‚ç
         if (data.hit)
         {
-            pTarget_->KillMe();
-            XMVECTOR vStart = XMLoadFloat3(&data.start);
-            XMVECTOR vDir = XMLoadFloat3(&data.dir);
+			XMVECTOR vStart = XMLoadFloat3(&data.start);
+			XMVECTOR vDir = XMLoadFloat3(&data.dir);
 
             XMVECTOR vHitPos = XMVectorAdd(vStart, XMVectorScale(vDir, data.dist));
-
             XMFLOAT3 hitPos;
-            XMStoreFloat3(&hitPos, vHitPos);
-
-            XMMATRIX decalWorld;
-
+			XMStoreFloat3(&hitPos, vHitPos);   
+           DecalManager* decal= (DecalManager*)FindObject("DecalManaager");
+           decal->AddMosaic(hitPos, move_);
             
         }
         else

@@ -2,19 +2,6 @@
 #include "Engine/GameObject.h"
 #include "Engine/Model.h"
 
-struct Vector2
-{
-	float x;
-	float y;
-};
-
-struct BoxDecal {
-	XMVECTOR pos;//中心点
-	float width;//幅
-	float height;//高さ
-	float depth;//奥行
-	bool isEnabled;//有効フラグ
-};
 
 class Bullet :public GameObject
 {

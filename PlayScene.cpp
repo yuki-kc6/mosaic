@@ -2,7 +2,7 @@
 #include "Ground.h"
 #include "Player.h"
 #include "Enemy.h"
-
+#include "DecalManager.h"
 
 //コンストラクタ
 PlayScene::PlayScene(GameObject * parent)
@@ -13,6 +13,7 @@ PlayScene::PlayScene(GameObject * parent)
 //初期化
 void PlayScene::Initialize()
 {
+	Instantiate<DecalManager>(this);
 	Instantiate<Ground>(this);
 	Instantiate<Player>(this);
 	Instantiate<Enemy>(this);

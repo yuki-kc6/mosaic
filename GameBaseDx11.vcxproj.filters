@@ -187,13 +187,13 @@
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">
       <Filter>02Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Assets\Shader\Simple3D.hlsl">
-      <Filter>02Shader</Filter>
-    </FxCompile>
     <FxCompile Include="Assets\Shader\Debug3D.hlsl">
       <Filter>02Shader</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\BillBoard.hlsl">
+      <Filter>02Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Simple3D.hlsl">
       <Filter>02Shader</Filter>
     </FxCompile>
   </ItemGroup>

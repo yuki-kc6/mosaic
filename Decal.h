@@ -1,19 +1,14 @@
 #pragma once
 #include "Engine/GameObject.h"
 
-//デカール直方体
-//定数バッファでHLSLに渡すときは16byteパッキングされてしまうため
-//このように16バイト区切りになるように並べている
-struct DecalBox {
-	XMFLOAT3 pos;//デカール
-	int enable;//有効フラグ
-	XMFLOAT3 right;//右ベクトル
-	float width;//幅
-	XMFLOAT3 up;//上ベクトル
-	float height;//高さ
-	XMFLOAT3 front;//前ベクトル
-	float depth;//奥行
+struct DECAL_AXIS {
+
+	XMVECTOR front;
+	XMVECTOR right;
+	XMVECTOR up;
 };
+
+
 
 class Decal :public GameObject
 {
@@ -24,8 +19,11 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Release() override;
+	void SetAxis(const DECAL_AXIS& vec) { this->vec = vec; };
+	DECAL_AXIS GetAxis() { return vec; }
 private:
 	int hModel_;
+	DECAL_AXIS vec;
 };
 
 

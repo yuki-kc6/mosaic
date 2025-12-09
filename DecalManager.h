@@ -2,6 +2,7 @@
 #include "Engine/global.h"
 #include "Engine/GameObject.h"
 #include <vector>
+
 //デカール直方体
 //定数バッファでHLSLに渡すときは16byteパッキングされてしまうため
 //このように16バイト区切りになるように並べている
@@ -18,9 +19,10 @@ struct DecalBox {
 	XMFLOAT3 front;//前ベクトル
 	float depth;//奥行
 };
+ 
 
-
-
+class Decal;
+class Texture;
 
 
 //-----------------------------------------------------------
@@ -28,6 +30,10 @@ struct DecalBox {
 //-----------------------------------------------------------
 class DecalManager : public GameObject
 {
+	ID3D11SamplerState* pSampleLinear_;		//テクスチャサンプラー（テクスチャの貼り方）
+	ID3D11ShaderResourceView* pTextureSRV_;		//シェーダーリソースビュー（テクスチャをシェーダーに送るためのもの）
+	XMFLOAT3					size_;				//画像ファイルのサイズ
+
 public:
 	ID3D11Buffer* pDecalCB_ = nullptr;
 	//コンストラクタ
@@ -41,6 +47,6 @@ public:
 	void AddMosaic(XMFLOAT3 hitPos, XMVECTOR vec);
 
 private:
-	std::vector<Transform> boxes;
-
+	std::vector<Decal*> boxes;
+	Texture* pDecalTexcture_;
 };

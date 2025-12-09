@@ -1,14 +1,14 @@
 #include "DecalManager.h"
-
+#include "Decal.h"
+#include "Engine/Texture.h"
 
 namespace
 {
-	constexpr int mosaic_num = 16;//弾痕デカール最大値
+	constexpr int mosaic_num = 16;//デカール最大値
 
 	DecalBox decalData[mosaic_num];
 
 }
-
 
 DecalManager::DecalManager(GameObject* parent)
 	: GameObject(parent, "DecalManager")
@@ -35,15 +35,20 @@ void DecalManager::Initialize()
 	this->InitConstantBuffer(mosaic_num);
 	//とりあえずCPU側から見れるようにしておく(実際はGPU側のメモリを見てるわけではなく、
 	//キャッシュコヒーレンシによって連動しているCPU側のメモリを見ている)
+
+	pDecalTexcture_ = new Texture();
+	pDecalTexcture_->Load("decal.png");
+
 	D3D11_MAPPED_SUBRESOURCE mapped;
 	Direct3D::pContext_->Map(pDecalCB_, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
-	auto decalCBuff = (DecalBox*)mapped.pData;
+	auto decalD = (DecalBox*)mapped.pData;
 	Direct3D::pContext_->Unmap(pDecalCB_, 0);
+
 	//初期化
 	for (int i = 0; i < mosaic_num; ++i) {
-		decalCBuff[i] = {};
+		decalData[i] = {};
 	}
-	//UpdateShaderConstantBuffer(decalCBuffH);
+	//UpdateShaderConstantBuffer(decalDataH);
 }
 
 void DecalManager::Update()
@@ -57,26 +62,43 @@ void DecalManager::Update()
 
 void DecalManager::Draw()
 {
+	Direct3D::pContext_->PSSetShaderResources(5, 1, &pTextureSRV_);
+	Direct3D::pContext_->PSSetSamplers(5, 1, &pSampleLinear_);
 }
 
 void DecalManager::Release()
 {
+
+	delete pDecalTexcture_;
 }
 
 void DecalManager::AddMosaic(XMFLOAT3 hitPos,XMVECTOR vec )
 {
-	Transform mBox;
+	Decal* decal = Instantiate<Decal>(this);
 	XMVECTOR up_vec = XMVectorSet(0, 1, 0, 0);
-	mBox.position_= hitPos;
-	XMVECTOR vFront = vec;
-	XMFLOAT3 front;
-	XMStoreFloat3(&front, vFront);
-	XMVECTOR vRight = XMVector3Normalize(XMVector3Cross(vFront, up_vec));
-	XMFLOAT3 right;
-	XMStoreFloat3(&right, vRight);
-	XMVECTOR vUp = XMVector3Normalize(XMVector3Cross(vFront, vRight));
-	XMFLOAT3 up;
-	XMStoreFloat3(&up, vUp);
+	decal->SetPosition(hitPos);
+	XMVECTOR right =XMVector3Normalize(XMVector3Cross(up_vec, vec));
+	XMVECTOR up	   =XMVector3Normalize(XMVector3Cross(vec, right));
+	decal->SetAxis({ vec,right,up});
+	decal->SetScale(20, 20, 20);
+	boxes.push_back(decal);
+	if (boxes.size() > mosaic_num) {
+		boxes.erase(boxes.begin());
+	}
 
-	boxes.push_back();
+	auto idx = boxes.size() - 1;
+	auto& box = boxes.back();
+	decalData[idx].enable = 1;
+	decalData[idx].pos = box->GetPosition();
+	XMStoreFloat3(&decalData[idx].right, box->GetAxis().right);
+	XMStoreFloat3(&decalData[idx].up, box->GetAxis().up);
+	XMStoreFloat3(&decalData[idx].front, box->GetAxis().front);
+	decalData[idx].width = box->GetScale().x;
+	decalData[idx].height = box->GetScale().y;
+	decalData[idx].depth = box->GetScale().z;
+
+	D3D11_MAPPED_SUBRESOURCE mapped;
+	Direct3D::pContext_->Map(pDecalCB_, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
+	auto decalData = (DecalBox*)mapped.pData;
+	Direct3D::pContext_->Unmap(pDecalCB_, 0);
 }

@@ -126,6 +126,7 @@ void Player::Update()
        pBullet->SetPosition(Camera::GetPosition());
        //pBullet->SetStart(transform_.position_);
        //pBullet->SetMove(vBullet);
+  
     }
 
  
@@ -144,6 +145,7 @@ void Player::Update()
    //レイが当たったら
    if (data.hit)
    {
+
        //その分位置を下げる
        transform_.position_.y = -data.dist;//当たった距離のマイナス、ステージの最高点が0より低い
    }
