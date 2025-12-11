@@ -68,8 +68,9 @@ void Bullet::Update()
             XMVECTOR vHitPos = XMVectorAdd(vStart, XMVectorScale(vDir, data.dist));
             XMFLOAT3 hitPos;
 			XMStoreFloat3(&hitPos, vHitPos);   
-           DecalManager* decal= (DecalManager*)FindObject("DecalManaager");
-           decal->AddMosaic(hitPos, move_);
+            DecalManager* decal= (DecalManager*)FindObject("DecalManager");
+            decal->AddMosaic(hitPos, move_);
+            KillMe();
             
         }
         else

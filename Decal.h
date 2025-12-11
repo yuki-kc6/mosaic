@@ -3,11 +3,10 @@
 
 struct DECAL_AXIS {
 
-	XMVECTOR front;
-	XMVECTOR right;
-	XMVECTOR up;
+	XMFLOAT3 front;
+	XMFLOAT3 right;
+	XMFLOAT3 up;
 };
-
 
 
 class Decal :public GameObject

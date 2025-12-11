@@ -39,7 +39,7 @@ public:
 	//コンストラクタ
 	DecalManager(GameObject* parent);
 	void InitConstantBuffer(int decalCount);
-
+	\
 	void Initialize() override;
 	void Update() override;
 	void Draw() override;
@@ -47,6 +47,7 @@ public:
 	void AddMosaic(XMFLOAT3 hitPos, XMVECTOR vec);
 
 private:
-	std::vector<Decal*> boxes;
-	Texture* pDecalTexcture_;
+	std::list<Decal*> boxes;
+	Texture* pDecalTexture_;
+	DecalBox* decalCBuff;
 };
