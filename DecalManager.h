@@ -39,7 +39,6 @@ public:
 	//コンストラクタ
 	DecalManager(GameObject* parent);
 	void InitConstantBuffer(int decalCount);
-	\
 	void Initialize() override;
 	void Update() override;
 	void Draw() override;

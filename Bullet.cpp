@@ -20,7 +20,7 @@ void Bullet::Initialize()
     hModel_ = Model::Load("Models/BulletKari.fbx");
     assert(hModel_ >= 0);
 
-    SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), 1.2f);
+    SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), 0.3f);
     AddCollider(collision);
    
     XMFLOAT3 cameraPos = Camera::GetPosition();
@@ -48,36 +48,6 @@ void Bullet::Update()
         KillMe();//Ž€
     }
 
-
-    if (tModel != -1)
-    {
-        XMFLOAT3 dir;
-        XMStoreFloat3(&dir, move_);
-        data.dir = dir;//ƒŒƒC‚Ì•ûŒü
-        data.start = Camera::GetPosition();
-        Model::RayCast(tModel, &data); //ƒŒƒC‚ð”­ŽË
-
-        
-        
-        //ƒŒƒC‚ª“–‚½‚Á‚½‚ç
-        if (data.hit)
-        {
-			XMVECTOR vStart = XMLoadFloat3(&data.start);
-			XMVECTOR vDir = XMLoadFloat3(&data.dir);
-
-            XMVECTOR vHitPos = XMVectorAdd(vStart, XMVectorScale(vDir, data.dist));
-            XMFLOAT3 hitPos;
-			XMStoreFloat3(&hitPos, vHitPos);   
-            DecalManager* decal= (DecalManager*)FindObject("DecalManager");
-            decal->AddMosaic(hitPos, move_);
-            KillMe();
-            
-        }
-        else
-        {
-           // KillMe();
-        }
-    }
 }
 void Bullet::Draw()
 {
@@ -92,8 +62,7 @@ void Bullet::Release()
 
 void Bullet::OnCollision(GameObject* pTarget)
 {
-    pTarget_ = pTarget;
-   tModel= pTarget->GetModelHandle();
+    pTarget->PaintMosaic();
 
 }
 

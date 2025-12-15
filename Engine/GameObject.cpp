@@ -372,8 +372,8 @@ XMMATRIX GameObject::GetWorldMatrix(void)
 }
 
 
-void GameObject::PaintMosaic(XMFLOAT3 uv)
+void GameObject::PaintMosaic()
 {
-
+	
 }
 

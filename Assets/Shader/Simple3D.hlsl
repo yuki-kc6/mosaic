@@ -36,10 +36,10 @@ struct DecalBox
     float4 front; //前（および奥行）
 };
 
-#define bullet_hole_num 16
+#define mosaic_num 16
 cbuffer ConstatBuffer : register(b4)
 {
-    DecalBox g_decalBox[bullet_hole_num];
+    DecalBox g_decalBox[mosaic_num];
 }
 
 
@@ -107,7 +107,7 @@ float4 PS(VS_OUT inData) : SV_Target
 
     float4 diffuse;
 	
-    for (int i = 0; i < bullet_hole_num; ++i)
+    for (int i = 0; i < mosaic_num; ++i)
     {
         if (g_decalBox[i].enable)
         {

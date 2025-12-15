@@ -13,7 +13,7 @@ DecalManager::DecalManager(GameObject* parent)
 {
 	boxes.clear();
 }
-
+ 
 void DecalManager::InitConstantBuffer(int decalCount)
 {
 	//デカール用コンスタントバッファの作成
