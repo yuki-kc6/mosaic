@@ -2,7 +2,6 @@
 #include "Engine/Model.h"
 #include "Engine/SphereCollider.h"
 #include "Engine/Camera.h"
-#include "DecalManager.h"
 
 Bullet::Bullet(GameObject* parent)
 	:GameObject(parent, "Bullet"), hModel_(-1),life_(100),tModel(-1)

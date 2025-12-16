@@ -16,6 +16,16 @@ void Ground::Initialize()
 {
     hModel_ = Model::Load("Models/map1.fbx");
     assert(hModel_ >= 0);
+
+    paintMap = new RenderTexture();
+
+    paintMap->Create(1024, 1024);
+
+    // 初期状態は「未塗装」
+    paintMap->Begin();
+   
+
+    paintMap->End();
 }
 
 //更新

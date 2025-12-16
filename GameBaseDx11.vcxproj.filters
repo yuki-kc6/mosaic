@@ -101,8 +101,8 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="TitleScene.cpp" />
-    <ClCompile Include="Decal.cpp" />
-    <ClCompile Include="DecalManager.cpp" />
+    <ClCompile Include="RenderTexture.cpp" />
+    <ClCompile Include="MosaicPrinter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -180,8 +180,8 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="TitleScene.h" />
-    <ClInclude Include="Decal.h" />
-    <ClInclude Include="DecalManager.h" />
+    <ClInclude Include="RenderTexture.h" />
+    <ClInclude Include="MosaicPrinter.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

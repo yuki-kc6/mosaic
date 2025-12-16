@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include "RenderTexture.h"
 
 //ŸŸŸ‚ğŠÇ—‚·‚éƒNƒ‰ƒX
 class Ground : public GameObject
@@ -23,5 +24,7 @@ public:
 
     //ŠJ•ú
     void Release() override;
+private:
+    RenderTexture* paintMap;
 
 };
