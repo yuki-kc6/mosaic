@@ -21,6 +21,7 @@ public:
 	bool Create(int w, int h);
 	void Begin();
 	void End();
+	void Clear(float r,float g,float b,float a);
 
 	//各アクセス関数
 	ID3D11ShaderResourceView* GetSRV() { return pRenderTextureSRV_; }	//シェーダーリソースビューの取得

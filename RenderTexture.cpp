@@ -30,10 +30,6 @@ void RenderTexture::Begin()
 
    float clear[4] = { 0, 0, 0, 0 };  
    Direct3D::pContext_->ClearRenderTargetView(pRenderTextureRTV_, clear);  
-
-   // 修正: 初期化子の値が多すぎるエラーを回避するために、配列を使用  
-   float redClear[4] = { 1, 0, 0, 0 };  
-   Direct3D::pContext_->ClearRenderTargetView(pRenderTextureRTV_, redClear); // 赤  
 }
 
 void RenderTexture::End()
@@ -42,4 +38,10 @@ void RenderTexture::End()
 
     SAFE_RELEASE(pOldRTV_);
     SAFE_RELEASE(pOldDSV_);
+}
+
+void RenderTexture::Clear(float r, float g, float b, float a)
+{
+    float color[4] = { r, g, b, a };
+    Direct3D::pContext_->ClearRenderTargetView(pRenderTextureRTV_, color);
 }

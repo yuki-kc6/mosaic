@@ -25,6 +25,8 @@ void Ground::Initialize()
     paintMap->Begin();
    
 
+    paintMap->Clear(1, 0, 0, 1);   // ^‚ÁÔ
+
     paintMap->End();
 }
 
