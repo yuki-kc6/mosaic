@@ -2,6 +2,19 @@
 #include "Engine/Direct3D.h"
 #include "Engine/Global.h"
 
+RenderTexture::RenderTexture()
+{
+
+}
+
+RenderTexture::RenderTexture(const RenderTexture&)
+{
+}
+
+RenderTexture::~RenderTexture()
+{
+}
+
 bool RenderTexture::Create(int w,int h)
 {
     D3D11_TEXTURE2D_DESC desc{};
@@ -14,12 +27,24 @@ bool RenderTexture::Create(int w,int h)
     desc.Usage = D3D11_USAGE_DEFAULT;
     desc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 
-    Direct3D::pDevice_->CreateTexture2D(&desc, nullptr, &pTexure_);
-    Direct3D::pDevice_->CreateRenderTargetView(pTexure_, nullptr, &pRenderTextureRTV_);
-    Direct3D::pDevice_->CreateShaderResourceView(pTexure_, nullptr, &pRenderTextureSRV_);
+    Direct3D::pDevice_->CreateTexture2D(&desc, nullptr, &pRenderTexture_);
+    Direct3D::pDevice_->CreateRenderTargetView(pRenderTexture_, nullptr, &pRenderTextureRTV_);
+    Direct3D::pDevice_->CreateShaderResourceView(pRenderTexture_, nullptr, &pRenderTextureSRV_);
 
 
 	return true;
+}
+
+void RenderTexture::Shutdown()
+{
+}
+
+void RenderTexture::SetRenderTarget(ID3D11DeviceContext* target)
+{
+}
+
+void RenderTexture::ClearRenderTarget(ID3D11DeviceContext* target, float, float, float, float)
+{
 }
 
 void RenderTexture::Begin()  
