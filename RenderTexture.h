@@ -27,9 +27,9 @@ public:
 
 
 	void SetRenderTarget(ID3D11DeviceContext* target);
-	void ClearRenderTarget(ID3D11DeviceContext* target, float a, float b, float c, float d);
+	void ClearRenderTarget(ID3D11DeviceContext* target, float red, float green, float blue, float alpha);
 	
-	ID3D11ShaderResourceView* GetShaderResourceView() { return pRenderTextureSRV_; }	//シェーダーリソースビューの取得
+	ID3D11ShaderResourceView* GetShaderResourceView() { return pShaderResourceView_; }	//シェーダーリソースビューの取得
 
 	void GetProjectionMatrix(XMMATRIX);
 	void GetOrthoMatrix(XMMATRIX);
@@ -37,20 +37,19 @@ public:
 	int GetTextureWidth();
 	int GetTextureHeight();
 
-
-
-	void Begin();
-	void End();
-	void Clear(float r, float g, float b, float a);
-
 private:
 	int textureWidth;
 	int textureHeight;
 
 
-	ID3D11Texture2D* pRenderTexture_=nullptr;
-	ID3D11RenderTargetView* pRenderTextureRTV_=nullptr;
-	ID3D11ShaderResourceView* pRenderTextureSRV_ = nullptr;
+	ID3D11Texture2D* pRenderTargetTexture_;
+	ID3D11RenderTargetView* pRenderTargetView_;
+	ID3D11ShaderResourceView* pShaderResourceView_;
+	ID3D11Texture2D* pDepthStencilBuffer_;
+	ID3D11DepthStencilView* pDepthStencilView_;
+	D3D11_VIEWPORT viewPort_;
+	XMMATRIX projectionMatrix;
+	XMMATRIX orthoMatrix;
 
 
 	ID3D11RenderTargetView* pOldRTV_ = nullptr;
