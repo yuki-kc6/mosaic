@@ -19,7 +19,7 @@ RenderTexture::~RenderTexture()
 {
 }
 
-bool RenderTexture::Initialize(ID3D11Device*, int texWidth, int texHeight, float screenDepth, float screenNear, int format)++
+bool RenderTexture::Initialize(ID3D11Device* texture, int texWidth, int texHeight, float screenDepth, float screenNear, int format)
 {
     D3D11_TEXTURE2D_DESC textureDesc;
     HRESULT result;
@@ -185,18 +185,18 @@ void RenderTexture::Shutdown()
     return;
 }
 
-void RenderTexture::SetRenderTarget(ID3D11DeviceContext* target)
+void RenderTexture::SetRenderTarget(ID3D11DeviceContext* deviceContext)
 {
     // Bind the render target view and depth stencil buffer to the output render pipeline.
-    Direct3D::pContext_->OMSetRenderTargets(1, &pRenderTargetView_, pDepthStencilView_);
+     deviceContext->OMSetRenderTargets(1, &pRenderTargetView_, pDepthStencilView_);
 
     // Set the viewport.
-    Direct3D::pContext_->RSSetViewports(1, &viewPort_);
+     deviceContext->RSSetViewports(1, &viewPort_);
 
     return;
 }
 
-void RenderTexture::ClearRenderTarget(ID3D11DeviceContext* target, float red, float green, float blue, float alpha)
+void RenderTexture::ClearRenderTarget(ID3D11DeviceContext* deviceContext, float red, float green, float blue, float alpha)
 {
     float color[4];
 
@@ -208,10 +208,10 @@ void RenderTexture::ClearRenderTarget(ID3D11DeviceContext* target, float red, fl
     color[3] = alpha;
 
     // Clear the back buffer.
-    Direct3D::pContext_->ClearRenderTargetView(pRenderTargetView_, color);
+    deviceContext->ClearRenderTargetView(pRenderTargetView_, color);
 
     // Clear the depth buffer.
-    Direct3D::pContext_->ClearDepthStencilView(pDepthStencilView_, D3D11_CLEAR_DEPTH, 1.0f, 0);
+    deviceContext->ClearDepthStencilView(pDepthStencilView_, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
     return;
 }

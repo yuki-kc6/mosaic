@@ -1,5 +1,6 @@
 #include "Ground.h"
 #include "Engine/Model.h"
+#include "Engine/Direct3D.h"
 //コンストラクタ
 Ground::Ground(GameObject* parent)
     :GameObject(parent, "Ground"),hModel_(-1)
@@ -19,15 +20,7 @@ void Ground::Initialize()
 
     paintMap = new RenderTexture();
 
-    paintMap->Create(1024, 1024);
-
-    // 初期状態は「未塗装」
-    paintMap->Begin();
-   
-
-    paintMap->Clear(1, 0, 0, 1);   // 真っ赤
-
-    paintMap->End();
+	
 }
 
 //更新

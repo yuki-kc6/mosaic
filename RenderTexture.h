@@ -22,12 +22,12 @@ public:
 	RenderTexture(const RenderTexture&);
 	~RenderTexture();
 
-	bool Initialize(ID3D11Device*, int texWidth, int texHeight, float screenDepth, float screenNear, int format);
+	bool Initialize(ID3D11Device* texture, int texWidth, int texHeight, float screenDepth, float screenNear, int format);
 	void Shutdown();
 
 
-	void SetRenderTarget(ID3D11DeviceContext* target);
-	void ClearRenderTarget(ID3D11DeviceContext* target, float red, float green, float blue, float alpha);
+	void SetRenderTarget(ID3D11DeviceContext* deviceContext);
+	void ClearRenderTarget(ID3D11DeviceContext* deviceContext, float red, float green, float blue, float alpha);
 	
 	ID3D11ShaderResourceView* GetShaderResourceView() { return pShaderResourceView_; }	//シェーダーリソースビューの取得
 
