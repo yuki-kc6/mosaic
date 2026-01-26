@@ -32,6 +32,7 @@ struct VS_OUT
     float4 normal : TEXCOORD2; //法線
     float2 uv : TEXCOORD0; //UV座標
     float4 eye : TEXCOORD1; //視線
+    float3 worldPos : TEXCOORD3; //ワールド座標
 };
 
 //───────────────────────────────────────
@@ -62,12 +63,38 @@ VS_OUT VS(float4 pos : POSITION, float4 Normal : NORMAL, float2 Uv : TEXCOORD)
 	//まとめて出力
     return outData;
 }
+//───────────────────────────────────────
+// ノイズ生成
+//───────────────────────────────────────
+static float hash(float3 p)
+{
+    p = frac(p * 0.3183099 + 0.1);
+    p *= 17.0;
+    return frac(p.x * p.y * p.z * (p.x + p.y + p.z));
+
+
+}
+
+//───────────────────────────────────────
+// モザイク化
+//───────────────────────────────────────
+float Block3D(float3 p)
+{
+    return hash(floor(p));
+}
+
 
 //───────────────────────────────────────
 // ピクセルシェーダ
 //───────────────────────────────────────
 float4 PS(VS_OUT inData) : SV_Target
 {
+    //ワールド座標の定義
+    float3 worldPos = inData.worldPos.xyz;
+    float3 p = worldPos * NoiseScale;
+    
+    //ベースになるノイズ
+    
 	//ライトの向き
     float4 lightDir = g_vecLightDir; //グルーバル変数は変更できないので、いったんローカル変数へ
     lightDir = normalize(lightDir); //向きだけが必要なので正規化

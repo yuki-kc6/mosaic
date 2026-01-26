@@ -19,7 +19,7 @@ struct DecalBox {
 	XMFLOAT3 front;//前ベクトル
 	float depth;//奥行
 };
- 
+
 
 class Decal;
 class Texture;
@@ -39,6 +39,7 @@ public:
 	//コンストラクタ
 	DecalManager(GameObject* parent);
 	void InitConstantBuffer(int decalCount);
+	\
 	void Initialize() override;
 	void Update() override;
 	void Draw() override;
