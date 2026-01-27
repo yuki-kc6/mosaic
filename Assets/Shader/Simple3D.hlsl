@@ -89,11 +89,15 @@ float Block3D(float3 p)
 //───────────────────────────────────────
 float4 PS(VS_OUT inData) : SV_Target
 {
+ 
+    float NoiseScale = 0.05;
     //ワールド座標の定義
     float3 worldPos = inData.worldPos.xyz;
     float3 p = worldPos * NoiseScale;
     
     //ベースになるノイズ
+    float NoiseColor = Block3D(p);
+    
     
 	//ライトの向き
     float4 lightDir = g_vecLightDir; //グルーバル変数は変更できないので、いったんローカル変数へ
@@ -133,6 +137,9 @@ float4 PS(VS_OUT inData) : SV_Target
         speculer = pow(saturate(dot(R, inData.eye)), g_shuniness) * g_vecSpeculer; //ハイライトを求める
     }
 
+    
+    float4 ResultColor = float4(NoiseColor, NoiseColor, NoiseColor, 1.0);
 	//最終的な色
-    return diffuse * shade + diffuse * ambient + speculer;
+    //return diffuse * shade + diffuse * ambient + speculer;
+    return ResultColor; 
 }
