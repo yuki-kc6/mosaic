@@ -23,11 +23,21 @@ cbuffer global
 
 };
 
-cbuffer bulletHit
+
+//───────────────────────────────────────
+//配列用の構造体
+//───────────────────────────────────────
+
+struct mosaicData
 {
-    float4 g_hitPos; // 弾の当たったワールド座標
-    bool g_isHit; // 弾が当たったかどうか
+    float3 hitPos; // 弾の当たったワールド座標
+    bool isHit; // 弾が当たったかどうか
 };
+#define MAX_HITS 64
+cbuffer mosaicBuffer : register(b1)
+{
+    mosaicData g_mosaicData[MAX_HITS]; // 配列で100個分
+}
 
 //───────────────────────────────────────
 // 頂点シェーダー出力＆ピクセルシェーダー入力データ構造体
@@ -146,6 +156,7 @@ float4 PS(VS_OUT inData) : SV_Target
         speculer = pow(saturate(dot(R, inData.eye)), g_shuniness) * g_vecSpeculer; //ハイライトを求める
     }
 
+    //float dist= distance(inData.worldPos, g_hitPos);
     
     float4 ResultColor = float4(NoiseColor, NoiseColor, NoiseColor, 1.0);
 	//最終的な色
