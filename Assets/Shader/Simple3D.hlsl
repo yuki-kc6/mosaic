@@ -23,6 +23,12 @@ cbuffer global
 
 };
 
+cbuffer bulletHit
+{
+    float4 g_hitPos; // 弾の当たったワールド座標
+    bool g_isHit; // 弾が当たったかどうか
+};
+
 //───────────────────────────────────────
 // 頂点シェーダー出力＆ピクセルシェーダー入力データ構造体
 //───────────────────────────────────────
@@ -59,7 +65,8 @@ VS_OUT VS(float4 pos : POSITION, float4 Normal : NORMAL, float2 Uv : TEXCOORD)
 	//UV「座標
     outData.uv = Uv; //そのままピクセルシェーダーへ
 
-
+    outData.worldPos = worldPos.xyz; //ワールド座標をピクセルシェーダーへ
+    
 	//まとめて出力
     return outData;
 }
@@ -90,7 +97,9 @@ float Block3D(float3 p)
 float4 PS(VS_OUT inData) : SV_Target
 {
  
-    float NoiseScale = 0.05;
+    float NoiseScale = 10.0;//ノイズの粗さ
+    float radius = 0.5;//ノイズの半径
+    //float3 hitPos = g_hitPos;//弾の当たったワールド座標
     //ワールド座標の定義
     float3 worldPos = inData.worldPos.xyz;
     float3 p = worldPos * NoiseScale;

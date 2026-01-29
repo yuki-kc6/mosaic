@@ -103,8 +103,6 @@
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="RenderTexture.cpp" />
     <ClCompile Include="MosaicPrinter.cpp" />
-    <ClCompile Include="Decal.cpp" />
-    <ClCompile Include="DecalManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -184,8 +182,6 @@
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="RenderTexture.h" />
     <ClInclude Include="MosaicPrinter.h" />
-    <ClInclude Include="Decal.h" />
-    <ClInclude Include="DecalManager.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

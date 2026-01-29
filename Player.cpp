@@ -120,7 +120,7 @@ void Player::Update()
     XMVECTOR vBullet = vCamT - vCam;
 
     
-    if (Input::IsMouseButton(0))
+    if (Input::IsMouseButtonDown(0))
     {
        Bullet* pBullet = Instantiate<Bullet>(GetParent());
        pBullet->SetPosition(Camera::GetPosition());
