@@ -607,6 +607,9 @@ void FbxParts::RayCast(RayCastData * data)
 			{
 				data->hit = TRUE;
 				data->dist = dist;
+				data->ver[0] = ver[0];
+				data->ver[1] = ver[1];
+				data->ver[2] = ver[2];
 				//std::memcpy(data->ver, &ver, sizeof(ver));
 				//std::memcpy(data->uv, &uv, sizeof(uv));
 			}

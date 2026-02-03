@@ -4,6 +4,8 @@
 #include "Ground.h"
 #include "Engine/Camera.h"
 #include "Bullet.h"
+#include "RenderTexture.h"
+
 
 namespace
 {
@@ -33,6 +35,8 @@ void Player::Initialize()
     Input::SetMousePosition(50, 50);
     camTarY = 3.0;
     gravity = 3.0;
+    paintMap = new RenderTexture;
+    paintMap->Initialize()
 }
 
 //XV

@@ -2,6 +2,7 @@
  // テクスチャ＆サンプラーデータのグローバル変数定義
 //───────────────────────────────────────
 Texture2D g_texture : register(t0); //テクスチャー
+Texture2D g_maskTexture : register(t1); //モザイク用テクスチャー
 SamplerState g_sampler : register(s0); //サンプラー
 
 //───────────────────────────────────────
@@ -23,21 +24,6 @@ cbuffer global
 
 };
 
-
-//───────────────────────────────────────
-//配列用の構造体
-//───────────────────────────────────────
-
-struct mosaicData
-{
-    float3 hitPos; // 弾の当たったワールド座標
-    bool isHit; // 弾が当たったかどうか
-};
-#define MAX_HITS 64
-cbuffer mosaicBuffer : register(b1)
-{
-    mosaicData g_mosaicData[MAX_HITS]; // 配列で100個分
-}
 
 //───────────────────────────────────────
 // 頂点シェーダー出力＆ピクセルシェーダー入力データ構造体
@@ -80,25 +66,6 @@ VS_OUT VS(float4 pos : POSITION, float4 Normal : NORMAL, float2 Uv : TEXCOORD)
 	//まとめて出力
     return outData;
 }
-//───────────────────────────────────────
-// ノイズ生成
-//───────────────────────────────────────
-static float hash(float3 p)
-{
-    p = frac(p * 0.3183099 + 0.1);
-    p *= 17.0;
-    return frac(p.x * p.y * p.z * (p.x + p.y + p.z));
-
-
-}
-
-//───────────────────────────────────────
-// モザイク化
-//───────────────────────────────────────
-float Block3D(float3 p)
-{
-    return hash(floor(p));
-}
 
 
 //───────────────────────────────────────
@@ -106,16 +73,16 @@ float Block3D(float3 p)
 //───────────────────────────────────────
 float4 PS(VS_OUT inData) : SV_Target
 {
- 
-    float NoiseScale = 10.0;//ノイズの粗さ
-    float radius = 0.5;//ノイズの半径
-    //float3 hitPos = g_hitPos;//弾の当たったワールド座標
-    //ワールド座標の定義
-    float3 worldPos = inData.worldPos.xyz;
-    float3 p = worldPos * NoiseScale;
+    float maskValue = g_maskTexture.Sample(g_sampler, inData.uv).r;
     
-    //ベースになるノイズ
-    float NoiseColor = Block3D(p);
+    float2 mosaicUV = inData.uv;
+    
+    if (maskValue > 0.1f)
+    {
+        float mosaicRes = 64.0f; // モザイクの細かさ
+        
+        mosaicUV = floor(inData.uv * mosaicRes) / mosaicRes;//離散化
+    }
     
     
 	//ライトの向き
@@ -136,7 +103,7 @@ float4 PS(VS_OUT inData) : SV_Target
     if (g_isTexture == true)
     {
 		//テクスチャの色
-        diffuse = g_texture.Sample(g_sampler, inData.uv);
+        diffuse = g_texture.Sample(g_sampler, mosaicUV);//モザイクのUVを入れる
     }
     else
     {
@@ -158,8 +125,7 @@ float4 PS(VS_OUT inData) : SV_Target
 
     //float dist= distance(inData.worldPos, g_hitPos);
     
-    float4 ResultColor = float4(NoiseColor, NoiseColor, NoiseColor, 1.0);
 	//最終的な色
-    //return diffuse * shade + diffuse * ambient + speculer;
-    return ResultColor; 
+    return diffuse * shade + diffuse * ambient + speculer;
+    
 }

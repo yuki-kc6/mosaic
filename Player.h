@@ -2,6 +2,8 @@
 #include "Engine/GameObject.h"
 
 
+class RenderTexture;
+
 class Player:public GameObject
 {
 public:
@@ -17,4 +19,5 @@ private:
 	XMFLOAT3 PrevMousePos;
 	float camTarY;
 	float gravity;
+	RenderTexture* paintMap;
 };
