@@ -73,11 +73,11 @@ VS_OUT VS(float4 pos : POSITION, float4 Normal : NORMAL, float2 Uv : TEXCOORD)
 //„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ
 float4 PS(VS_OUT inData) : SV_Target
 {
-    float maskValue = g_maskTexture.Sample(g_sampler, inData.uv).r;
+    float mosaicValue = g_maskTexture.Sample(g_sampler, inData.uv).r;
     
     float2 mosaicUV = inData.uv;
     
-    if (maskValue > 0.1f)
+    if (mosaicValue > 0.1f)
     {
         float mosaicRes = 64.0f; // ƒ‚ƒUƒCƒN‚Ì×‚©‚³
         

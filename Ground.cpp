@@ -4,7 +4,7 @@
 #include "RenderTexture.h"
 //コンストラクタ
 Ground::Ground(GameObject* parent)
-    :GameObject(parent, "Ground"),hModel_(-1)
+    :PaintObject(parent, "Ground"),hModel_(-1)
 {
 }
 
@@ -32,9 +32,6 @@ void Ground::Update()
 //描画
 void Ground::Draw()
 {
-
-
-
     Model::SetTransform(hModel_, transform_);
     Model::Draw(hModel_);
 }

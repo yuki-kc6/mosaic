@@ -1,11 +1,10 @@
 #pragma once
-#include "Engine/GameObject.h"
-#include "RenderTexture.h"
+#include "PaintObject.h"
 
 //◆◆◆を管理するクラス
-class Ground : public GameObject
+class Ground : public PaintObject
 {
-    int hModel_;    //モデル番号
+
 public:
     //コンストラクタ
     Ground(GameObject* parent);
@@ -25,6 +24,6 @@ public:
     //開放
     void Release() override;
 private:
-    RenderTexture* paintMap;
+    int hModel_;    //モデル番号
 
 };

@@ -1,29 +1,53 @@
 #include "MosaicPrinter.h"
-#include "Engine/Direct3D.h"
 #include "Engine/Global.h"
-
-void MosaicPrinter::Initialize()
+namespace MosaicPrinter
 {
-}
-
-void MosaicPrinter::BeginPaint(RenderTexture* target)
-{
-	target->SetRenderTarget(Direct3D::pContext_);
-
-	Direct3D::SetDepthBafferWriteEnable(false);
+	//元のRenderTargetの情報を入れておくための変数
+	ID3D11RenderTargetView* originRTV = nullptr;
+	ID3D11DepthStencilView* originDSV = nullptr;
+	D3D11_VIEWPORT          originVP;
 
 
-}
 
-void MosaicPrinter::EndPaint()
-{
-}
+	void MosaicPrinter::Initialize()
+	{
+	}
 
-void MosaicPrinter::Release()
-{
-}
+	void MosaicPrinter::BeginPaint(RenderTexture* target)
+	{
+		//現在の設定の保存
+		UINT numViewports = 1;
+		Direct3D::pContext_->OMGetRenderTargets(1, &originRTV, &originDSV);
+		Direct3D::pContext_->RSGetViewports(&numViewports,&originVP);
 
-void MosaicPrinter::Paint(ID3D11DeviceContext* context, RenderTexture* targetRT, XMFLOAT2 hitUV)
-{
 
+		//RenderTargetの変更
+		target->SetRenderTarget(Direct3D::pContext_);
+
+		//Zバッファへの書き込みOFF
+		Direct3D::SetDepthBafferWriteEnable(false);
+
+
+	}
+
+	void MosaicPrinter::EndPaint()
+	{
+		Direct3D::pContext_->OMSetRenderTargets(1, &originRTV, originDSV);
+		Direct3D::pContext_->RSSetViewports(1, &originVP);
+
+
+		if (originRTV) { originRTV->Release(); originRTV= nullptr; }
+		if (originDSV) { originRTV->Release(); originDSV = nullptr; }
+
+		Direct3D::SetDepthBafferWriteEnable(true);
+	}
+
+	void MosaicPrinter::Release()
+	{
+	}
+
+	void MosaicPrinter::Paint(RenderTexture* targetRT, XMFLOAT2 hitUV)
+	{
+
+	}
 }

@@ -13,6 +13,6 @@ namespace MosaicPrinter
 
 	void Release();
 
-	void Paint(ID3D11DeviceContext* context, RenderTexture* targetRT, XMFLOAT2 hitUV);
+	void Paint(RenderTexture* targetRT, XMFLOAT2 hitUV);
 
 }

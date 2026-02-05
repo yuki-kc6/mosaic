@@ -2,24 +2,28 @@
 #include "Engine/Direct3D.h"
 
 PaintObject::PaintObject()
-	:GameObject()
+	:GameObject(),mosaicRT(nullptr)
 {
 }
 
 PaintObject::PaintObject(GameObject* parent)
-	:GameObject(parent)
+	:GameObject(parent), mosaicRT(nullptr)
 {
 }
 
 PaintObject::PaintObject(GameObject* parent, const std::string& name)
-	:GameObject(parent,name)
+	:GameObject(parent,name), mosaicRT(nullptr)
+{
+}
+
+PaintObject::~PaintObject()
 {
 }
 
 
 void PaintObject::PaintMosaic(XMFLOAT2 uv)
 {
-	MosaicPrinter::BeginPaint();
-	MosaicPrinter::Paint(Direct3D::pContext_, mosaicRT, uv);
+	MosaicPrinter::BeginPaint(mosaicRT);
+	MosaicPrinter::Paint(mosaicRT, uv);
 	MosaicPrinter::EndPaint();
 }
