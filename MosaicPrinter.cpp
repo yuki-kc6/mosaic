@@ -1,11 +1,15 @@
+#include <d3dcompiler.h>
 #include "MosaicPrinter.h"
 #include "Engine/Global.h"
+
 namespace MosaicPrinter
 {
 	//Œ³‚ÌRenderTarget‚Ìî•ñ‚ð“ü‚ê‚Ä‚¨‚­‚½‚ß‚Ì•Ï”
 	ID3D11RenderTargetView* originRTV = nullptr;
 	ID3D11DepthStencilView* originDSV = nullptr;
 	D3D11_VIEWPORT          originVP;
+
+
 
 
 
@@ -48,6 +52,33 @@ namespace MosaicPrinter
 
 	void MosaicPrinter::Paint(RenderTexture* targetRT, XMFLOAT2 hitUV)
 	{
+		int w  =targetRT->GetTextureWidth();
+		int h = targetRT->GetTextureHeight();
+
+		float px = hitUV.x * w;
+		float py = hitUV.y * h;
+
+		float brushSize = 64.0f;
+
+		D3D11_VIEWPORT vp{};
+		vp.TopLeftX = px - brushSize * 0.5f;
+		vp.TopLeftY = py - brushSize * 0.5f;
+		vp.Width = brushSize;
+		vp.Height = brushSize;
+		vp.MinDepth = 0.0f;
+		vp.MaxDepth = 1.0f;
+
+		Direct3D::pContext_->RSSetViewports(1, &vp);
+
+		ShaderSet();
+
+
+	}
+
+
+	void ShaderSet()
+	{
+
 
 	}
 }

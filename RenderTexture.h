@@ -35,8 +35,8 @@ public:
 	void GetProjectionMatrix(XMMATRIX);
 	void GetOrthoMatrix(XMMATRIX);
 
-	int GetTextureWidth();
-	int GetTextureHeight();
+	int GetTextureWidth() { return textureWidth; }
+	int GetTextureHeight() { return textureHeight; };
 
 	
 

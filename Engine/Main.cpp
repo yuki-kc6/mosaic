@@ -64,7 +64,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//オーディオ（効果音）の準備
 	Audio::Initialize();
 
-
 	//ルートオブジェクト準備
 	//すべてのゲームオブジェクトの親となるオブジェクト
 	RootObject* pRootObject = new RootObject;

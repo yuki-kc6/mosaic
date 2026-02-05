@@ -198,5 +198,8 @@
     <FxCompile Include="Assets\Shader\Simple3D.hlsl">
       <Filter>02Shader</Filter>
     </FxCompile>
+    <FxCompile Include="Assets\Shader\PaintMask.hlsl">
+      <Filter>02Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
