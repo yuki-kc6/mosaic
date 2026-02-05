@@ -1,15 +1,18 @@
 #pragma once
 #include "RenderTexture.h"
-#include "Engine/GameObject.h"
 
-class MosaicPrinter :
-	public GameObject
+
+
+namespace MosaicPrinter
 {
-public:
-	MosaicPrinter();
-	~MosaicPrinter();
-	void DrawMosaic(RenderTexture* target,XMFLOAT2 uv,float radius);
+	void Initialize();
 
+	void BeginPaint(RenderTexture* target);
 
-};
+	void EndPaint();
 
+	void Release();
+
+	void Paint(ID3D11DeviceContext* context, RenderTexture* targetRT, XMFLOAT2 hitUV);
+
+}

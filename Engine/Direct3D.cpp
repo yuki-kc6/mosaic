@@ -504,7 +504,7 @@ namespace Direct3D
 			//Zバッファ（デプスステンシルを指定する）
 			pContext_->OMSetRenderTargets(1, &pRenderTargetView_, pDepthStencilView);
 		}
-
+		 
 		//OFF
 		else
 		{
