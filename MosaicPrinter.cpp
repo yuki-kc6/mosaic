@@ -15,6 +15,18 @@ namespace MosaicPrinter
 
 	void MosaicPrinter::Initialize()
 	{
+		// Initialize内でのブレンドステート作成例
+		D3D11_BLEND_DESC blendDesc = {};
+		blendDesc.RenderTarget[0].BlendEnable = TRUE;
+		blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+		blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE; // 足し算（あるいは D3D11_BLEND_OP_MAX を使う）
+		blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+		blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+		blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+		blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+		blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+		Direct3D::pDevice_->CreateBlendState(&blendDesc, &g_pBlendStateMax);
 	}
 
 	void MosaicPrinter::BeginPaint(RenderTexture* target)
