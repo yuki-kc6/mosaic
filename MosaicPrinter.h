@@ -20,4 +20,7 @@ namespace MosaicPrinter
 
 	void ShaderSet();
 
+	void InitShader();
+
+	
 }

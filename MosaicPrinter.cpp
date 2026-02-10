@@ -8,9 +8,12 @@ namespace MosaicPrinter
 	ID3D11RenderTargetView* originRTV = nullptr;
 	ID3D11DepthStencilView* originDSV = nullptr;
 	D3D11_VIEWPORT          originVP;
+	ID3D11BlendState*		pBlendStateMax = nullptr;
 
-
-
+	ID3D11InputLayout* pVertexLayout=nullptr;
+	ID3D11VertexShader* pVertexShader=nullptr;
+	ID3D11PixelShader* pPixelShader=nullptr;
+	ID3D11RasterizerState* pRasterizerState=nullptr;
 
 
 	void MosaicPrinter::Initialize()
@@ -26,7 +29,9 @@ namespace MosaicPrinter
 		blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
-		Direct3D::pDevice_->CreateBlendState(&blendDesc, &g_pBlendStateMax);
+		Direct3D::pDevice_->CreateBlendState(&blendDesc, &pBlendStateMax);
+
+		InitShader();
 	}
 
 	void MosaicPrinter::BeginPaint(RenderTexture* target)
@@ -42,8 +47,6 @@ namespace MosaicPrinter
 
 		//Zバッファへの書き込みOFF
 		Direct3D::SetDepthBafferWriteEnable(false);
-
-
 	}
 
 	void MosaicPrinter::EndPaint()
@@ -53,7 +56,7 @@ namespace MosaicPrinter
 
 
 		if (originRTV) { originRTV->Release(); originRTV= nullptr; }
-		if (originDSV) { originRTV->Release(); originDSV = nullptr; }
+		if (originDSV) { originDSV->Release(); originDSV = nullptr; }
 
 		Direct3D::SetDepthBafferWriteEnable(true);
 	}
@@ -64,6 +67,7 @@ namespace MosaicPrinter
 
 	void MosaicPrinter::Paint(RenderTexture* targetRT, XMFLOAT2 hitUV)
 	{
+
 		int w  =targetRT->GetTextureWidth();
 		int h = targetRT->GetTextureHeight();
 
@@ -84,13 +88,65 @@ namespace MosaicPrinter
 
 		ShaderSet();
 
-
+		Direct3D::pContext_->Draw(4, 0);
 	}
 
 
 	void ShaderSet()
 	{
+		auto context = Direct3D::pContext_;
 
+		// シェーダー切り替え
+		context->VSSetShader(pVertexShader, nullptr, 0);
+		context->PSSetShader(pPixelShader, nullptr, 0);
 
+		// レイアウトは不要 (SV_VertexIDを使うため)
+		context->IASetInputLayout(nullptr);
+
+		// ブレンドステート適用 (Max合成)
+		float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+		context->OMSetBlendState(pBlendStateMax, blendFactor, 0xffffffff);
+
+		// ラスタライザ (カリングなし推奨)
+		context->RSSetState(pRasterizerState);
+
+		// トポロジー (TriangleStrip)
+		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 	}
+	void InitShader()
+	{
+		DWORD vectorSize = sizeof(XMFLOAT3);
+
+		// 頂点シェーダの作成（コンパイル）
+		ID3DBlob* pCompileVS = NULL;
+		D3DCompileFromFile(L"Shader/PaintMask.hlsl", nullptr, nullptr, "VS", "vs_5_0", NULL, 0, &pCompileVS, NULL);
+		Direct3D::pDevice_->CreateVertexShader(pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), NULL, &pVertexShader);
+
+
+		// ピクセルシェーダの作成（コンパイル）
+		ID3DBlob* pCompilePS = NULL;
+		D3DCompileFromFile(L"Shader/PaintMask.hlsl", nullptr, nullptr, "PS", "ps_5_0", NULL, 0, &pCompilePS, NULL);
+		Direct3D::pDevice_->CreatePixelShader(pCompilePS->GetBufferPointer(), pCompilePS->GetBufferSize(), NULL, &pPixelShader);
+
+
+		// 頂点レイアウトの作成（1頂点の情報が何のデータをどんな順番で持っているか）
+		D3D11_INPUT_ELEMENT_DESC layout[] = {
+			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, vectorSize * 0,  D3D11_INPUT_PER_VERTEX_DATA, 0 },	//頂点位置
+			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, vectorSize * 2, D3D11_INPUT_PER_VERTEX_DATA, 0 },	//テクスチャ（UV）座標
+		};
+		Direct3D::pDevice_->CreateInputLayout(layout, 3, pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), &pVertexLayout);
+
+
+		//シェーダーが無事作成できたので、コンパイルしたやつはいらない
+		pCompileVS->Release();
+		pCompilePS->Release();
+
+		//ラスタライザ作成
+		D3D11_RASTERIZER_DESC rdc = {};
+		rdc.CullMode = D3D11_CULL_NONE;
+		rdc.FillMode = D3D11_FILL_SOLID;
+		rdc.FrontCounterClockwise = FALSE;	//反時計回りは表面じゃない
+		Direct3D::pDevice_->CreateRasterizerState(&rdc, &pRasterizerState);
+	}
+
 }
