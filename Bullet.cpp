@@ -61,8 +61,7 @@ void Bullet::Release()
 
 void Bullet::OnCollision(GameObject* pTarget)
 {
-    pTarget->PaintMosaic();
-
+    
 }
 
 

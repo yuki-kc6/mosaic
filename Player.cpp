@@ -35,6 +35,8 @@ void Player::Initialize()
     Input::SetMousePosition(50, 50);
     camTarY = 3.0;
     gravity = 3.0;
+
+
 }
 
 //更新
@@ -121,19 +123,27 @@ void Player::Update()
 
     XMVECTOR vBullet = vCamT - vCam;
 
-    
+
+    Ground* pGround = (Ground*)FindObject("Ground");    //ステージオブジェクトを探す
+    int hGroundModel = pGround->GetModelHandle();    //モデル番号を取得
+
+    XMFLOAT2 testUV = { 0.5f, 0.5f };
+
     if (Input::IsMouseButtonDown(0))
     {
-       Bullet* pBullet = Instantiate<Bullet>(GetParent());
-       pBullet->SetPosition(Camera::GetPosition());
-       //pBullet->SetStart(transform_.position_);
-       //pBullet->SetMove(vBullet);
-  
+      // Bullet* pBullet = Instantiate<Bullet>(GetParent());
+      // pBullet->SetPosition(Camera::GetPosition());
+      //// pBullet->SetStart(transform_.position_);
+      // //pBullet->SetMove(vBullet);
+		XMFLOAT2 hitUV;
+        hitUV.x = transform_.position_.x;
+        hitUV.y= transform_.position_.z;
+		pGround->PaintMosaic(testUV);//タイルを塗る
+        
     }
 
  
-   Ground* pGround = (Ground*)FindObject("Ground");    //ステージオブジェクトを探す
-   int hGroundModel = pGround->GetModelHandle();    //モデル番号を取得
+   
 
    RayCastData data;
    data.start = transform_.position_;   //レイの発射位置

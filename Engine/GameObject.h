@@ -153,7 +153,7 @@ public:
 
 	int GetModelHandle() { return hModel_; }
 
-	void PaintMosaic();
+
 
 private:
 
