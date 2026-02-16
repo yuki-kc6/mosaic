@@ -79,9 +79,9 @@ float4 PS(VS_OUT inData) : SV_Target
     
     if (mosaicValue > 0.1f)
     {
-        float mosaicRes = 64.0f; // モザイクの細かさ
+        float mosaicRes = 0.0f; // モザイクの細かさ
         
-        mosaicUV = floor(inData.uv * mosaicRes) / mosaicRes;//離散化
+         mosaicUV = floor(inData.uv * mosaicRes) / mosaicRes;//離散化
     }
     
     

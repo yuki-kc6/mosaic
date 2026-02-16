@@ -4,6 +4,7 @@
 #include "Direct3D.h"
 #include "Camera.h"
 
+
 //コンストラクタ
 FbxParts::FbxParts():
 	ppIndexBuffer_(nullptr), pMaterial_(nullptr), 
@@ -470,6 +471,23 @@ void FbxParts::Draw(Transform& transform)
 			ID3D11ShaderResourceView*	pSRV = pMaterial_[i].pTexture->GetSRV();
 			Direct3D::pContext_->PSSetShaderResources(0, 1, &pSRV);
 		}
+
+		//モザイク用のテクスチャをシェーダーに設定
+
+		if (pMosaicSRV)
+		{
+			Direct3D::pContext_->PSSetShaderResources(1, 1, &pMosaicSRV);
+		}
+		else
+		{
+			// マスクがない場合は、念のためスロット1を空にする（前の描画設定が残らないように）
+			ID3D11ShaderResourceView* nullSRV = nullptr;
+			Direct3D::pContext_->PSSetShaderResources(1, 1, &nullSRV);
+		}
+
+
+
+
 		Direct3D::pContext_->Unmap(pConstantBuffer_, 0);									// GPUからのリソースアクセスを再開
 
 		 //ポリゴンメッシュを描画する

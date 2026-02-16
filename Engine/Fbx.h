@@ -52,17 +52,10 @@ class Fbx
 	//アニメーションの最初と最後のフレーム
 	int _startFrame, _endFrame;
 
-
-
-
-
 	//ノードの中身を調べる
 	//引数：pNode		調べるノード
 	//引数：pPartsList	パーツのリスト
 	void CheckNode(FbxNode* pNode, std::vector<FbxParts*> *pPartsList);
-
-
-
 
 public:
 	Fbx();
@@ -88,6 +81,9 @@ public:
 	//レイキャスト（レイを飛ばして当たり判定）
 	//引数：data	必要なものをまとめたデータ
 	void RayCast(RayCastData *data);
+
+	//パーツにモザイク用のテクスチャをセットする
+	void SetMaskSRV(ID3D11ShaderResourceView* pSRV);
 
 };
 

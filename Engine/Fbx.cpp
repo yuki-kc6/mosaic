@@ -71,6 +71,15 @@ HRESULT Fbx::Load(std::string fileName)
 	return S_OK;
 }
 
+void Fbx::SetMaskSRV(ID3D11ShaderResourceView* pSRV)
+{
+	// 全てのパーツをループして SRV を渡す
+	for (auto& p : parts_) {
+		p->SetMaskSRV(pSRV);
+	}
+
+}
+
 void Fbx::CheckNode(FbxNode * pNode, std::vector<FbxParts*>* pPartsList)
 {
 	//そのノードにはメッシュ情報が入っているだろうか？

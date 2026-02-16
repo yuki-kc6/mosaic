@@ -85,8 +85,13 @@ namespace Model
 
 		if (_datas[handle]->pFbx)
 		{
+			_datas[handle]->pFbx->SetMaskSRV(_datas[handle]->pMaskSRV);
 			_datas[handle]->pFbx->Draw(_datas[handle]->transform, (int)_datas[handle]->nowFrame);
+			_datas[handle]->pFbx->SetMaskSRV(nullptr);
 		}
+
+
+		
 	}
 
 
@@ -160,7 +165,7 @@ namespace Model
 
 
 	//ƒ[ƒ‹ƒhs—ñ‚ğİ’è
-	void SetTransform(int handle, Transform & transform)
+	void SetTransform(int handle, Transform& transform, ID3D11ShaderResourceView* pMaskSRV)
 	{
 		if (handle < 0 || handle >= _datas.size())
 		{
@@ -168,6 +173,8 @@ namespace Model
 		}
 
 		_datas[handle]->transform = transform;
+		_datas[handle]->pMaskSRV = pMaskSRV;
+
 	}
 
 

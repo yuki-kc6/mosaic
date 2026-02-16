@@ -115,6 +115,9 @@ class FbxParts
 	void InitSkelton(FbxMesh * pMesh);			//骨の情報を準備
 	void IntConstantBuffer();	//コンスタントバッファ（シェーダーに情報を送るやつ）準備
 
+	//モザイク用のテクスチャを保存する
+	ID3D11ShaderResourceView* pMosaicSRV = nullptr;	
+
 public:
 	FbxParts();
 	~FbxParts();
@@ -153,5 +156,9 @@ public:
 	//レイキャスト（レイを飛ばして当たり判定）
 	//引数：data	必要なものをまとめたデータ
 	void RayCast(RayCastData *data);
+
+	//モザイク用のテクスチャをセットする関数
+	void SetMaskSRV(ID3D11ShaderResourceView* pSRV) { pMosaicSRV = pSRV; }
+
 };
 

@@ -23,6 +23,9 @@ namespace Model
 		//行列
 		Transform 	transform;
 
+		//モザイク用テクスチャ
+		ID3D11ShaderResourceView* pMaskSRV = nullptr;
+
 		//アニメーションのフレーム
 		float nowFrame, animSpeed;
 		int startFrame, endFrame;
@@ -87,7 +90,7 @@ namespace Model
 	//ワールド行列を設定
 	//引数：handle	設定したいモデルの番号
 	//引数：matrix	ワールド行列
-	void SetTransform(int handle, Transform& transform);
+	void SetTransform(int handle, Transform& transform, ID3D11ShaderResourceView* pMaskSRV = nullptr);
 
 	//ワールド行列の取得
 	//引数：handle	知りたいモデルの番号

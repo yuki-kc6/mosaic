@@ -127,7 +127,7 @@ void Player::Update()
     Ground* pGround = (Ground*)FindObject("Ground");    //ステージオブジェクトを探す
     int hGroundModel = pGround->GetModelHandle();    //モデル番号を取得
 
-    XMFLOAT2 testUV = { 0.5f, 0.5f };
+    XMFLOAT2 testUV = { 50.0f, 50.0f };
 
     if (Input::IsMouseButtonDown(0))
     {

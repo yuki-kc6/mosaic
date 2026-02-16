@@ -32,9 +32,12 @@ void Ground::Update()
 //•`‰æ
 void Ground::Draw()
 {
-    Model::SetTransform(hModel_, transform_);
+    Model::SetTransform(hModel_, transform_,mosaicRT->GetShaderResourceView());
     Model::Draw(hModel_);
+
 }
+
+
 
 //ŠJ•ú
 void Ground::Release()
