@@ -15,6 +15,7 @@ namespace MosaicPrinter
 	ID3D11PixelShader* pPixelShader=nullptr;
 	ID3D11RasterizerState* pRasterizerState=nullptr;
 
+	ID3D11BlendState* pBlendState[Direct3D::BLEND_MAX];
 
 	void MosaicPrinter::Initialize()
 	{
@@ -41,6 +42,11 @@ namespace MosaicPrinter
 		Direct3D::pContext_->OMGetRenderTargets(1, &originRTV, &originDSV);
 		Direct3D::pContext_->RSGetViewports(&numViewports,&originVP);
 
+		ID3D11RenderTargetView* currentRTV = nullptr;
+		Direct3D::pContext_->OMGetRenderTargets(1, &currentRTV, nullptr); // 今のRTVを取得
+		Direct3D::pContext_->OMSetRenderTargets(1, &currentRTV, nullptr); // DSVなしで再設定
+
+		if (currentRTV) currentRTV->Release(); // 取得した分をリリース
 
 		//RenderTargetの変更
 		target->SetRenderTarget(Direct3D::pContext_);
@@ -57,6 +63,10 @@ namespace MosaicPrinter
 
 		if (originRTV) { originRTV->Release(); originRTV= nullptr; }
 		if (originDSV) { originDSV->Release(); originDSV = nullptr; }
+
+
+		float blendFactor[4] = { D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO };
+		Direct3D::pContext_->OMSetBlendState(pBlendState[Direct3D::BLEND_DEFAULT], blendFactor, 0xffffffff);
 
 		Direct3D::SetDepthBafferWriteEnable(true);
 	}
@@ -77,10 +87,8 @@ namespace MosaicPrinter
 		float brushSize = 64.0f;
 
 		D3D11_VIEWPORT vp{};
-		vp.TopLeftX = px - brushSize * 0.5f;
-		vp.TopLeftY = py - brushSize * 0.5f;
-		vp.Width = brushSize;
-		vp.Height = brushSize;
+		vp.Width = w;
+		vp.Height = h;
 		vp.MinDepth = 0.0f;
 		vp.MaxDepth = 1.0f;
 
@@ -88,7 +96,7 @@ namespace MosaicPrinter
 
 		ShaderSet();
 
-		Direct3D::pContext_->Draw(4, 0);
+		//Direct3D::pContext_->Draw(2, 0);
 	}
 
 
@@ -113,6 +121,7 @@ namespace MosaicPrinter
 		// トポロジー (TriangleStrip)
 		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 	}
+
 	void InitShader()
 	{
 		DWORD vectorSize = sizeof(XMFLOAT3);

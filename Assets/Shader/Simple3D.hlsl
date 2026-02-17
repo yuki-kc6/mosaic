@@ -97,21 +97,8 @@ float Block3D(float3 p)
 float4 PS(VS_OUT inData) : SV_Target
 {
     float mosaicValue = g_maskTexture.Sample(g_sampler, inData.uv).r;
-    
-    return float4(mosaicValue, 0, 0, 1);
-    
-    float2 mosaicUV = inData.uv;
-    
-    if (mosaicValue > 0.1f)
-    {
-        float NoiseScale = 64.0f; // モザイクの細かさ
-        float radius = 0.5f;
-        
-        
-        float NoiseColor = Block3D(inData.worldPos * NoiseScale) * radius;
-        
-    }
-    
+       
+ 
     
 	//ライトの向き
     float4 lightDir = g_vecLightDir; //グルーバル変数は変更できないので、いったんローカル変数へ
@@ -131,7 +118,7 @@ float4 PS(VS_OUT inData) : SV_Target
     if (g_isTexture == true)
     {
 		//テクスチャの色
-        diffuse = g_texture.Sample(g_sampler, mosaicUV);//モザイクのUVを入れる
+        diffuse = g_texture.Sample(g_sampler, inData.uv); //モザイクのUVを入れる
     }
     else
     {
@@ -151,9 +138,13 @@ float4 PS(VS_OUT inData) : SV_Target
         speculer = pow(saturate(dot(R, inData.eye)), g_shuniness) * g_vecSpeculer; //ハイライトを求める
     }
 
+    //float2 mosaicUV = inData.uv;
+    
+    
     //float dist= distance(inData.worldPos, g_hitPos);
     
 	//最終的な色
     return diffuse * shade + diffuse * ambient + speculer;
+    //return float4(mosaicValue, mosaicValue, mosaicValue, 1.0f);
     
 }

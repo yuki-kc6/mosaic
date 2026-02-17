@@ -36,9 +36,9 @@ public:
 	void GetOrthoMatrix(XMMATRIX);
 
 	int GetTextureWidth() { return textureWidth; }
-	int GetTextureHeight() { return textureHeight; };
+	int GetTextureHeight() { return textureHeight; }
 
-	
+	ID3D11RenderTargetView* GetRTV()const { return pRenderTargetView_; }
 
 private:
 	int textureWidth;

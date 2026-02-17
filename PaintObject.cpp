@@ -23,7 +23,7 @@ PaintObject::PaintObject(GameObject* parent, const std::string& name)
 {
 	mosaicRT = new RenderTexture();
 	mosaicRT->Initialize(Direct3D::pDevice_, 512, 512, 0.1f, 1000.0f, 1);
-	mosaicRT->ClearRenderTarget(Direct3D::pContext_, 1.0, 0, 0, 1);
+	mosaicRT->ClearRenderTarget(Direct3D::pContext_, 0.0, 0.0, 0.0, 1);
 }
 
 

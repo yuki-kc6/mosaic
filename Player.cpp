@@ -127,17 +127,10 @@ void Player::Update()
     Ground* pGround = (Ground*)FindObject("Ground");    //ステージオブジェクトを探す
     int hGroundModel = pGround->GetModelHandle();    //モデル番号を取得
 
-    XMFLOAT2 testUV = { 50.0f, 50.0f };
+    XMFLOAT2 testUV = { 0.1f, 0.1f };
 
     if (Input::IsMouseButtonDown(0))
     {
-      // Bullet* pBullet = Instantiate<Bullet>(GetParent());
-      // pBullet->SetPosition(Camera::GetPosition());
-      //// pBullet->SetStart(transform_.position_);
-      // //pBullet->SetMove(vBullet);
-		XMFLOAT2 hitUV;
-        hitUV.x = transform_.position_.x;
-        hitUV.y= transform_.position_.z;
 		pGround->PaintMosaic(testUV);//タイルを塗る
         
     }
