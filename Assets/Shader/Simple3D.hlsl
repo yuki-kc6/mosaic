@@ -67,6 +67,29 @@ VS_OUT VS(float4 pos : POSITION, float4 Normal : NORMAL, float2 Uv : TEXCOORD)
     return outData;
 }
 
+//───────────────────────────────────────
+// ノイズ生成
+//───────────────────────────────────────
+static float hash(float3 p)
+{
+    p = frac(p * 0.3183099 + 0.1);
+    p *= 17.0;
+    return frac(p.x * p.y * p.z * (p.x + p.y + p.z));
+
+
+}
+
+//───────────────────────────────────────
+// モザイク化
+//───────────────────────────────────────
+float Block3D(float3 p)
+{
+    return hash(floor(p));
+}
+
+
+
+
 
 //───────────────────────────────────────
 // ピクセルシェーダ
@@ -75,13 +98,18 @@ float4 PS(VS_OUT inData) : SV_Target
 {
     float mosaicValue = g_maskTexture.Sample(g_sampler, inData.uv).r;
     
+    return float4(mosaicValue, 0, 0, 1);
+    
     float2 mosaicUV = inData.uv;
     
     if (mosaicValue > 0.1f)
     {
-        float mosaicRes = 0.0f; // モザイクの細かさ
+        float NoiseScale = 64.0f; // モザイクの細かさ
+        float radius = 0.5f;
         
-         mosaicUV = floor(inData.uv * mosaicRes) / mosaicRes;//離散化
+        
+        float NoiseColor = Block3D(inData.worldPos * NoiseScale) * radius;
+        
     }
     
     
