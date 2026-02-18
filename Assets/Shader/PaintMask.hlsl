@@ -26,5 +26,5 @@ float4 PS(VS_OUT input) : SV_Target
     if (length(dist) > 0.5f)
         discard; // ”¼Œa0.5‚æ‚èŠO‚Í•`‚©‚È‚¢
 
-    return float4(0, 0, 0, 0); // ”’‚ð“h‚é
+    return float4(0, 255, 0, 0); // ”’‚ð“h‚é
 }
