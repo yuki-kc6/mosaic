@@ -19,10 +19,11 @@ public:
 	//モザイクを塗るための関数
 	void PaintMosaic(XMFLOAT2 uv);
 
-	RenderTexture* mosaicRT;//オブジェクトごとにRenderTextureを作成
+	virtual RenderTexture* GetMosaicRT() { return mosaicRT; }
+	
 
 private:
-	
+	RenderTexture* mosaicRT;//オブジェクトごとにRenderTextureを作成
 
 };
 
