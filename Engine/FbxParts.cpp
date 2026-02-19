@@ -614,20 +614,32 @@ void FbxParts::RayCast(RayCastData * data)
 			ver[1] = pVertexData_[ppIndexData_[i][j * 3 + 1]].position;
 			ver[2] = pVertexData_[ppIndexData_[i][j * 3 + 2]].position;
 
+			XMFLOAT2 uv[3];
+			uv[0] = XMFLOAT2(pVertexData_[ppIndexData_[i][j * 3 + 0]].uv.x, pVertexData_[ppIndexData_[i][j * 3 + 0]].uv.y);
+			uv[1] = XMFLOAT2(pVertexData_[ppIndexData_[i][j * 3 + 1]].uv.x, pVertexData_[ppIndexData_[i][j * 3 + 1]].uv.y);
+			uv[2] = XMFLOAT2(pVertexData_[ppIndexData_[i][j * 3 + 2]].uv.x, pVertexData_[ppIndexData_[i][j * 3 + 2]].uv.y);
 			
+
+
 			BOOL  hit = FALSE;
 			float dist = 0.0f;
-
-			hit = Direct3D::Intersect(data->start, data->dir, ver[0], ver[1], ver[2], &dist);
+			float u, v, t;
+			hit = Direct3D::Intersect(data->start, data->dir, ver[0], ver[1], ver[2], u, v, t, & dist);
 
 
 			if (hit && dist < data->dist)
 			{
+				float w = 1.0f - u - v;
+
+				XMFLOAT2 hitUV;
+				hitUV.x = w * uv[0].x + u * uv[1].x + v * uv[2].x;
+				hitUV.y = w * uv[0].y + u * uv[1].y + v * uv[2].y;
+
 				data->hit = TRUE;
 				data->dist = dist;
-				data->ver[0] = ver[0];
-				data->ver[1] = ver[1];
-				data->ver[2] = ver[2];
+				data->uv = hitUV;
+
+
 				//std::memcpy(data->ver, &ver, sizeof(ver));
 				//std::memcpy(data->uv, &uv, sizeof(uv));
 			}

@@ -63,11 +63,8 @@ namespace MosaicPrinter
 		if (originRTV) { originRTV->Release(); originRTV = nullptr; }
 		if (originDSV) { originDSV->Release(); originDSV = nullptr; }
 
-
 		float blendFactor[4] = { D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO };
 		Direct3D::pContext_->OMSetBlendState(pBlendState[Direct3D::BLEND_DEFAULT], blendFactor, 0xffffffff);
-
-		Direct3D::SetDepthBafferWriteEnable(true);
 
 		Direct3D::SetShader(Direct3D::SHADER_3D);
 
@@ -86,7 +83,7 @@ namespace MosaicPrinter
 		CONSTANT_BUFFER cb;
 		D3D11_MAPPED_SUBRESOURCE pdata;
 		cb.center = hitUV;
-		cb.radius = 0.2;
+		cb.radius = 0.01;
 		cb.padding = 0.0f;
 
 		Direct3D::pContext_->Map(pConstantBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);

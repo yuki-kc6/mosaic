@@ -126,26 +126,25 @@ void Player::Update()
 
     Ground* pGround = (Ground*)FindObject("Ground");    //ステージオブジェクトを探す
     int hGroundModel = pGround->GetModelHandle();    //モデル番号を取得
-
+    
 	Enemy* pEnemy = (Enemy*)FindObject("Enemy");    //敵オブジェクトを探す
+	int hEnemyModel = pEnemy->GetModelHandle();    //モデル番号を取得
 
     XMFLOAT2 testUV = { 0.3f, 0.5f };
 
     RayCastData gan;
-	gan.start=transform_.position_;
-	gan.start.y = 0;
+	gan.start=camPos;
+	gan.dir=camTarget;
 	//gan.dir = vBullet;
-	//Model::RayCast(hGroundModel, &gan);
-	if (gan.hit)
-	{
-//		testUV = gan.uv;
-	}
-
-
+    
     if (Input::IsMouseButtonDown(0))
     {
-		pEnemy->PaintMosaic(testUV);//タイルを塗る
-     
+        Model::RayCast(hEnemyModel, &gan);
+        if (gan.hit)
+        {
+            testUV = gan.uv;
+            pEnemy->PaintMosaic(testUV);//タイルを塗る
+        }
     }
 
 
