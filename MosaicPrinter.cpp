@@ -124,38 +124,7 @@ namespace MosaicPrinter
 
 	void InitShader()
 	{
-		DWORD vectorSize = sizeof(XMFLOAT3);
-
-		// 頂点シェーダの作成（コンパイル）
-		ID3DBlob* pCompileVS = NULL;
-		D3DCompileFromFile(L"Shader/PaintMask.hlsl", nullptr, nullptr, "VS", "vs_5_0", NULL, 0, &pCompileVS, NULL);
-		Direct3D::pDevice_->CreateVertexShader(pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), NULL, &pVertexShader);
-
-
-		// ピクセルシェーダの作成（コンパイル）
-		ID3DBlob* pCompilePS = NULL;
-		D3DCompileFromFile(L"Shader/PaintMask.hlsl", nullptr, nullptr, "PS", "ps_5_0", NULL, 0, &pCompilePS, NULL);
-		Direct3D::pDevice_->CreatePixelShader(pCompilePS->GetBufferPointer(), pCompilePS->GetBufferSize(), NULL, &pPixelShader);
-
-
-		// 頂点レイアウトの作成（1頂点の情報が何のデータをどんな順番で持っているか）
-		D3D11_INPUT_ELEMENT_DESC layout[] = {
-			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, vectorSize * 0,  D3D11_INPUT_PER_VERTEX_DATA, 0 },	//頂点位置
-			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, vectorSize * 2, D3D11_INPUT_PER_VERTEX_DATA, 0 },	//テクスチャ（UV）座標
-		};
-		Direct3D::pDevice_->CreateInputLayout(layout, 3, pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), &pVertexLayout);
-
-
-		//シェーダーが無事作成できたので、コンパイルしたやつはいらない
-		pCompileVS->Release();
-		pCompilePS->Release();
-
-		//ラスタライザ作成
-		D3D11_RASTERIZER_DESC rdc = {};
-		rdc.CullMode = D3D11_CULL_NONE;
-		rdc.FillMode = D3D11_FILL_SOLID;
-		rdc.FrontCounterClockwise = FALSE;	//反時計回りは表面じゃない
-		Direct3D::pDevice_->CreateRasterizerState(&rdc, &pRasterizerState);
+		Direct3D::SetShader(Direct3D::SHADER_MASK);
 	}
 
 }
