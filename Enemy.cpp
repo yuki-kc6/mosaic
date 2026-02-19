@@ -3,7 +3,7 @@
 #include "Engine/SphereCollider.h"
 
 Enemy::Enemy(GameObject* parent)
-    : GameObject(parent, "Enemy"),hModel_(-1)
+    : PaintObject(parent, "Enemy"),hModel_(-1)
 {
 
 }
@@ -21,15 +21,20 @@ void Enemy::Initialize()
 
     SphereCollider* collision = new SphereCollider(transform_.position_, 1.2f);
     AddCollider(collision);
+
+
+
 }
 
 void Enemy::Update()
 {
+	transform_.position_.x += 0.01f;
+
 }
 
 void Enemy::Draw()
 {
-    Model::SetTransform(hModel_, transform_);
+    Model::SetTransform(hModel_, transform_,GetMosaicRT()->GetShaderResourceView());
     Model::Draw(hModel_);
 }
 

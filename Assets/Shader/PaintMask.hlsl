@@ -29,11 +29,7 @@ VS_OUT VS(uint vid : SV_VertexID)
 // ピクセルシェーダー
 float4 PS(VS_OUT input) : SV_Target
 {
-    
-    float2 g_hitUV = float2(0.3, 0.5);
-    float g_radius = 0.2;
-    
-   // 現在のピクセル(input.uv)とマウス位置(g_hitUV)の距離を計算
+   // 現在のピクセルヒット地点の距離を計算
     float dist = distance(input.uv, g_hitUV);
 
     // 距離が半径以内なら「白」、外なら「何もしない」

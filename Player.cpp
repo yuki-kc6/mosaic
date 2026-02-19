@@ -5,7 +5,7 @@
 #include "Engine/Camera.h"
 #include "Bullet.h"
 #include "RenderTexture.h"
-
+#include "Enemy.h"
 
 namespace
 {
@@ -127,11 +127,24 @@ void Player::Update()
     Ground* pGround = (Ground*)FindObject("Ground");    //ステージオブジェクトを探す
     int hGroundModel = pGround->GetModelHandle();    //モデル番号を取得
 
-    XMFLOAT2 testUV = { 0.1f, 0.1f };
+	Enemy* pEnemy = (Enemy*)FindObject("Enemy");    //敵オブジェクトを探す
+
+    XMFLOAT2 testUV = { 0.3f, 0.5f };
+
+    RayCastData gan;
+	gan.start=transform_.position_;
+	gan.start.y = 0;
+	//gan.dir = vBullet;
+	//Model::RayCast(hGroundModel, &gan);
+	if (gan.hit)
+	{
+//		testUV = gan.uv;
+	}
+
 
     if (Input::IsMouseButtonDown(0))
     {
-		pGround->PaintMosaic(testUV);//タイルを塗る
+		pEnemy->PaintMosaic(testUV);//タイルを塗る
      
     }
 

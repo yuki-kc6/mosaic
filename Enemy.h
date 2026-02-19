@@ -1,7 +1,7 @@
 #pragma once
-#include "Engine/GameObject.h"
+#include "PaintObject.h"
 
-class Enemy :public GameObject
+class Enemy :public PaintObject
 {
 public:
 	Enemy(GameObject* parent);

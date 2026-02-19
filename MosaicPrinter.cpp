@@ -4,8 +4,6 @@
 
 namespace MosaicPrinter
 {
-
-
 	//元のRenderTargetの情報を入れておくための変数
 	ID3D11RenderTargetView* originRTV = nullptr;
 	ID3D11DepthStencilView* originDSV = nullptr;
@@ -24,7 +22,17 @@ namespace MosaicPrinter
 
 	void MosaicPrinter::Initialize()
 	{
+		//必要な設定項目
+		D3D11_BUFFER_DESC cb;
+		cb.ByteWidth = sizeof(CONSTANT_BUFFER);
+		cb.Usage = D3D11_USAGE_DYNAMIC;
+		cb.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		cb.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		cb.MiscFlags = 0;
+		cb.StructureByteStride = 0;
 
+		// 定数バッファの作成
+		Direct3D::pDevice_->CreateBuffer(&cb, NULL, &pConstantBuffer_);
 	}
 
 	void MosaicPrinter::BeginPaint(RenderTexture* target)
@@ -39,7 +47,6 @@ namespace MosaicPrinter
 
 		ID3D11ShaderResourceView* nullSRV[2] = { nullptr, nullptr };
 		Direct3D::pContext_->PSSetShaderResources(1, 1, nullSRV);
-		//Direct3D::pContext_->PSSetShaderResources(0, 2, nullSRV);
 
 		//RenderTargetの変更
 		target->SetRenderTarget(Direct3D::pContext_);
@@ -74,14 +81,19 @@ namespace MosaicPrinter
 
 	void MosaicPrinter::Paint(RenderTexture* targetRT, XMFLOAT2 hitUV)
 	{
+		Direct3D::pContext_->PSSetConstantBuffers(0, 1, &pConstantBuffer_);
+
 		CONSTANT_BUFFER cb;
 		D3D11_MAPPED_SUBRESOURCE pdata;
 		cb.center = hitUV;
-		cb.radius = 16;
+		cb.radius = 0.2;
 		cb.padding = 0.0f;
 
-		/*Direct3D::pContext_->UpdateSubresource(pConstantBuffer_, 0, nullptr, &cb, 0, 0);
-		Direct3D::pContext_->PSSetConstantBuffers(0, 1, &pConstantBuffer_);*/
+		Direct3D::pContext_->Map(pConstantBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);
+
+		memcpy_s(pdata.pData, pdata.RowPitch, (void*)(&cb), sizeof(cb));		// リソースへ値を送る
+
+		Direct3D::pContext_->Unmap(pConstantBuffer_, 0);
 
 		// ビューポート
 		D3D11_VIEWPORT vp{};

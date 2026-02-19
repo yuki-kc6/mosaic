@@ -97,9 +97,21 @@ float Block3D(float3 p)
 float4 PS(VS_OUT inData) : SV_Target
 {
     float mosaicValue = g_maskTexture.Sample(g_sampler, inData.uv).r;
+    
+    //レンダテクスチャに色が塗られていたらモザイクをかける
+    if(mosaicValue>0.1)
+    {
+        float3 worldPos = inData.worldPos;
+        float3 p = worldPos * 12;
+        float NoiseColor = Block3D(p);
+        
+        float4 ResultColor = float4(NoiseColor, NoiseColor, NoiseColor, 1);
+        
+        return ResultColor;
        
- 
-    return g_maskTexture.Sample(g_sampler, inData.uv);
+    }
+    
+    
 	//ライトの向き
     float4 lightDir = g_vecLightDir; //グルーバル変数は変更できないので、いったんローカル変数へ
     lightDir = normalize(lightDir); //向きだけが必要なので正規化
@@ -137,11 +149,6 @@ float4 PS(VS_OUT inData) : SV_Target
         float4 R = reflect(lightDir, inData.normal); //正反射ベクトル
         speculer = pow(saturate(dot(R, inData.eye)), g_shuniness) * g_vecSpeculer; //ハイライトを求める
     }
-
-    //float2 mosaicUV = inData.uv;
-    
-    
-    //float dist= distance(inData.worldPos, g_hitPos);
     
 	//最終的な色
     return diffuse * shade + diffuse * ambient + speculer;
