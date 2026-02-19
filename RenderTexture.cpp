@@ -188,7 +188,7 @@ void RenderTexture::Shutdown()
 void RenderTexture::SetRenderTarget(ID3D11DeviceContext* deviceContext)
 {
     // Bind the render target view and depth stencil buffer to the output render pipeline.
-     deviceContext->OMSetRenderTargets(1, &pRenderTargetView_, pDepthStencilView_);
+     deviceContext->OMSetRenderTargets(1, &pRenderTargetView_, nullptr);
 
     // Set the viewport.
      deviceContext->RSSetViewports(1, &viewPort_);

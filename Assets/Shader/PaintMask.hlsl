@@ -1,19 +1,27 @@
-// 頂点シェーダー
-// 入力なし（SV_VertexIDだけで作る）
+
+cbuffer BrushCB
+{
+    float2 g_hitUV;
+    float g_radius;
+    float padding; //16バイト境界に合わせるため
+};
+
+
 struct VS_OUT
 {
     float4 pos : SV_POSITION;
     float2 uv : TEXCOORD0;
 };
 
+// 頂点シェーダー
 VS_OUT VS(uint vid : SV_VertexID)
 {
     VS_OUT output;
-    // 0,1,2,3 のIDから四角形を作る魔法の計算
+    
     float2 uv = float2((vid << 1) & 2, vid & 2);
     output.uv = uv;
-    // 画面全体(-1～1)を覆う四角形を出力
-    // ビューポートが小さくなっているので、実際にはブラシのサイズになる
+
+    
     output.pos = float4(uv * float2(2, -2) + float2(-1, 1), 0, 1);
     return output;
 }
@@ -21,10 +29,20 @@ VS_OUT VS(uint vid : SV_VertexID)
 // ピクセルシェーダー
 float4 PS(VS_OUT input) : SV_Target
 {
-    // 円形に切り抜く
-    float2 dist = input.uv - 0.5f; // 中心からの距離
-    if (length(dist) > 0.5f)
-        discard; // 半径0.5より外は描かない
+    
+    float2 g_hitUV = float2(0.3, 0.5);
+    float g_radius = 0.2;
+    
+   // 現在のピクセル(input.uv)とマウス位置(g_hitUV)の距離を計算
+    float dist = distance(input.uv, g_hitUV);
 
-    return float4(0, 255, 0, 0); // 白を塗る
+    // 距離が半径以内なら「白」、外なら「何もしない」
+    if (dist < g_radius)
+    {
+        return float4(1, 1, 1, 1);
+    }
+    
+    // 半径の外側は描画自体をキャンセルする（元のテクスチャの色を維持する）
+    discard;
+    return float4(0, 0, 0, 0);
 }

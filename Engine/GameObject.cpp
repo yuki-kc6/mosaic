@@ -291,8 +291,6 @@ GameObject * GameObject::GetRootJob()
 }
 
 
-
-
 void GameObject::UpdateSub()
 {
 	Update();

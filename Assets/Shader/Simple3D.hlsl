@@ -99,7 +99,7 @@ float4 PS(VS_OUT inData) : SV_Target
     float mosaicValue = g_maskTexture.Sample(g_sampler, inData.uv).r;
        
  
-    
+    return g_maskTexture.Sample(g_sampler, inData.uv);
 	//ライトの向き
     float4 lightDir = g_vecLightDir; //グルーバル変数は変更できないので、いったんローカル変数へ
     lightDir = normalize(lightDir); //向きだけが必要なので正規化

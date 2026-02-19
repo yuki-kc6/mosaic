@@ -4,64 +4,56 @@
 
 namespace MosaicPrinter
 {
+
+
 	//元のRenderTargetの情報を入れておくための変数
 	ID3D11RenderTargetView* originRTV = nullptr;
 	ID3D11DepthStencilView* originDSV = nullptr;
 	D3D11_VIEWPORT          originVP;
-	ID3D11BlendState*		pBlendStateMax = nullptr;
+	ID3D11BlendState* pBlendStateMax = nullptr;
 
-	ID3D11InputLayout* pVertexLayout=nullptr;
-	ID3D11VertexShader* pVertexShader=nullptr;
-	ID3D11PixelShader* pPixelShader=nullptr;
-	ID3D11RasterizerState* pRasterizerState=nullptr;
+	ID3D11InputLayout* pVertexLayout = nullptr;
+	ID3D11VertexShader* pVertexShader = nullptr;
+	ID3D11PixelShader* pPixelShader = nullptr;
+	ID3D11RasterizerState* pRasterizerState = nullptr;
 
 	ID3D11BlendState* pBlendState[Direct3D::BLEND_MAX];
 
+	ID3D11Buffer* pConstantBuffer_;
+
+
 	void MosaicPrinter::Initialize()
 	{
-		// Initialize内でのブレンドステート作成例
-		D3D11_BLEND_DESC blendDesc = {};
-		blendDesc.RenderTarget[0].BlendEnable = TRUE;
-		blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
-		blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE; // 足し算（あるいは D3D11_BLEND_OP_MAX を使う）
-		blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-		blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-		blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-		blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-		blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
-		Direct3D::pDevice_->CreateBlendState(&blendDesc, &pBlendStateMax);
-
-		InitShader();
 	}
 
 	void MosaicPrinter::BeginPaint(RenderTexture* target)
 	{
+		Direct3D::SetShader(Direct3D::SHADER_MASK);
+
 		//現在の設定の保存
 		UINT numViewports = 1;
 		Direct3D::pContext_->OMGetRenderTargets(1, &originRTV, &originDSV);
-		Direct3D::pContext_->RSGetViewports(&numViewports,&originVP);
+		Direct3D::pContext_->RSGetViewports(&numViewports, &originVP);
 
-		ID3D11RenderTargetView* currentRTV = nullptr;
-		Direct3D::pContext_->OMGetRenderTargets(1, &currentRTV, nullptr); // 今のRTVを取得
-		Direct3D::pContext_->OMSetRenderTargets(1, &currentRTV, nullptr); // DSVなしで再設定
 
-		if (currentRTV) currentRTV->Release(); // 取得した分をリリース
+		ID3D11ShaderResourceView* nullSRV[2] = { nullptr, nullptr };
+		Direct3D::pContext_->PSSetShaderResources(1, 1, nullSRV);
+		//Direct3D::pContext_->PSSetShaderResources(0, 2, nullSRV);
 
 		//RenderTargetの変更
 		target->SetRenderTarget(Direct3D::pContext_);
 
-		//Zバッファへの書き込みOFF
-		Direct3D::SetDepthBafferWriteEnable(false);
+		Direct3D::pContext_->OMSetBlendState(nullptr, nullptr, 0xffffffff);
 	}
 
 	void MosaicPrinter::EndPaint()
 	{
-		Direct3D::pContext_->OMSetRenderTargets(1, &originRTV, originDSV);
+		Direct3D::SetDepthBafferWriteEnable(true);
 		Direct3D::pContext_->RSSetViewports(1, &originVP);
 
 
-		if (originRTV) { originRTV->Release(); originRTV= nullptr; }
+		if (originRTV) { originRTV->Release(); originRTV = nullptr; }
 		if (originDSV) { originDSV->Release(); originDSV = nullptr; }
 
 
@@ -69,6 +61,11 @@ namespace MosaicPrinter
 		Direct3D::pContext_->OMSetBlendState(pBlendState[Direct3D::BLEND_DEFAULT], blendFactor, 0xffffffff);
 
 		Direct3D::SetDepthBafferWriteEnable(true);
+
+		Direct3D::SetShader(Direct3D::SHADER_3D);
+
+
+
 	}
 
 	void MosaicPrinter::Release()
@@ -77,49 +74,30 @@ namespace MosaicPrinter
 
 	void MosaicPrinter::Paint(RenderTexture* targetRT, XMFLOAT2 hitUV)
 	{
+		CONSTANT_BUFFER cb;
+		D3D11_MAPPED_SUBRESOURCE pdata;
+		cb.center = hitUV;
+		cb.radius = 16;
+		cb.padding = 0.0f;
 
-		int w  =targetRT->GetTextureWidth();
-		int h = targetRT->GetTextureHeight();
+		/*Direct3D::pContext_->UpdateSubresource(pConstantBuffer_, 0, nullptr, &cb, 0, 0);
+		Direct3D::pContext_->PSSetConstantBuffers(0, 1, &pConstantBuffer_);*/
 
-		float px = hitUV.x * w;
-		float py = hitUV.y * h;
-
-		float brushSize = 64.0f;
-
+		// ビューポート
 		D3D11_VIEWPORT vp{};
-		vp.Width = w;
-		vp.Height = h;
-		vp.MinDepth = 0.0f;
-		vp.MaxDepth = 1.0f;
-
+		vp.Width = (float)targetRT->GetTextureWidth();
+		vp.Height = (float)targetRT->GetTextureHeight();
+		vp.MinDepth = 0;
+		vp.MaxDepth = 1;
 		Direct3D::pContext_->RSSetViewports(1, &vp);
 
-		ShaderSet();
-
-		//Direct3D::pContext_->Draw(2, 0);
+		Direct3D::pContext_->Draw(4, 0);
 	}
 
 
 	void ShaderSet()
 	{
-		auto context = Direct3D::pContext_;
-
-		// シェーダー切り替え
-		context->VSSetShader(pVertexShader, nullptr, 0);
-		context->PSSetShader(pPixelShader, nullptr, 0);
-
-		// レイアウトは不要 (SV_VertexIDを使うため)
-		context->IASetInputLayout(nullptr);
-
-		// ブレンドステート適用 (Max合成)
-		float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
-		context->OMSetBlendState(pBlendStateMax, blendFactor, 0xffffffff);
-
-		// ラスタライザ (カリングなし推奨)
-		context->RSSetState(pRasterizerState);
-
-		// トポロジー (TriangleStrip)
-		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+		Direct3D::SetShader(Direct3D::SHADER_MASK);
 	}
 
 	void InitShader()
@@ -127,4 +105,19 @@ namespace MosaicPrinter
 		Direct3D::SetShader(Direct3D::SHADER_MASK);
 	}
 
+
+	void InitConstatnrBuffer()
+	{
+		//必要な設定項目
+		D3D11_BUFFER_DESC cb;
+		cb.ByteWidth = sizeof(CONSTANT_BUFFER);
+		cb.Usage = D3D11_USAGE_DYNAMIC;
+		cb.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		cb.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		cb.MiscFlags = 0;
+		cb.StructureByteStride = 0;
+
+		// 定数バッファの作成
+		Direct3D::pDevice_->CreateBuffer(&cb, NULL, &pConstantBuffer_);
+	}
 }
