@@ -83,7 +83,7 @@ namespace MosaicPrinter
 		CONSTANT_BUFFER cb;
 		D3D11_MAPPED_SUBRESOURCE pdata;
 		cb.center = hitUV;
-		cb.radius = 0.01;
+		cb.radius = 0.005;
 		cb.padding = 0.0f;
 
 		Direct3D::pContext_->Map(pConstantBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);

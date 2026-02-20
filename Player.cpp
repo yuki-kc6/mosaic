@@ -107,7 +107,6 @@ void Player::Update()
     XMVECTOR vCam = { 0, 3.0f, 5.0f, 0 };//カメラ位置ベクトル
     XMVECTOR vCamT = { 0, camTarY,6.0f, 0 };//カメラターゲットのベクトル
 
-
     //カメラ位置をセット
     vCam = XMVector3TransformCoord(vCam, mRotate);
     XMFLOAT3 camPos;
@@ -121,8 +120,6 @@ void Player::Update()
     XMStoreFloat3(&camTarget, vPos + vCamT);
     Camera::SetTarget(camTarget);
 
-    XMVECTOR vBullet = vCamT - vCam;
-
 
     Ground* pGround = (Ground*)FindObject("Ground");    //ステージオブジェクトを探す
     int hGroundModel = pGround->GetModelHandle();    //モデル番号を取得
@@ -132,24 +129,25 @@ void Player::Update()
 
     XMFLOAT2 testUV = { 0.3f, 0.5f };
 
+    XMFLOAT3 ganTarget;
+    XMStoreFloat3(&ganTarget, vCamT - vCam);
+
+
     RayCastData gan;
 	gan.start=camPos;
-	gan.dir=camTarget;
+	gan.dir=ganTarget;
 	//gan.dir = vBullet;
     
-    if (Input::IsMouseButtonDown(0))
+    if (Input::IsMouseButton(0))
     {
-        Model::RayCast(hEnemyModel, &gan);
+        Model::RayCast(hGroundModel, &gan);
         if (gan.hit)
         {
-            testUV = gan.uv;
-            pEnemy->PaintMosaic(testUV);//タイルを塗る
+            //testUV = gan.uv;
+            pGround->PaintMosaic(gan.uv);//タイルを塗る
         }
     }
 
-
-
-   
 
    RayCastData data;
    data.start = transform_.position_;   //レイの発射位置
@@ -163,7 +161,6 @@ void Player::Update()
    //レイが当たったら
    if (data.hit)
    {
-
        //その分位置を下げる
        transform_.position_.y = -data.dist;//当たった距離のマイナス、ステージの最高点が0より低い
    }

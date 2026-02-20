@@ -187,10 +187,10 @@ void RenderTexture::Shutdown()
 
 void RenderTexture::SetRenderTarget(ID3D11DeviceContext* deviceContext)
 {
-    // Bind the render target view and depth stencil buffer to the output render pipeline.
+    // レンダーターゲットと深度ステンシルバッファを設定
      deviceContext->OMSetRenderTargets(1, &pRenderTargetView_, nullptr);
 
-    // Set the viewport.
+    //ビューポートの設定
      deviceContext->RSSetViewports(1, &viewPort_);
 
     return;
@@ -201,16 +201,16 @@ void RenderTexture::ClearRenderTarget(ID3D11DeviceContext* deviceContext, float 
     float color[4];
 
 
-    // Setup the color to clear the buffer to.
+    // 配列に色を入れる
     color[0] = red;
     color[1] = green;
     color[2] = blue;
     color[3] = alpha;
 
-    // Clear the back buffer.
+    //色をクリアする
     deviceContext->ClearRenderTargetView(pRenderTargetView_, color);
 
-    // Clear the depth buffer.
+    // 深度も一緒に
     deviceContext->ClearDepthStencilView(pDepthStencilView_, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
     return;
