@@ -14,9 +14,10 @@ public:
 	void Draw() override;
 	void Release() override;
 private:
+	void FPSCamera();
 	int hModel_;
-	XMFLOAT3 mousePos;
-	XMFLOAT3 PrevMousePos;
+	XMFLOAT3 baseMousePos;
+	XMFLOAT3 currentMousePos;
 	float camTarY;
 	float gravity;
 	RenderTexture* paintMap;

@@ -23,6 +23,7 @@ Player::Player(GameObject* parent)
 //デストラクタ
 Player::~Player()
 {
+    ShowCursor(TRUE);
 }
 
 //初期化
@@ -35,16 +36,12 @@ void Player::Initialize()
     Input::SetMousePosition(50, 50);
     camTarY = 3.0;
     gravity = 3.0;
-
-
+    //ShowCursor(FALSE);
 }
 
 //更新
 void Player::Update()
 {
-
-    mousePos = Input::GetMousePosition();//現在のマウスの座標
-
     XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
     XMVECTOR vMove1 = { 0,0,0.1f,0 };
     XMVECTOR vMove2 = { 0.1f,0,0,0 };
@@ -59,6 +56,7 @@ void Player::Update()
     vMove3 = XMVector3TransformCoord(vMove3, mRotate);
 
     
+    this->FPSCamera();
 
     //移動
     {
@@ -85,24 +83,10 @@ void Player::Update()
     }
 
 
-    //横軸の視点移動
-    if (Input::GetMouseMove().x)
-    {
-        transform_.rotate_.y += (mousePos.x - PrevMousePos.x) * 0.5;
-    }
-
-    //縦軸の視点移動
-    if (Input::GetMouseMove().y&&camTarY<100&&camTarY>0)
-    {
-        camTarY -= (mousePos.y - PrevMousePos.y) * 0.01;
-        transform_.rotate_.x = (mousePos.y- PrevMousePos.y) * 0.01;
-    }
-
-    PrevMousePos = mousePos;//PrevMousePosの更新
-
     XMStoreFloat3(&transform_.position_, vPos);
 
     
+
 
     XMVECTOR vCam = { 0, 3.0f, 5.0f, 0 };//カメラ位置ベクトル
     XMVECTOR vCamT = { 0, camTarY,6.0f, 0 };//カメラターゲットのベクトル
@@ -126,8 +110,6 @@ void Player::Update()
     
 	Enemy* pEnemy = (Enemy*)FindObject("Enemy");    //敵オブジェクトを探す
 	int hEnemyModel = pEnemy->GetModelHandle();    //モデル番号を取得
-
-    XMFLOAT2 testUV = { 0.3f, 0.5f };
 
     XMFLOAT3 ganTarget;
     XMStoreFloat3(&ganTarget, vCamT - vCam);
@@ -180,4 +162,33 @@ void Player::Draw()
 //開放
 void Player::Release()
 {
+}
+
+void Player::FPSCamera()
+{
+    
+    baseMousePos = Input::GetMousePosition();//現在のマウスの座標
+
+    currentMousePos = Input::GetMousePosition();
+
+
+    if (Input::GetMouseMove)
+    {
+        //横軸の視点移動
+        if (Input::GetMouseMove().x)
+        {
+            transform_.rotate_.y += (baseMousePos.x - currentMousePos.x) * 0.5;
+        }
+
+        //縦軸の視点移動
+        if (Input::GetMouseMove().y && camTarY < 100 && camTarY>0)
+        {
+            camTarY -= (baseMousePos.y - currentMousePos.y) * 0.01;
+            transform_.rotate_.x = (baseMousePos.y - currentMousePos.y) * 0.01;
+        }
+
+    }
+
+    Input::SetMousePosition(5.0, 5.0);
+
 }
