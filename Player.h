@@ -18,7 +18,14 @@ private:
 	int hModel_;
 	XMFLOAT3 baseMousePos;
 	XMFLOAT3 currentMousePos;
+
+	XMFLOAT3 mousePos;
+	XMFLOAT3 PrevMousePos;
+
 	float camTarY;
 	float gravity;
 	RenderTexture* paintMap;
+	float ScreenWIDTH = 800;
+	float ScreenHEIGHT = 600;
+
 };

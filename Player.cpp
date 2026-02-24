@@ -12,7 +12,6 @@ namespace
 
 }
 
-
 //コンストラクタ
 Player::Player(GameObject* parent)
     :GameObject(parent, "Player"), hModel_(-1)
@@ -33,7 +32,8 @@ void Player::Initialize()
     assert(hModel_ >= 0);
 
     transform_.position_.y = 1;
-    Input::SetMousePosition(50, 50);
+    Input::SetMousePosition(50, 30);
+    mousePos = Input::GetMousePosition();
     camTarY = 3.0;
     gravity = 3.0;
     //ShowCursor(FALSE);
@@ -42,6 +42,7 @@ void Player::Initialize()
 //更新
 void Player::Update()
 {
+    mousePos = Input::GetMousePosition();
     XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
     XMVECTOR vMove1 = { 0,0,0.1f,0 };
     XMVECTOR vMove2 = { 0.1f,0,0,0 };
@@ -56,7 +57,7 @@ void Player::Update()
     vMove3 = XMVector3TransformCoord(vMove3, mRotate);
 
     
-    this->FPSCamera();
+   // this->FPSCamera();
 
     //移動
     {
@@ -85,7 +86,29 @@ void Player::Update()
 
     XMStoreFloat3(&transform_.position_, vPos);
 
-    
+    //横軸の視点移動
+    if (Input::GetMouseMove().x)
+    {
+        transform_.rotate_.y += (mousePos.x - PrevMousePos.x) * 0.2;
+    }
+
+    //縦軸の視点移動
+    if (Input::GetMouseMove().y && camTarY < 100 && camTarY>0)
+    {
+        camTarY -= (mousePos.y - PrevMousePos.y) * 0.01;
+        transform_.rotate_.x = (mousePos.y - PrevMousePos.y) * 0.01;
+    }
+    if (camTarY > 100)
+    {
+        camTarY = 99;
+    }
+    if (camTarY < 0)
+    {
+        camTarY = 1;
+    }
+    PrevMousePos = mousePos;//PrevMousePosの更新
+
+    XMStoreFloat3(&transform_.position_, vPos);
 
 
     XMVECTOR vCam = { 0, 3.0f, 5.0f, 0 };//カメラ位置ベクトル
@@ -97,13 +120,11 @@ void Player::Update()
     XMStoreFloat3(&camPos, vPos + vCam);
     Camera::SetPosition(camPos);
 
-
     //カメラターゲットのセット
     vCamT = XMVector3TransformCoord(vCamT, mRotate);
     XMFLOAT3 camTarget;
     XMStoreFloat3(&camTarget, vPos + vCamT);
     Camera::SetTarget(camTarget);
-
 
     Ground* pGround = (Ground*)FindObject("Ground");    //ステージオブジェクトを探す
     int hGroundModel = pGround->GetModelHandle();    //モデル番号を取得
@@ -167,7 +188,9 @@ void Player::Release()
 void Player::FPSCamera()
 {
     
-    baseMousePos = Input::GetMousePosition();//現在のマウスの座標
+    baseMousePos.x = ScreenWIDTH / 2;
+    baseMousePos.y = ScreenHEIGHT / 2;
+    baseMousePos.z = 0.0;
 
     currentMousePos = Input::GetMousePosition();
 
