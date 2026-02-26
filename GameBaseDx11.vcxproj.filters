@@ -105,6 +105,7 @@
     <ClCompile Include="MosaicPrinter.cpp" />
     <ClCompile Include="PaintObject.cpp" />
     <ClCompile Include="Ball.cpp" />
+    <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -186,6 +187,7 @@
     <ClInclude Include="MosaicPrinter.h" />
     <ClInclude Include="PaintObject.h" />
     <ClInclude Include="Ball.h" />
+    <ClInclude Include="Wall.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

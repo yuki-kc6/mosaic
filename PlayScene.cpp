@@ -3,7 +3,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "MosaicPrinter.h"
-
+#include "Wall.h"
 
 //コンストラクタ
 PlayScene::PlayScene(GameObject * parent)
@@ -18,6 +18,7 @@ void PlayScene::Initialize()
 	Instantiate<Ground>(this);
 	Instantiate<Player>(this);
 	Instantiate<Enemy>(this);
+	Instantiate<Wall>(this);
 	
 }
 

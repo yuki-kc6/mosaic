@@ -16,7 +16,7 @@ Ground::~Ground()
 //‰Šú‰»
 void Ground::Initialize()
 {
-    hModel_ = Model::Load("Models/ground.fbx");
+    hModel_ = Model::Load("Models/Map1.fbx");
     assert(hModel_ >= 0);
 
 

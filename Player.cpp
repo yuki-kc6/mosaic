@@ -6,7 +6,7 @@
 #include "Bullet.h"
 #include "RenderTexture.h"
 #include "Enemy.h"
-
+#include "Wall.h"
 namespace
 {
 
@@ -83,7 +83,6 @@ void Player::Update()
         }
     }
 
-
     XMStoreFloat3(&transform_.position_, vPos);
 
     //横軸の視点移動
@@ -110,7 +109,6 @@ void Player::Update()
 
     XMStoreFloat3(&transform_.position_, vPos);
 
-
     XMVECTOR vCam = { 0, 3.0f, 5.0f, 0 };//カメラ位置ベクトル
     XMVECTOR vCamT = { 0, camTarY,6.0f, 0 };//カメラターゲットのベクトル
 
@@ -132,6 +130,9 @@ void Player::Update()
 	Enemy* pEnemy = (Enemy*)FindObject("Enemy");    //敵オブジェクトを探す
 	int hEnemyModel = pEnemy->GetModelHandle();    //モデル番号を取得
 
+    Wall* pWall = (Wall*)FindObject("Wall");
+    int hWallModel = pWall->GetModelHandle();    //モデル番号を取得
+
     XMFLOAT3 ganTarget;
     XMStoreFloat3(&ganTarget, vCamT - vCam);
 
@@ -150,7 +151,6 @@ void Player::Update()
             pGround->PaintMosaic(gan.uv);//タイルを塗る
         }
     }
-
 
    RayCastData data;
    data.start = transform_.position_;   //レイの発射位置
