@@ -144,11 +144,11 @@ void Player::Update()
     
     if (Input::IsMouseButton(0))
     {
-        Model::RayCast(hGroundModel, &gan);
+        Model::RayCast(hWallModel, &gan);
         if (gan.hit)
         {
             //testUV = gan.uv;
-            pGround->PaintMosaic(gan.uv);//タイルを塗る
+            pWall->PaintMosaic(gan.uv);//タイルを塗る
         }
     }
 
