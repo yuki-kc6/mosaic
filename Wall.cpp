@@ -16,7 +16,7 @@ Wall::~Wall()
 //‰Šú‰»
 void Wall::Initialize()
 {
-    hModel_ = Model::Load("Models/Wall.fbx");
+    hModel_ = Model::Load("Models/building.fbx");
     assert(hModel_ >= 0);
 }
 
