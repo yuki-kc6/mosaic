@@ -18,6 +18,7 @@ private:
 	void FPSCamera();
 	void OnGround();
 	void RayCastToPaintObjects(RayCastData &data);
+	void PlayerMove();
 	int hModel_;
 	XMFLOAT3 baseMousePos;
 	XMFLOAT3 currentMousePos;
