@@ -27,7 +27,6 @@ void Player::Initialize()
 
     transform_.position_.y = 1;
     Input::SetMousePosition(50, 30);
-    mousePos = Input::GetMousePosition();
     camTarY = 3.0;
     gravity = 3.0;
     paintObj = nullptr;
@@ -40,12 +39,15 @@ void Player::Initialize()
 //更新
 void Player::Update()
 {
-    mousePos = Input::GetMousePosition();
+    //mousePos = Input::GetMousePosition();
    
     this->FPSCamera();
     this->PlayerMove();
 
     XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
+
+    Camera::SetPosition(camPos);
+    Camera::SetTarget(camTarget);
 
     RayCastData gan;
 	gan.start=Camera::GetPosition();
@@ -78,18 +80,7 @@ void Player::FPSCamera()
 
     if (Input::GetMouseMove)
     {
-        //横軸の視点移動
-        if (Input::GetMouseMove().x)
-        {
-            transform_.rotate_.y += (baseMousePos.x - currentMousePos.x) * 0.5;
-        }
 
-        //縦軸の視点移動
-        if (Input::GetMouseMove().y && camTarY < 100 && camTarY>0)
-        {
-            camTarY -= (baseMousePos.y - currentMousePos.y) * 0.01;
-            transform_.rotate_.x = (baseMousePos.y - currentMousePos.y) * 0.01;
-        }
     }
 }
 

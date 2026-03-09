@@ -20,15 +20,13 @@ private:
 	void RayCastToPaintObjects(RayCastData &data);
 	void PlayerMove();
 	int hModel_;
-	XMFLOAT3 baseMousePos;
 	XMFLOAT3 currentMousePos;
 
-	XMFLOAT3 mousePos;
-	XMFLOAT3 PrevMousePos;
+	XMFLOAT3 camPos;
+	XMFLOAT3 camTarget;
 
 	float camTarY;
 	float gravity;
-	RenderTexture* paintMap;
 	PaintObject* paintObj;
 	int centerX;
 	int centerY;

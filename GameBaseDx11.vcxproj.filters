@@ -104,8 +104,8 @@
     <ClCompile Include="RenderTexture.cpp" />
     <ClCompile Include="MosaicPrinter.cpp" />
     <ClCompile Include="PaintObject.cpp" />
-    <ClCompile Include="Ball.cpp" />
     <ClCompile Include="Wall.cpp" />
+    <ClCompile Include="FPSCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -186,8 +186,8 @@
     <ClInclude Include="RenderTexture.h" />
     <ClInclude Include="MosaicPrinter.h" />
     <ClInclude Include="PaintObject.h" />
-    <ClInclude Include="Ball.h" />
     <ClInclude Include="Wall.h" />
+    <ClInclude Include="FPSCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">
