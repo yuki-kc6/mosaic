@@ -1,8 +1,9 @@
 #pragma once
 #include "Engine/GameObject.h"
-
+#include "Engine/Model.h"
 
 class RenderTexture;
+class PaintObject;
 
 class Player:public GameObject
 {
@@ -15,6 +16,8 @@ public:
 	void Release() override;
 private:
 	void FPSCamera();
+	void OnGround();
+	void RayCastToPaintObjects(RayCastData &data);
 	int hModel_;
 	XMFLOAT3 baseMousePos;
 	XMFLOAT3 currentMousePos;
@@ -25,7 +28,11 @@ private:
 	float camTarY;
 	float gravity;
 	RenderTexture* paintMap;
-	float ScreenWIDTH = 800;
-	float ScreenHEIGHT = 600;
+	PaintObject* paintObj;
+	int centerX;
+	int centerY;
+
 
 };
+
+

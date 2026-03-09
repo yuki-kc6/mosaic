@@ -12,9 +12,6 @@ struct CONSTANT_BUFFER
 	float padding;   // 4 bytes（16バイト揃え）
 };
 
-
-
-
 namespace MosaicPrinter
 {
 	
@@ -32,6 +29,3 @@ namespace MosaicPrinter
 
 	void InitShader();
 }
-
-
-void InitConstatnrBuffer();

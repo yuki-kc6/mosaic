@@ -1,16 +1,9 @@
 #include "Player.h"
-#include "Engine/Model.h"
 #include "Engine/Input.h"
 #include "Ground.h"
 #include "Engine/Camera.h"
 #include "Bullet.h"
 #include "RenderTexture.h"
-#include "Enemy.h"
-#include "Wall.h"
-namespace
-{
-
-}
 
 //コンストラクタ
 Player::Player(GameObject* parent)
@@ -28,6 +21,7 @@ Player::~Player()
 //初期化
 void Player::Initialize()
 {
+    SetCursorPos(50, 50);
     hModel_ = Model::Load("Models/PlayerKari.fbx");
     assert(hModel_ >= 0);
 
@@ -36,6 +30,10 @@ void Player::Initialize()
     mousePos = Input::GetMousePosition();
     camTarY = 3.0;
     gravity = 3.0;
+    paintObj = nullptr;
+    centerX = GetSystemMetrics(SM_CXSCREEN) / 2;
+    centerY = GetSystemMetrics(SM_CYSCREEN) / 2;
+
     //ShowCursor(FALSE);
 }
 
@@ -124,15 +122,6 @@ void Player::Update()
     XMStoreFloat3(&camTarget, vPos + vCamT);
     Camera::SetTarget(camTarget);
 
-    Ground* pGround = (Ground*)FindObject("Ground");    //ステージオブジェクトを探す
-    int hGroundModel = pGround->GetModelHandle();    //モデル番号を取得
-    
-	Enemy* pEnemy = (Enemy*)FindObject("Enemy");    //敵オブジェクトを探す
-	int hEnemyModel = pEnemy->GetModelHandle();    //モデル番号を取得
-
-    Wall* pWall = (Wall*)FindObject("Wall");
-    int hWallModel = pWall->GetModelHandle();    //モデル番号を取得
-
     XMFLOAT3 ganTarget;
     XMStoreFloat3(&ganTarget, vCamT - vCam);
 
@@ -144,32 +133,10 @@ void Player::Update()
     
     if (Input::IsMouseButton(0))
     {
-        Model::RayCast(hWallModel, &gan);
-        if (gan.hit)
-        {
-            //testUV = gan.uv;
-            pWall->PaintMosaic(gan.uv);//タイルを塗る
-        }
+        this->RayCastToPaintObjects(gan);
     }
 
-   RayCastData data;
-   data.start = transform_.position_;   //レイの発射位置
-   data.start.y = 0;
-
-   data.dir = XMFLOAT3(0, -1, 0);       //レイの方向
-   Model::RayCast(hGroundModel, &data); //レイを発射
-
-
-
-   //レイが当たったら
-   if (data.hit)
-   {
-       //その分位置を下げる
-       transform_.position_.y = -data.dist;//当たった距離のマイナス、ステージの最高点が0より低い
-   }
-
-
-
+    this->OnGround();
 }
 
 //描画
@@ -187,13 +154,7 @@ void Player::Release()
 
 void Player::FPSCamera()
 {
-    
-    baseMousePos.x = ScreenWIDTH / 2;
-    baseMousePos.y = ScreenHEIGHT / 2;
-    baseMousePos.z = 0.0;
-
-    currentMousePos = Input::GetMousePosition();
-
+    SetCursorPos(centerX, centerY);
 
     if (Input::GetMouseMove)
     {
@@ -211,7 +172,53 @@ void Player::FPSCamera()
         }
 
     }
+}
 
-    Input::SetMousePosition(5.0, 5.0);
+void Player::OnGround()
+{
+    Ground* pGround = (Ground*)FindObject("Ground");    //ステージオブジェクトを探す
+    int hGroundModel = pGround->GetModelHandle();    //モデル番号を取得
 
+    RayCastData data;
+    data.start = transform_.position_;   //レイの発射位置
+    data.start.y = 0;
+
+    data.dir = XMFLOAT3(0, -1, 0);       //レイの方向
+    Model::RayCast(hGroundModel, &data); //レイを発射
+
+    //レイが当たったら
+    if (data.hit)
+    {
+        //その分位置を下げる
+        transform_.position_.y = -data.dist;//当たった距離のマイナス、ステージの最高点が0より低い
+    }
+}
+
+void Player::RayCastToPaintObjects(RayCastData& data)
+{
+    PaintObject* closestObj = nullptr;
+    float dist = FLT_MAX;
+    XMFLOAT2 UV = { 0,0 };
+    // PaintObject 継承クラスだけに絞ってループ
+    for (PaintObject* pObj : PaintObject::GetPaintObjectList()) {
+        // 描画されていない、または死んでいるオブジェクトはスキップ
+        RayCastData ray = data; // コピーして使用
+        if (!pObj->IsVisibled() || pObj->IsDead()) continue;
+        // 親クラス GameObject の hModel_ と WorldMatrix を使用して判定
+        Model::RayCast(pObj->GetModelHandle(), &ray);
+
+        if (ray.hit)
+        {
+            if (dist > ray.dist)
+            {
+                dist = ray.dist;
+                closestObj = pObj;
+                UV = ray.uv;
+            }
+        }
+    }
+    if (closestObj != nullptr)
+    {
+        closestObj->PaintMosaic(UV);
+    }
 }

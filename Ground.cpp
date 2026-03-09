@@ -4,7 +4,7 @@
 #include "RenderTexture.h"
 //コンストラクタ
 Ground::Ground(GameObject* parent)
-    :PaintObject(parent, "Ground"),hModel_(-1)
+    :PaintObject(parent, "Ground")
 {
 }
 
@@ -19,9 +19,6 @@ void Ground::Initialize()
     hModel_ = Model::Load("Models/map1.fbx");
     assert(hModel_ >= 0);
 
-
-
-	
 }
 
 //更新

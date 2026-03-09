@@ -68,8 +68,6 @@ namespace MosaicPrinter
 
 		Direct3D::SetShader(Direct3D::SHADER_3D);
 
-
-
 	}
 
 	void MosaicPrinter::Release()
@@ -114,19 +112,4 @@ namespace MosaicPrinter
 		Direct3D::SetShader(Direct3D::SHADER_MASK);
 	}
 
-
-	void InitConstatnrBuffer()
-	{
-		//必要な設定項目
-		D3D11_BUFFER_DESC cb;
-		cb.ByteWidth = sizeof(CONSTANT_BUFFER);
-		cb.Usage = D3D11_USAGE_DYNAMIC;
-		cb.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		cb.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		cb.MiscFlags = 0;
-		cb.StructureByteStride = 0;
-
-		// 定数バッファの作成
-		Direct3D::pDevice_->CreateBuffer(&cb, NULL, &pConstantBuffer_);
-	}
 }

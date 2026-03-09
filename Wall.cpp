@@ -4,7 +4,7 @@
 #include "RenderTexture.h"
 //コンストラクタ
 Wall::Wall(GameObject* parent)
-    :PaintObject(parent, "Wall"), hModel_(-1)
+    :PaintObject(parent, "Wall")
 {
 }
 

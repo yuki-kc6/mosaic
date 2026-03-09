@@ -5,7 +5,7 @@
 RenderTexture::RenderTexture()
 {
     pRenderTargetTexture_ = 0;
-    pRenderTargetTexture_ = 0;
+    pRenderTargetView_ = 0;
     pShaderResourceView_ = 0;
     pDepthStencilBuffer_ = 0;
     pDepthStencilView_ = 0;

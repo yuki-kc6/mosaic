@@ -1,6 +1,5 @@
 #pragma once
 #include "Engine/GameObject.h"
-
 //テストシーンを管理するクラス
 class PlayScene : public GameObject
 {
@@ -19,5 +18,5 @@ public:
 	void Draw() override;
 
 	//開放
-	void Release() override;
+	void Release() override;	
 };

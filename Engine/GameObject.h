@@ -33,7 +33,6 @@ protected:
 
 	//モデルのハンドル
 	int						hModel_;
-
 public:
 	//コンストラクタ
 	GameObject();
@@ -151,7 +150,7 @@ public:
 	void SetScale(XMFLOAT3 scale) { transform_.scale_ = scale; }
 	void SetScale(float x, float y, float z) { SetScale(XMFLOAT3(x, y, z)); }
 
-	int GetModelHandle() { return hModel_; }
+	int GetModelHandle() { return this->hModel_; }
 
 
 
@@ -160,7 +159,7 @@ private:
 	//オブジェクト削除（再帰）
 	//引数：obj　削除するオブジェクト
 	void KillObjectSub(GameObject* obj);
-
+	
 
 private:
 	//フラグ

@@ -15,12 +15,14 @@ PlayScene::PlayScene(GameObject * parent)
 void PlayScene::Initialize()
 {
 	MosaicPrinter::Initialize();
-	Instantiate<Wall>(this);
+
+
 	Instantiate<Enemy>(this);
 	
 	Instantiate<Ground>(this);
 
-
+	Instantiate<Wall>(this);
+	
 	Instantiate<Player>(this);
 	
 	

@@ -2,6 +2,7 @@
 #include "Engine/GameObject.h"
 #include "RenderTexture.h"
 #include "MosaicPrinter.h"
+#include <list>
 class PaintObject :
     public GameObject
 {
@@ -20,10 +21,11 @@ public:
 	void PaintMosaic(XMFLOAT2 uv);
 
 	virtual RenderTexture* GetMosaicRT() { return mosaicRT; }
-	
+
+	static const std::list<PaintObject*>& GetPaintObjectList() { return paintObjectList_; }
 
 private:
 	RenderTexture* mosaicRT;//オブジェクトごとにRenderTextureを作成
-
+	static std::list<PaintObject*> paintObjectList_;
 };
 

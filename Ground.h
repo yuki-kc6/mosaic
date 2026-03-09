@@ -1,7 +1,6 @@
 #pragma once
 #include "PaintObject.h"
 
-//◆◆◆を管理するクラス
 class Ground : public PaintObject
 {
 
@@ -24,6 +23,5 @@ public:
     //開放
     void Release() override;
 private:
-    int hModel_;    //モデル番号
 
 };

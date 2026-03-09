@@ -3,7 +3,7 @@
 #include "Engine/SphereCollider.h"
 
 Enemy::Enemy(GameObject* parent)
-    : PaintObject(parent, "Enemy"),hModel_(-1)
+    : PaintObject(parent, "Enemy")
 {
 
 }
