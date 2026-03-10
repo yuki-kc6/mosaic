@@ -63,7 +63,7 @@ namespace Direct3D
 		scDesc.BufferDesc.RefreshRate.Denominator = 1;
 
 		//その他
-		scDesc.Windowed = TRUE;				//ウィンドウモードかフルスクリーンか
+		scDesc.Windowed = FALSE;				//ウィンドウモードかフルスクリーンか
 		scDesc.OutputWindow = hWnd;			//ウィンドウハンドル
 		scDesc.BufferCount = 1;				//裏画面の枚数
 		scDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;	//画面に描画するために使う

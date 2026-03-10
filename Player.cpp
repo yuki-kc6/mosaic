@@ -9,7 +9,7 @@
 
 //コンストラクタ
 Player::Player(GameObject* parent)
-    :GameObject(parent, "Player"), hModel_(-1),yaw_(0),pitch_(0),sensitivity_(0)
+    :GameObject(parent, "Player"), hModel_(-1),moveSpeed_(0)
 {
 
 }
@@ -27,8 +27,7 @@ void Player::Initialize()
     //assert(hModel_ >= 0);
 
     transform_.position_.y = 1;
-    gravity = 3.0;
-    sensitivity_ = 0.5;
+    moveSpeed_ = 0.5;
 
     transform_.rotate_ = { 0,0,0 };
     
@@ -43,7 +42,7 @@ void Player::Initialize()
 void Player::Update()
 {
     fpsCamera->Update();
-    fpsCamera->SetFpsCamera(transform_);
+    fpsCamera->SetFpsCamera(transform_,0.5f);
     XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
 
     XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
@@ -59,19 +58,19 @@ void Player::Update()
     {
         if (Input::IsKey(DIK_W))
         {
-            vPos += vMoveForward*sensitivity_;
+            vPos += vMoveForward*moveSpeed_;
         }
         if (Input::IsKey(DIK_S))
         {
-            vPos -= vMoveForward*sensitivity_;
+            vPos -= vMoveForward*moveSpeed_;
         }
         if (Input::IsKey(DIK_D))
         {
-            vPos += vMoveRight*sensitivity_;
+            vPos += vMoveRight*moveSpeed_;
         }
         if (Input::IsKey(DIK_A))
         {
-            vPos -= vMoveRight*sensitivity_;
+            vPos -= vMoveRight*moveSpeed_;
         }
     }
 

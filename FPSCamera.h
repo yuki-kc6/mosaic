@@ -12,7 +12,7 @@ public:
 
 	void Update();
 
-	void SetFpsCamera(Transform &cam);
+	void SetFpsCamera(Transform &cam, float sensitivity);
 
 	const int GetMouseDeltaX()const { return DeltaX; }
 	const int GetMouseDeltaY()const { return DeltaY; }

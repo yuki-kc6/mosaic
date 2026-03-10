@@ -30,12 +30,12 @@ void FPSCamera::Update()
 
 }
 
-void FPSCamera::SetFpsCamera(Transform &cam)
+void FPSCamera::SetFpsCamera(Transform &cam,float sensitivity)
 {
 	XMVECTOR vPos = XMLoadFloat3(&cam.position_);
 
-	cam.rotate_.y += DeltaX;
-	cam.rotate_.x += DeltaY;
+	cam.rotate_.y += DeltaX*sensitivity;
+	cam.rotate_.x += DeltaY*sensitivity;
 
 	if (cam.rotate_.x > 80.0f)
 	{

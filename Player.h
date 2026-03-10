@@ -24,25 +24,8 @@ private:
 
 	FPSCamera* fpsCamera;
 
-	float yaw_;
-	float pitch_;
-	float sensitivity_;
-
-	XMFLOAT3 currentMousePos;
-	XMFLOAT3 mousePos;
-	XMFLOAT3 PrevMousePos;
-
+	float moveSpeed_;
 	
-	XMFLOAT3 camPos;
-	XMFLOAT3 camTarget;
-
-	float camTarY;
-	float gravity;
-	PaintObject* paintObj;
-	int centerX;
-	int centerY;
-
-
 };
 
 
