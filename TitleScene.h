@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 
+
 //テストシーンを管理するクラス
 class TitleScene : public GameObject
 {
@@ -20,4 +21,6 @@ public:
 
 	//開放
 	void Release() override;
+private:
+	
 };

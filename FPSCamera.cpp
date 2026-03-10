@@ -1,7 +1,7 @@
 #include "FPSCamera.h"
 #include "Engine/Input.h"
 
-FPSCamera::FPSCamera()
+FPSCamera::FPSCamera():DeltaX(0),DeltaY(0),currentMousePos(0)
 {
 	centerX = GetSystemMetrics(SM_CXSCREEN) / 2;
 	centerY = GetSystemMetrics(SM_CYSCREEN) / 2;

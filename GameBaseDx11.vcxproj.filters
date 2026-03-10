@@ -106,6 +106,7 @@
     <ClCompile Include="PaintObject.cpp" />
     <ClCompile Include="Wall.cpp" />
     <ClCompile Include="FPSCamera.cpp" />
+    <ClCompile Include="TitleHeader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -188,6 +189,7 @@
     <ClInclude Include="PaintObject.h" />
     <ClInclude Include="Wall.h" />
     <ClInclude Include="FPSCamera.h" />
+    <ClInclude Include="TitleHeader.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

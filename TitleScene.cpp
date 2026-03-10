@@ -1,6 +1,7 @@
 #include "TitleScene.h"
 #include "Engine/Input.h"
 #include "Engine/SceneManager.h"
+#include "TitleHeader.h"
 
 //コンストラクタ
 TitleScene::TitleScene(GameObject* parent)
@@ -12,6 +13,7 @@ TitleScene::TitleScene(GameObject* parent)
 //初期化
 void TitleScene::Initialize()
 {
+	Instantiate<TitleHeader>(this);
 }
 
 //更新
@@ -27,9 +29,11 @@ void TitleScene::Update()
 //描画
 void TitleScene::Draw()
 {
+
 }
 
 //開放
 void TitleScene::Release()
 {
+
 }

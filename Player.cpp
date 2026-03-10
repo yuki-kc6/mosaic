@@ -27,6 +27,7 @@ void Player::Initialize()
 
     transform_.position_.y = 1;
     Input::SetMousePosition(50, 30);
+    mousePos = Input::GetMousePosition();
     camTarY = 3.0;
     gravity = 3.0;
     paintObj = nullptr;
@@ -39,20 +40,97 @@ void Player::Initialize()
 //更新
 void Player::Update()
 {
-    //mousePos = Input::GetMousePosition();
-   
-    this->FPSCamera();
-    this->PlayerMove();
-
+    mousePos = Input::GetMousePosition();
     XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
+    XMVECTOR vMove1 = { 0,0,0.1f,0 };
+    XMVECTOR vMove2 = { 0.1f,0,0,0 };
+    XMVECTOR vMove3 = { 0,1.0f,0,0 };
 
+
+    XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+
+
+    vMove1 = XMVector3TransformCoord(vMove1, mRotate);
+    vMove2 = XMVector3TransformCoord(vMove2, mRotate);
+    vMove3 = XMVector3TransformCoord(vMove3, mRotate);
+
+
+    // this->FPSCamera();
+
+     //移動
+    {
+        if (Input::IsKey(DIK_W))
+        {
+            vPos += vMove1;
+            XMStoreFloat3(&transform_.position_, vPos);
+        }
+        if (Input::IsKey(DIK_S))
+        {
+            vPos -= vMove1;
+            XMStoreFloat3(&transform_.position_, vPos);
+        }
+        if (Input::IsKey(DIK_D))
+        {
+            vPos += vMove2;
+            XMStoreFloat3(&transform_.position_, vPos);
+        }
+        if (Input::IsKey(DIK_A))
+        {
+            vPos -= vMove2;
+            XMStoreFloat3(&transform_.position_, vPos);
+        }
+    }
+
+    XMStoreFloat3(&transform_.position_, vPos);
+
+    //横軸の視点移動
+    if (Input::GetMouseMove().x)
+    {
+        transform_.rotate_.y += (mousePos.x - PrevMousePos.x) * 0.2;
+    }
+
+    //縦軸の視点移動
+    if (Input::GetMouseMove().y && camTarY < 100 && camTarY>0)
+    {
+        camTarY -= (mousePos.y - PrevMousePos.y) * 0.01;
+        transform_.rotate_.x = (mousePos.y - PrevMousePos.y) * 0.01;
+    }
+    if (camTarY > 100)
+    {
+        camTarY = 99;
+    }
+    if (camTarY < 0)
+    {
+        camTarY = 1;
+    }
+    PrevMousePos = mousePos;//PrevMousePosの更新
+
+    XMStoreFloat3(&transform_.position_, vPos);
+
+    XMVECTOR vCam = { 0, 3.0f, 5.0f, 0 };//カメラ位置ベクトル
+    XMVECTOR vCamT = { 0, camTarY,6.0f, 0 };//カメラターゲットのベクトル
+
+    //カメラ位置をセット
+    vCam = XMVector3TransformCoord(vCam, mRotate);
+    XMFLOAT3 camPos;
+    XMStoreFloat3(&camPos, vPos + vCam);
     Camera::SetPosition(camPos);
+
+    //カメラターゲットのセット
+    vCamT = XMVector3TransformCoord(vCamT, mRotate);
+    XMFLOAT3 camTarget;
+    XMStoreFloat3(&camTarget, vPos + vCamT);
     Camera::SetTarget(camTarget);
 
+    XMFLOAT3 ganTarget;
+    XMStoreFloat3(&ganTarget, vCamT - vCam);
+
+
     RayCastData gan;
-	gan.start=Camera::GetPosition();
-	gan.dir=Camera::GetTarget();
-	
+    gan.start = camPos;
+    gan.dir = ganTarget;
+    //gan.dir = vBullet;
+
     if (Input::IsMouseButton(0))
     {
         this->RayCastToPaintObjects(gan);
@@ -66,22 +144,12 @@ void Player::Draw()
 {
     Model::SetTransform(hModel_, transform_);
     Model::Draw(hModel_);
-    
+
 }
 
 //開放
 void Player::Release()
 {
-}
-
-void Player::FPSCamera()
-{
-    SetCursorPos(centerX, centerY);
-
-    if (Input::GetMouseMove)
-    {
-
-    }
 }
 
 void Player::OnGround()
@@ -131,49 +199,4 @@ void Player::RayCastToPaintObjects(RayCastData& data)
     {
         closestObj->PaintMosaic(UV);
     }
-}
-
-void Player::PlayerMove()
-{
-    XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
-    XMVECTOR vMove1 = { 0,0,0.1f,0 };
-    XMVECTOR vMove2 = { 0.1f,0,0,0 };
-    XMVECTOR vMove3 = { 0,1.0f,0,0 };
-
-
-    XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
-
-
-    vMove1 = XMVector3TransformCoord(vMove1, mRotate);
-    vMove2 = XMVector3TransformCoord(vMove2, mRotate);
-    vMove3 = XMVector3TransformCoord(vMove3, mRotate);
-
-
-    // this->FPSCamera();
-
-     //移動
-    {
-        if (Input::IsKey(DIK_W))
-        {
-            vPos += vMove1;
-            XMStoreFloat3(&transform_.position_, vPos);
-        }
-        if (Input::IsKey(DIK_S))
-        {
-            vPos -= vMove1;
-            XMStoreFloat3(&transform_.position_, vPos);
-        }
-        if (Input::IsKey(DIK_D))
-        {
-            vPos += vMove2;
-            XMStoreFloat3(&transform_.position_, vPos);
-        }
-        if (Input::IsKey(DIK_A))
-        {
-            vPos -= vMove2;
-            XMStoreFloat3(&transform_.position_, vPos);
-        }
-    }
-
-    XMStoreFloat3(&transform_.position_, vPos);
 }
