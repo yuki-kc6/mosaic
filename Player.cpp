@@ -41,21 +41,21 @@ void Player::Initialize()
 //更新
 void Player::Update()
 {
+    //カメラ
     fpsCamera->Update();
     fpsCamera->SetFpsCamera(transform_,0.5f);
-    XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
 
-    XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+    //プレイヤーの移動
+    {
+      XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
+      XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+      XMVECTOR vMoveForward = { 0,0,1,0 };
+      XMVECTOR vMoveRight = { 1,0,0,0 };
 
-
-    XMVECTOR vMoveForward = { 0,0,1,0 };
-    XMVECTOR vMoveRight = { 1,0,0,0 };
-
-    vMoveForward = XMVector3TransformNormal(vMoveForward, mRotate);
-    vMoveRight = XMVector3TransformNormal(vMoveRight, mRotate);
+      vMoveForward = XMVector3TransformNormal(vMoveForward, mRotate);
+      vMoveRight = XMVector3TransformNormal(vMoveRight, mRotate);
 
      //移動
-    {
         if (Input::IsKey(DIK_W))
         {
             vPos += vMoveForward*moveSpeed_;
@@ -72,9 +72,25 @@ void Player::Update()
         {
             vPos -= vMoveRight*moveSpeed_;
         }
+        XMStoreFloat3(&transform_.position_, vPos);
     }
 
-    XMStoreFloat3(&transform_.position_, vPos);
+    XMVECTOR ganTarget;
+    XMFLOAT3 camPos = Camera::GetPosition();
+    XMFLOAT3 camTar = Camera::GetTarget();
+    XMVECTOR vCamPosition = XMLoadFloat3(&camPos);
+    XMVECTOR vCamTarget= XMLoadFloat3(&camTar);
+    ganTarget = vCamTarget-vCamPosition;
+
+    RayCastData gan;
+    gan.start = Camera::GetPosition();
+    XMStoreFloat3(&gan.dir,ganTarget);
+   
+
+    if (Input::IsMouseButton(0))
+    {
+        this->RayCastToPaintObjects(gan);
+    }
 
     this->OnGround();
 }
@@ -123,7 +139,7 @@ void Player::RayCastToPaintObjects(RayCastData& data)
         // 描画されていない、または死んでいるオブジェクトはスキップ
         RayCastData ray = data; // コピーして使用
         if (!pObj->IsVisibled() || pObj->IsDead()) continue;
-        // 親クラス GameObject の hModel_ と WorldMatrix を使用して判定
+        // GameObject の hModel_ 使用して判定
         Model::RayCast(pObj->GetModelHandle(), &ray);
 
         if (ray.hit)
