@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include "Engine/Model.h"
+#include "FPSCamera.h"
 
 class RenderTexture;
 class PaintObject;
@@ -17,8 +18,16 @@ public:
 private:
 	void OnGround();
 	void RayCastToPaintObjects(RayCastData &data);
+	void PlayerCamera();
 	void PlayerMove();
 	int hModel_;
+
+	FPSCamera* fpsCamera;
+
+	float yaw_;
+	float pitch_;
+	float sensitivity_;
+
 	XMFLOAT3 currentMousePos;
 	XMFLOAT3 mousePos;
 	XMFLOAT3 PrevMousePos;

@@ -4,10 +4,12 @@
 #include "Engine/Camera.h"
 #include "Bullet.h"
 #include "RenderTexture.h"
+#include <iostream>
+#include <algorithm>
 
 //コンストラクタ
 Player::Player(GameObject* parent)
-    :GameObject(parent, "Player"), hModel_(-1)
+    :GameObject(parent, "Player"), hModel_(-1),yaw_(0),pitch_(0),sensitivity_(0)
 {
 
 }
@@ -21,120 +23,59 @@ Player::~Player()
 //初期化
 void Player::Initialize()
 {
-    SetCursorPos(50, 50);
-    hModel_ = Model::Load("Models/PlayerKari.fbx");
-    assert(hModel_ >= 0);
+    //hModel_ = Model::Load("Models/PlayerKari.fbx");
+    //assert(hModel_ >= 0);
 
     transform_.position_.y = 1;
-    Input::SetMousePosition(50, 30);
-    mousePos = Input::GetMousePosition();
-    camTarY = 3.0;
     gravity = 3.0;
-    paintObj = nullptr;
-    centerX = GetSystemMetrics(SM_CXSCREEN) / 2;
-    centerY = GetSystemMetrics(SM_CYSCREEN) / 2;
+    sensitivity_ = 0.5;
 
+    transform_.rotate_ = { 0,0,0 };
+    
+
+
+    fpsCamera = new FPSCamera();
+    
     //ShowCursor(FALSE);
 }
 
 //更新
 void Player::Update()
 {
-    mousePos = Input::GetMousePosition();
+    fpsCamera->Update();
+    fpsCamera->SetFpsCamera(transform_);
     XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
-    XMVECTOR vMove1 = { 0,0,0.1f,0 };
-    XMVECTOR vMove2 = { 0.1f,0,0,0 };
-    XMVECTOR vMove3 = { 0,1.0f,0,0 };
-
 
     XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
 
 
-    vMove1 = XMVector3TransformCoord(vMove1, mRotate);
-    vMove2 = XMVector3TransformCoord(vMove2, mRotate);
-    vMove3 = XMVector3TransformCoord(vMove3, mRotate);
+    XMVECTOR vMoveForward = { 0,0,1,0 };
+    XMVECTOR vMoveRight = { 1,0,0,0 };
 
-
-    // this->FPSCamera();
+    vMoveForward = XMVector3TransformNormal(vMoveForward, mRotate);
+    vMoveRight = XMVector3TransformNormal(vMoveRight, mRotate);
 
      //移動
     {
         if (Input::IsKey(DIK_W))
         {
-            vPos += vMove1;
-            XMStoreFloat3(&transform_.position_, vPos);
+            vPos += vMoveForward*sensitivity_;
         }
         if (Input::IsKey(DIK_S))
         {
-            vPos -= vMove1;
-            XMStoreFloat3(&transform_.position_, vPos);
+            vPos -= vMoveForward*sensitivity_;
         }
         if (Input::IsKey(DIK_D))
         {
-            vPos += vMove2;
-            XMStoreFloat3(&transform_.position_, vPos);
+            vPos += vMoveRight*sensitivity_;
         }
         if (Input::IsKey(DIK_A))
         {
-            vPos -= vMove2;
-            XMStoreFloat3(&transform_.position_, vPos);
+            vPos -= vMoveRight*sensitivity_;
         }
     }
 
     XMStoreFloat3(&transform_.position_, vPos);
-
-    //横軸の視点移動
-    if (Input::GetMouseMove().x)
-    {
-        transform_.rotate_.y += (mousePos.x - PrevMousePos.x) * 0.2;
-    }
-
-    //縦軸の視点移動
-    if (Input::GetMouseMove().y && camTarY < 100 && camTarY>0)
-    {
-        camTarY -= (mousePos.y - PrevMousePos.y) * 0.01;
-        transform_.rotate_.x = (mousePos.y - PrevMousePos.y) * 0.01;
-    }
-    if (camTarY > 100)
-    {
-        camTarY = 99;
-    }
-    if (camTarY < 0)
-    {
-        camTarY = 1;
-    }
-    PrevMousePos = mousePos;//PrevMousePosの更新
-
-    XMStoreFloat3(&transform_.position_, vPos);
-
-    XMVECTOR vCam = { 0, 3.0f, 5.0f, 0 };//カメラ位置ベクトル
-    XMVECTOR vCamT = { 0, camTarY,6.0f, 0 };//カメラターゲットのベクトル
-
-    //カメラ位置をセット
-    vCam = XMVector3TransformCoord(vCam, mRotate);
-    XMFLOAT3 camPos;
-    XMStoreFloat3(&camPos, vPos + vCam);
-    Camera::SetPosition(camPos);
-
-    //カメラターゲットのセット
-    vCamT = XMVector3TransformCoord(vCamT, mRotate);
-    XMFLOAT3 camTarget;
-    XMStoreFloat3(&camTarget, vPos + vCamT);
-    Camera::SetTarget(camTarget);
-
-    XMFLOAT3 ganTarget;
-    XMStoreFloat3(&ganTarget, vCamT - vCam);
-
-
-    RayCastData gan;
-    gan.start = camPos;
-    gan.dir = ganTarget;
-    //gan.dir = vBullet;
-
-    if (Input::IsMouseButton(0))
-    {
-        this->RayCastToPaintObjects(gan);
-    }
 
     this->OnGround();
 }
@@ -142,14 +83,15 @@ void Player::Update()
 //描画
 void Player::Draw()
 {
-    Model::SetTransform(hModel_, transform_);
-    Model::Draw(hModel_);
+    //Model::SetTransform(hModel_, transform_);
+    //Model::Draw(hModel_);
 
 }
 
 //開放
 void Player::Release()
 {
+    delete fpsCamera;
 }
 
 void Player::OnGround()
@@ -199,4 +141,9 @@ void Player::RayCastToPaintObjects(RayCastData& data)
     {
         closestObj->PaintMosaic(UV);
     }
+}
+
+void Player::PlayerCamera()
+{
+
 }

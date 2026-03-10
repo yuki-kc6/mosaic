@@ -1,5 +1,6 @@
 #pragma once
 #include <DirectXMath.h>
+#include "Engine/Transform.h"
 
 using namespace DirectX;
 
@@ -11,8 +12,10 @@ public:
 
 	void Update();
 
-	const int GetMouseDelatX()const { return DeltaX; }
-	const int GetMouseDelatY()const { return DeltaY; }
+	void SetFpsCamera(Transform &cam);
+
+	const int GetMouseDeltaX()const { return DeltaX; }
+	const int GetMouseDeltaY()const { return DeltaY; }
 
 private:
 	XMFLOAT3 currentMousePos;
