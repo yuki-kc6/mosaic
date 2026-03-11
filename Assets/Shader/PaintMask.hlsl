@@ -3,7 +3,7 @@ cbuffer BrushCB
 {
     float2 g_hitUV;
     float g_radius;
-    float padding; //16バイト境界に合わせるため
+    float g_isCompleted;
 };
 
 
@@ -29,6 +29,10 @@ VS_OUT VS(uint vid : SV_VertexID)
 // ピクセルシェーダー
 float4 PS(VS_OUT input) : SV_Target
 {
+    if(g_isCompleted>0.5)
+    {
+        return float4(1, 1, 1, 1);
+    }
    // 現在のピクセルヒット地点の距離を計算
     float dist = distance(input.uv, g_hitUV);
 

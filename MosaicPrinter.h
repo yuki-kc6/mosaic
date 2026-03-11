@@ -7,14 +7,14 @@
 
 struct CONSTANT_BUFFER
 {
-	XMFLOAT2 center;  // 8 bytes
-	float radius;     // 4 bytes
-	float padding;   // 4 bytes（16バイト揃え）
+	XMFLOAT2 center;  // 中心座標
+	float radius;     // 塗りの半径
+	float isCompleted;   // 全部塗る際に仕様
+
 };
 
 namespace MosaicPrinter
 {
-	
 	void Initialize();
 
 	void BeginPaint(RenderTexture* target);
@@ -23,7 +23,7 @@ namespace MosaicPrinter
 
 	void Release();
 
-	void Paint(RenderTexture* targetRT, XMFLOAT2 hitUV);
+	void Paint(RenderTexture* targetRT, XMFLOAT2 hitUV, float brushSize,float paintAll);
 
 	void ShaderSet();
 

@@ -19,7 +19,6 @@ private:
 	void OnGround();
 	void RayCastToPaintObjects(RayCastData &data);
 	void PlayerCamera();
-	void PlayerMove();
 	int hModel_;
 
 	FPSCamera* fpsCamera;

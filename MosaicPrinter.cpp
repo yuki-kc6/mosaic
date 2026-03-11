@@ -74,15 +74,16 @@ namespace MosaicPrinter
 	{
 	}
 
-	void MosaicPrinter::Paint(RenderTexture* targetRT, XMFLOAT2 hitUV)
+	void MosaicPrinter::Paint(RenderTexture* targetRT, XMFLOAT2 hitUV,float brushSize,float paintAll)
 	{
 		Direct3D::pContext_->PSSetConstantBuffers(0, 1, &pConstantBuffer_);
 
 		CONSTANT_BUFFER cb;
 		D3D11_MAPPED_SUBRESOURCE pdata;
 		cb.center = hitUV;
-		cb.radius = 0.005;
-		cb.padding = 0.0f;
+		cb.radius = brushSize;
+		cb.isCompleted = paintAll;
+
 
 		Direct3D::pContext_->Map(pConstantBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);
 
@@ -98,9 +99,9 @@ namespace MosaicPrinter
 		vp.MaxDepth = 1;
 		Direct3D::pContext_->RSSetViewports(1, &vp);
 
-		Direct3D::pContext_->Draw(4, 0);
+		int vertex = 4;
+		Direct3D::pContext_->Draw(vertex, 0);
 	}
-
 
 	void ShaderSet()
 	{

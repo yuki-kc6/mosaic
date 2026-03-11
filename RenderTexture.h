@@ -32,9 +32,6 @@ public:
 	ID3D11ShaderResourceView* GetShaderResourceView() { return pShaderResourceView_; }	//シェーダーリソースビューの取得
 	XMMATRIX GetOrthoMatrix() { return orthoMatrix; } // ペイント描画時に使います
 
-	void GetProjectionMatrix(XMMATRIX);
-	void GetOrthoMatrix(XMMATRIX);
-
 	int GetTextureWidth() { return textureWidth; }
 	int GetTextureHeight() { return textureHeight; }
 

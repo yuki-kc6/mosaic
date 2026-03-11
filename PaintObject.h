@@ -3,6 +3,7 @@
 #include "RenderTexture.h"
 #include "MosaicPrinter.h"
 #include <list>
+#include <vector>
 class PaintObject :
     public GameObject
 {
@@ -10,7 +11,7 @@ public:
 	PaintObject();
 	PaintObject(GameObject* parent);
 	PaintObject(GameObject* parent, const std::string& name);
-	virtual ~PaintObject();
+	//virtual ~PaintObject()override;
 	//GameObjectからそのまま引き継ぐ
 	virtual void Initialize(void)override = 0;
 	virtual void Update(void)override = 0;
@@ -18,14 +19,31 @@ public:
 	virtual void Release(void)override = 0;
 
 	//モザイクを塗るための関数
-	void PaintMosaic(XMFLOAT2 uv);
+	void PaintMosaic(XMFLOAT2 uv, float brushSize);
+
+	void CalculateScore(XMFLOAT2 uv, float brushSize);
+
+	int getScore() { return score_; }
 
 	virtual RenderTexture* GetMosaicRT() { return mosaicRT; }
 
 	static const std::list<PaintObject*>& GetPaintObjectList() { return paintObjectList_; }
 
+	
 private:
 	RenderTexture* mosaicRT;//オブジェクトごとにRenderTextureを作成
 	static std::list<PaintObject*> paintObjectList_;
+	int textureSize;
+	int score_;
+	int gridSize;
+	std::vector<std::vector<bool>> isPaint;
+	float isAllPaint;//シェーダーに合わせるためにboolではなきfloat
+
+protected:
+	bool isSensitive;
+
+
+	
 };
+
 

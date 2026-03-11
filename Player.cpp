@@ -27,12 +27,10 @@ void Player::Initialize()
     //assert(hModel_ >= 0);
 
     transform_.position_.y = 1;
-    moveSpeed_ = 0.5;
+    moveSpeed_ = 0.08;
 
     transform_.rotate_ = { 0,0,0 };
     
-
-
     fpsCamera = new FPSCamera();
     
     //ShowCursor(FALSE);
@@ -139,7 +137,7 @@ void Player::RayCastToPaintObjects(RayCastData& data)
         // 描画されていない、または死んでいるオブジェクトはスキップ
         RayCastData ray = data; // コピーして使用
         if (!pObj->IsVisibled() || pObj->IsDead()) continue;
-        // GameObject の hModel_ 使用して判定
+        // GameObject の hModel_ 使用して判定 
         Model::RayCast(pObj->GetModelHandle(), &ray);
 
         if (ray.hit)
@@ -154,7 +152,7 @@ void Player::RayCastToPaintObjects(RayCastData& data)
     }
     if (closestObj != nullptr)
     {
-        closestObj->PaintMosaic(UV);
+       closestObj->PaintMosaic(UV,0.05);
     }
 }
 
