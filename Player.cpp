@@ -73,6 +73,17 @@ void Player::Update()
         XMStoreFloat3(&transform_.position_, vPos);
     }
 
+
+    if (Input::IsKey(DIK_SPACE))
+    {
+        transform_.position_.y += 0.3;
+    }
+    if (Input::IsKey(DIK_B))
+    {
+        transform_.position_.y -= 0.3;
+    }
+
+
     XMVECTOR ganTarget;
     XMFLOAT3 camPos = Camera::GetPosition();
     XMFLOAT3 camTar = Camera::GetTarget();
@@ -90,7 +101,7 @@ void Player::Update()
         this->RayCastToPaintObjects(gan);
     }
 
-    this->OnGround();
+    //this->OnGround();
 }
 
 //描画
@@ -152,6 +163,7 @@ void Player::RayCastToPaintObjects(RayCastData& data)
     }
     if (closestObj != nullptr)
     {
+        //オブジェクトにモザイクを塗る
        closestObj->PaintMosaic(UV,0.05);
     }
 }

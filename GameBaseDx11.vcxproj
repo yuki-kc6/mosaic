@@ -157,6 +157,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="RenderTexture.cpp" />
+    <ClCompile Include="StageTimer.cpp" />
     <ClCompile Include="TitleHeader.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="Wall.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="RenderTexture.h" />
+    <ClInclude Include="StageTimer.h" />
     <ClInclude Include="TitleHeader.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="Wall.h" />

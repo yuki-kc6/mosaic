@@ -23,7 +23,7 @@ PaintObject::PaintObject(GameObject* parent)
 }
 
 PaintObject::PaintObject(GameObject* parent, const std::string& name)
-	:GameObject(parent,name), mosaicRT(nullptr),textureSize(512),isAllPaint(0),score_(0)
+	:GameObject(parent,name), mosaicRT(nullptr),textureSize(512),isAllPaint(0),score_(0),paintedCount(0)
 {
 	paintObjectList_.push_back(this);
 	mosaicRT = new RenderTexture();
@@ -37,11 +37,14 @@ PaintObject::PaintObject(GameObject* parent, const std::string& name)
 
 void PaintObject::PaintMosaic(XMFLOAT2 uv,float brushSize)
 {
-	if (float(score_ / (gridSize * gridSize)) > 0.25)
+	this->CalculateScore(uv, brushSize);
+	score_= (float)paintedCount / (float)((gridSize * gridSize));
+
+	if (score_> 0.4)
 	{
 		isAllPaint = 1.0;
 	}
-	this->CalculateScore(uv, brushSize);
+
 	MosaicPrinter::BeginPaint(mosaicRT);
 	MosaicPrinter::Paint(mosaicRT, uv, brushSize, isAllPaint);
 	MosaicPrinter::EndPaint();
@@ -50,16 +53,18 @@ void PaintObject::PaintMosaic(XMFLOAT2 uv,float brushSize)
 
 void PaintObject::CalculateScore(XMFLOAT2 uv,float brushSize)
 {
-	int centerX = (int)(uv.x * gridSize);
-	int centerY = (int)(uv.y * gridSize);
+	int centerX = (int)(uv.x * (gridSize-1));
+	int centerY = (int)((1.0f - uv.y) * (gridSize - 1));
 
 	int brushPixel = (int)(brushSize * gridSize);
+
+	int radiusSq = brushPixel * brushPixel;
 
 	for(int x = -brushPixel; x <= brushPixel; x++)
 	{
 		for (int y = -brushPixel; y <= brushPixel; y++)
 		{
-			if (x * x + y * y > brushPixel * brushPixel) continue;
+			if (x * x + y * y > radiusSq) continue;
 
 			int px = centerX + x;
 			int py = centerY + y;
@@ -70,13 +75,8 @@ void PaintObject::CalculateScore(XMFLOAT2 uv,float brushSize)
 			if (!isPaint[py][px])
 			{
 				isPaint[py][px] = true;
-d				score_++;
+				paintedCount++;
 			}
 		}
 	}
 }
-
-
-
-
-

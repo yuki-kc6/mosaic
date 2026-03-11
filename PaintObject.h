@@ -23,21 +23,23 @@ public:
 
 	void CalculateScore(XMFLOAT2 uv, float brushSize);
 
-	int getScore() { return score_; }
+	float getScore() { return score_; }
 
 	virtual RenderTexture* GetMosaicRT() { return mosaicRT; }
 
 	static const std::list<PaintObject*>& GetPaintObjectList() { return paintObjectList_; }
-
 	
 private:
 	RenderTexture* mosaicRT;//オブジェクトごとにRenderTextureを作成
 	static std::list<PaintObject*> paintObjectList_;
 	int textureSize;
-	int score_;
+	float score_;
+	int paintedCount;
 	int gridSize;
 	std::vector<std::vector<bool>> isPaint;
 	float isAllPaint;//シェーダーに合わせるためにboolではなきfloat
+
+
 
 protected:
 	bool isSensitive;
