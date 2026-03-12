@@ -19,6 +19,7 @@ void Wall::Initialize()
     hModel_ = Model::Load("Models/building.fbx");
     assert(hModel_ >= 0);
     transform_.position_.y = 10.;
+    this->SetSensitive(true);
 }
 
 //XV

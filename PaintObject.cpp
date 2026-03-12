@@ -2,7 +2,7 @@
 #include "Engine/Direct3D.h"
 #include "Engine/FbxParts.h"
 
-std::list<PaintObject*> PaintObject::paintObjectList_;
+std::list<PaintObject*> PaintObject::paintObjectList;
 
 PaintObject::PaintObject()
 	:GameObject(),mosaicRT(nullptr)
@@ -23,9 +23,11 @@ PaintObject::PaintObject(GameObject* parent)
 }
 
 PaintObject::PaintObject(GameObject* parent, const std::string& name)
-	:GameObject(parent,name), mosaicRT(nullptr),textureSize(512),isAllPaint(0),score_(0),paintedCount(0)
+	:GameObject(parent,name), mosaicRT(nullptr),textureSize(512),
+	isAllPaint(0),score_(0),
+	paintedCount(0),isSensitive(false),isOK(false)
 {
-	paintObjectList_.push_back(this);
+	paintObjectList.push_back(this);
 	mosaicRT = new RenderTexture();
 	mosaicRT->Initialize(Direct3D::pDevice_, textureSize, textureSize, 0.1f, 1000.0f, 1);
 	mosaicRT->ClearRenderTarget(Direct3D::pContext_, 0.0, 0.0, 0.0, 1);
@@ -43,6 +45,7 @@ void PaintObject::PaintMosaic(XMFLOAT2 uv,float brushSize)
 	if (score_> 0.4)
 	{
 		isAllPaint = 1.0;
+		isOK = true;
 	}
 
 	MosaicPrinter::BeginPaint(mosaicRT);

@@ -27,11 +27,17 @@ public:
 
 	virtual RenderTexture* GetMosaicRT() { return mosaicRT; }
 
-	static const std::list<PaintObject*>& GetPaintObjectList() { return paintObjectList_; }
+	static const std::list<PaintObject*>& GetPaintObjectList() { return paintObjectList; }
 	
+	bool IsSensitive() { return isSensitive; }
+	void SetSensitive(bool sen) { isSensitive = sen; }
+
+	bool IsClear() { return isOK; }
+
+
 private:
 	RenderTexture* mosaicRT;//オブジェクトごとにRenderTextureを作成
-	static std::list<PaintObject*> paintObjectList_;
+	static std::list<PaintObject*> paintObjectList;
 	int textureSize;
 	float score_;
 	int paintedCount;
@@ -39,10 +45,8 @@ private:
 	std::vector<std::vector<bool>> isPaint;
 	float isAllPaint;//シェーダーに合わせるためにboolではなきfloat
 
-
-
-protected:
 	bool isSensitive;
+	bool isOK;
 
 
 	

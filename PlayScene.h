@@ -1,5 +1,9 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include <list>
+
+class PaintObject;
+
 //テストシーンを管理するクラス
 class PlayScene : public GameObject
 {
@@ -19,4 +23,10 @@ public:
 
 	//開放
 	void Release() override;	
+private:
+	void PushSensitive();
+	void MissionAllClear();
+
+
+	std::list<PaintObject*> sensitiveList_;
 };

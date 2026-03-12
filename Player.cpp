@@ -145,8 +145,8 @@ void Player::RayCastToPaintObjects(RayCastData& data)
     XMFLOAT2 UV = { 0,0 };
     // PaintObject 継承クラスだけに絞ってループ
     for (PaintObject* pObj : PaintObject::GetPaintObjectList()) {
-        // 描画されていない、または死んでいるオブジェクトはスキップ
         RayCastData ray = data; // コピーして使用
+        // 描画されていない、または死んでいるオブジェクトはスキップ
         if (!pObj->IsVisibled() || pObj->IsDead()) continue;
         // GameObject の hModel_ 使用して判定 
         Model::RayCast(pObj->GetModelHandle(), &ray);
