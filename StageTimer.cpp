@@ -5,7 +5,7 @@
 
 
 StageTimer::StageTimer(GameObject* parent)
-	:prevTime(0),startTime(0),maxTime(0)
+	:prevTime(0),startTime(0),maxTime(0),timer(nullptr)
 {
 }
 
@@ -15,9 +15,11 @@ StageTimer::~StageTimer()
 
 void StageTimer::Initialize()
 {
+	
 	start = std::chrono::system_clock::now(); // Œv‘ªŠJŽn‚µ‚½ŽžŠÔ
 	maxTime = 60.0f;
-	timer = new Text();
+	timer = new Text;
+	timer->Initialize();
 }
 
 void StageTimer::Update()
@@ -37,10 +39,11 @@ void StageTimer::Update()
 void StageTimer::Draw()
 {
 	char time = (char)(maxTime - elapsed);
-	timer->Draw(0, 0, 500);
+	int hp = 500;
+	timer->Draw(30, 30, "ok");
 
 }
-
+ 
 void StageTimer::Release()
 {
 }
