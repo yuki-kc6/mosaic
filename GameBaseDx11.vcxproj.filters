@@ -99,7 +99,6 @@
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="RenderTexture.cpp" />
     <ClCompile Include="MosaicPrinter.cpp" />
@@ -108,6 +107,8 @@
     <ClCompile Include="FPSCamera.cpp" />
     <ClCompile Include="TitleHeader.cpp" />
     <ClCompile Include="StageTimer.cpp" />
+    <ClCompile Include="ResultHeader.cpp" />
+    <ClCompile Include="ResultScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -183,7 +184,6 @@
     <ClInclude Include="Ground.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Enemy.h" />
-    <ClInclude Include="Bullet.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="RenderTexture.h" />
     <ClInclude Include="MosaicPrinter.h" />
@@ -192,6 +192,8 @@
     <ClInclude Include="FPSCamera.h" />
     <ClInclude Include="TitleHeader.h" />
     <ClInclude Include="StageTimer.h" />
+    <ClInclude Include="ResultHeader.h" />
+    <ClInclude Include="ResultScene.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

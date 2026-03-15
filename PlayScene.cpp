@@ -5,6 +5,7 @@
 #include "MosaicPrinter.h"
 #include "Wall.h"
 #include "Engine/SceneManager.h"
+#include "StageTimer.h"
 
 
 //コンストラクタ
@@ -29,6 +30,7 @@ void PlayScene::Initialize()
 	
 	this->PushSensitive();
 
+	Instantiate<StageTimer>(this);
 
 }
 

@@ -5,21 +5,15 @@
 std::list<PaintObject*> PaintObject::paintObjectList;
 
 PaintObject::PaintObject()
-	:GameObject(),mosaicRT(nullptr)
+	:GameObject(), mosaicRT(nullptr)
 {
-	//paintObjectList_.push_back(this);
-	//mosaicRT = new RenderTexture();
-	//mosaicRT->Initialize(Direct3D::pDevice_, 512, 512, 0.1f, 1000.0f, 1);	
-	//mosaicRT->ClearRenderTarget(Direct3D::pContext_, 0.0, 0.0, 0.0, 1);
+
 }
 
 PaintObject::PaintObject(GameObject* parent)
 	:GameObject(parent), mosaicRT(nullptr)
 {
-	//paintObjectList_.push_back(this);
-	//mosaicRT = new RenderTexture();
-	//mosaicRT->Initialize(Direct3D::pDevice_, 512, 512, 0.1f, 1000.0f, 1);
-	//mosaicRT->ClearRenderTarget(Direct3D::pContext_, 0.0, 0.0, 0.0, 1);
+	
 }
 
 PaintObject::PaintObject(GameObject* parent, const std::string& name)
@@ -42,7 +36,7 @@ void PaintObject::PaintMosaic(XMFLOAT2 uv,float brushSize)
 	this->CalculateScore(uv, brushSize);
 	score_= (float)paintedCount / (float)((gridSize * gridSize));
 
-	if (score_> 0.4)
+	if (score_> 0.3)
 	{
 		isAllPaint = 1.0;
 		isOK = true;

@@ -11,5 +11,6 @@ public:
     void Release()override;
 private:
     int hPic_;
+    int hTitle_;
 };
 

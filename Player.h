@@ -20,11 +20,15 @@ private:
 	void RayCastToPaintObjects(RayCastData &data);
 	void PlayerCamera();
 	int hModel_;
+	int hCrossHair_;
 
 	FPSCamera* fpsCamera;
 
 	float moveSpeed_;
 	
+	float centerX;
+	float centerY;
+
 };
 
 

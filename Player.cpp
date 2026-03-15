@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Engine/Direct3D.h"
 #include "Engine/Input.h"
 #include "Ground.h"
 #include "Engine/Camera.h"
@@ -6,6 +7,7 @@
 #include "RenderTexture.h"
 #include <iostream>
 #include <algorithm>
+#include "Engine/Image.h"
 
 //コンストラクタ
 Player::Player(GameObject* parent)
@@ -17,6 +19,7 @@ Player::Player(GameObject* parent)
 //デストラクタ
 Player::~Player()
 {
+    //Image::Release(hCrossHair_);
     ShowCursor(TRUE);
 }
 
@@ -25,6 +28,11 @@ void Player::Initialize()
 {
     //hModel_ = Model::Load("Models/PlayerKari.fbx");
     //assert(hModel_ >= 0);
+
+    hCrossHair_ = Image::Load("crosshair.png");
+    centerX = Direct3D::screenWidth_ / 2;
+    centerY = Direct3D::screenHeight_ / 2;
+
 
     transform_.position_.y = 1;
     moveSpeed_ = 0.08;
@@ -107,9 +115,11 @@ void Player::Update()
 //描画
 void Player::Draw()
 {
-    //Model::SetTransform(hModel_, transform_);
-    //Model::Draw(hModel_);
-
+    Transform ch;
+    ch.matTranslate_ = XMMatrixTranslation(centerX, centerY, 0);
+    ch.scale_ = { 1.0,1.0,0 };
+    Image::SetTransform(hCrossHair_, ch);
+    Image::Draw(hCrossHair_);
 }
 
 //開放
@@ -166,9 +176,4 @@ void Player::RayCastToPaintObjects(RayCastData& data)
         //オブジェクトにモザイクを塗る
        closestObj->PaintMosaic(UV,0.05);
     }
-}
-
-void Player::PlayerCamera()
-{
-
 }

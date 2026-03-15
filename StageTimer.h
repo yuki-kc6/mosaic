@@ -1,5 +1,8 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include <chrono>
+
+class Text;
 
 class StageTimer : public GameObject
 {
@@ -23,8 +26,10 @@ public:
     //ŠJ•ú
     void Release() override;
 private:
-    int prevTime;
-    int startTime;
-
-
+    float prevTime;
+    float startTime;
+    float maxTime;
+    float elapsed;
+    std::chrono::system_clock::time_point  start, end;//ŽžŠÔ‚ð‘ª‚é
+    Text* timer;
 };
