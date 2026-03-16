@@ -60,7 +60,7 @@ void Text::Draw(int x, int y, const char* str)
 		int y = id / rowLength_;	//ã‚©‚ç‰½”Ô–Ú
 
 		//•\¦‚·‚éˆÊ’u
-		Transform transform;
+		Transform transform = {};
 		transform.position_.x = px;
 		transform.position_.y = py;
 		Image::SetTransform(hPict_, transform);
@@ -72,7 +72,7 @@ void Text::Draw(int x, int y, const char* str)
 		Image::Draw(hPict_);
 
 		//Ÿ‚ÌˆÊ’u‚É‚¸‚ç‚·
-		px += width_ / (float)(Direct3D::screenWidth_ / 2.0f);
+		px += width_*2;/// (float)(Direct3D::screenWidth_ / 2.0f);
 	}
 }
 

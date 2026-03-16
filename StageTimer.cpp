@@ -39,9 +39,7 @@ void StageTimer::Update()
 void StageTimer::Draw()
 {
 	char time = (char)(maxTime - elapsed);
-	int hp = 500;
-	timer->Draw(30, 30, "ok");
-
+	//timer->Draw(0, 0, "ABSHODJEFDOJ")
 }
  
 void StageTimer::Release()

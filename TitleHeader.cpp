@@ -23,7 +23,7 @@ void TitleHeader::Update()
 
 void TitleHeader::Draw()
 {
-	transform_.position_ = { 10,-500,0 };
+	transform_.position_ = { 0,-500,0 };
 	transform_.scale_ = { 0.2,0.2,1 };
 	Image::SetTransform(hPic_, transform_);
 	Image::Draw(hPic_);
