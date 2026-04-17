@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "Engine/Direct3D.h"
 #include "Engine/Input.h"
+#include "Engine/SphereCollider.h"
 #include "Ground.h"
 #include "Engine/Camera.h"
 #include "Bullet.h"
@@ -8,6 +9,7 @@
 #include <iostream>
 #include <algorithm>
 #include "Engine/Image.h"
+
 
 //コンストラクタ
 Player::Player(GameObject* parent)
@@ -41,6 +43,9 @@ void Player::Initialize()
     
     fpsCamera = new FPSCamera();
     
+    SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), 1.2f);
+    AddCollider(collision);
+
     //ShowCursor(FALSE);
 }
 

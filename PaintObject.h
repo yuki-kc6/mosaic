@@ -19,7 +19,7 @@ public:
 	virtual void Release(void)override = 0;
 
 	//モザイクを塗るための関数
-	void PaintMosaic(XMFLOAT2 uv, float brushSize);
+	void PaintMosaic(XMFLOAT2 uv);
 
 	void CalculateScore(XMFLOAT2 uv, float brushSize);
 
@@ -34,6 +34,7 @@ public:
 
 	bool IsClear() { return isOK; }
 
+	void SetBrushSize(float size) { brushSize = size; }
 
 private:
 	RenderTexture* mosaicRT;//オブジェクトごとにRenderTextureを作成
@@ -47,6 +48,8 @@ private:
 
 	bool isSensitive;
 	bool isOK;
+
+	float brushSize;
 
 
 	

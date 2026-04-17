@@ -19,7 +19,7 @@ PaintObject::PaintObject(GameObject* parent)
 PaintObject::PaintObject(GameObject* parent, const std::string& name)
 	:GameObject(parent,name), mosaicRT(nullptr),textureSize(512),
 	isAllPaint(0),score_(0),
-	paintedCount(0),isSensitive(false),isOK(false)
+	paintedCount(0),isSensitive(false),isOK(false),brushSize(0.05f)
 {
 	paintObjectList.push_back(this);
 	mosaicRT = new RenderTexture();
@@ -31,7 +31,7 @@ PaintObject::PaintObject(GameObject* parent, const std::string& name)
 	isPaint = std::vector<std::vector<bool>>(gridSize, std::vector<bool>(gridSize, false));
 }
 
-void PaintObject::PaintMosaic(XMFLOAT2 uv,float brushSize)
+void PaintObject::PaintMosaic(XMFLOAT2 uv)
 {
 	this->CalculateScore(uv, brushSize);
 	score_= (float)paintedCount / (float)((gridSize * gridSize));
@@ -48,12 +48,12 @@ void PaintObject::PaintMosaic(XMFLOAT2 uv,float brushSize)
 	
 }
 
-void PaintObject::CalculateScore(XMFLOAT2 uv,float brushSize)
+void PaintObject::CalculateScore(XMFLOAT2 uv,float brush)
 {
 	int centerX = (int)(uv.x * (gridSize-1));
 	int centerY = (int)((1.0f - uv.y) * (gridSize - 1));
 
-	int brushPixel = (int)(brushSize * gridSize);
+	int brushPixel = (int)(brush * gridSize);
 
 	int radiusSq = brushPixel * brushPixel;
 

@@ -1,22 +1,20 @@
-#include "Wall.h"
+#include "building.h"
 
 #include "Engine/BoxCollider.h"
 #include "Engine/Model.h"
 #include "Engine/Direct3D.h"
 #include "RenderTexture.h"
-//コンストラクタ
-Wall::Wall(GameObject* parent)
-    :PaintObject(parent, "Wall")
+
+Building::Building(GameObject* parent)
+	:PaintObject(parent, "Building")
 {
 }
 
-//デストラクタ
-Wall::~Wall()
+Building::~Building()
 {
 }
 
-//初期化
-void Wall::Initialize()
+void Building::Initialize()
 {
     hModel_ = Model::Load("Models/building.fbx");
     assert(hModel_ >= 0);
@@ -26,21 +24,16 @@ void Wall::Initialize()
     AddCollider(collision);
 }
 
-//更新
-void Wall::Update()
+void Building::Update()
 {
 }
 
-//描画
-void Wall::Draw()
+void Building::Draw()
 {
     Model::SetTransform(hModel_, transform_, this->GetMosaicRT()->GetShaderResourceView());
     Model::Draw(hModel_);
 }
 
-
-
-//開放
-void Wall::Release()
+void Building::Release()
 {
 }
