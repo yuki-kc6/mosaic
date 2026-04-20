@@ -10,7 +10,6 @@
 #include <algorithm>
 #include "Engine/Image.h"
 
-
 //コンストラクタ
 Player::Player(GameObject* parent)
     :GameObject(parent, "Player"), hModel_(-1),moveSpeed_(0)
@@ -46,7 +45,7 @@ void Player::Initialize()
     SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), 1.2f);
     AddCollider(collision);
 
-    //ShowCursor(FALSE);
+    
 }
 
 //更新
