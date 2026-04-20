@@ -109,6 +109,7 @@
     <ClCompile Include="StageTimer.cpp" />
     <ClCompile Include="ResultHeader.cpp" />
     <ClCompile Include="ResultScene.cpp" />
+    <ClCompile Include="building.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -194,6 +195,7 @@
     <ClInclude Include="StageTimer.h" />
     <ClInclude Include="ResultHeader.h" />
     <ClInclude Include="ResultScene.h" />
+    <ClInclude Include="building.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">
