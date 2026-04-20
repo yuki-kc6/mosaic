@@ -179,6 +179,6 @@ void Player::RayCastToPaintObjects(RayCastData& data)
     if (closestObj != nullptr)
     {
         //オブジェクトにモザイクを塗る
-       closestObj->PaintMosaic(UV,0.05);
+       closestObj->PaintMosaic(UV);
     }
 }
