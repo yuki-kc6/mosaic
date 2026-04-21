@@ -6,7 +6,7 @@
 #include "Wall.h"
 #include "Engine/SceneManager.h"
 #include "StageTimer.h"
-
+#include "BuildingManager.h"
 
 //コンストラクタ
 PlayScene::PlayScene(GameObject * parent)
@@ -24,7 +24,7 @@ void PlayScene::Initialize()
 	
 	Instantiate<Ground>(this);
 
-	Instantiate<Wall>(this);
+	Instantiate<BuildingManager>(this);
 	
 	Instantiate<Player>(this);
 	

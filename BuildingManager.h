@@ -1,16 +1,14 @@
 #pragma once
 #include "Engine/GameObject.h"
-
-    //◆◆◆を管理するクラス
-    class gun : public GameObject
+class BuildingManager : public GameObject
 {
 
 public:
     //コンストラクタ
-    gun(GameObject* parent);
+    BuildingManager(GameObject* parent);
 
     //デストラクタ
-    ~gun();
+    ~BuildingManager();
 
     //初期化
     void Initialize() override;
@@ -23,7 +21,4 @@ public:
 
     //開放
     void Release() override;
-private:
-    int hModel_;
-}; 
-
+};

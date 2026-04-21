@@ -103,14 +103,14 @@
     <ClCompile Include="RenderTexture.cpp" />
     <ClCompile Include="MosaicPrinter.cpp" />
     <ClCompile Include="PaintObject.cpp" />
-    <ClCompile Include="Wall.cpp" />
     <ClCompile Include="FPSCamera.cpp" />
     <ClCompile Include="TitleHeader.cpp" />
     <ClCompile Include="StageTimer.cpp" />
     <ClCompile Include="ResultHeader.cpp" />
     <ClCompile Include="ResultScene.cpp" />
-    <ClCompile Include="building.cpp" />
+    <ClCompile Include="Building.cpp" />
     <ClCompile Include="gun.cpp" />
+    <ClCompile Include="BuildingManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -190,14 +190,14 @@
     <ClInclude Include="RenderTexture.h" />
     <ClInclude Include="MosaicPrinter.h" />
     <ClInclude Include="PaintObject.h" />
-    <ClInclude Include="Wall.h" />
     <ClInclude Include="FPSCamera.h" />
     <ClInclude Include="TitleHeader.h" />
     <ClInclude Include="StageTimer.h" />
     <ClInclude Include="ResultHeader.h" />
     <ClInclude Include="ResultScene.h" />
-    <ClInclude Include="building.h" />
+    <ClInclude Include="Building.h" />
     <ClInclude Include="gun.h" />
+    <ClInclude Include="BuildingManager.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

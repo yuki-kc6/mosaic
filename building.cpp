@@ -1,39 +1,48 @@
-#include "building.h"
+#include "Building.h"
 
 #include "Engine/BoxCollider.h"
 #include "Engine/Model.h"
 #include "Engine/Direct3D.h"
 #include "RenderTexture.h"
-
+//コンストラクタ
 Building::Building(GameObject* parent)
-	:PaintObject(parent, "Building")
+    :PaintObject(parent, "Building")
 {
 }
 
+//デストラクタ
 Building::~Building()
 {
 }
 
+//初期化
 void Building::Initialize()
 {
-    hModel_ = Model::Load("Models/building.fbx");
+    hModel_ = Model::Load("Models/building3.fbx");
     assert(hModel_ >= 0);
-    transform_.position_.y = 10.;
-    this->SetSensitive(true);
+    //transform_.position_.y = ;
+    //this->SetSensitive(true);
     BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1));
     AddCollider(collision);
+    SetBrushSize(0.03f);
+	transform_.scale_ = { 5.0f,5.0f,5.0f };
 }
 
+//更新
 void Building::Update()
 {
 }
 
+//描画
 void Building::Draw()
 {
     Model::SetTransform(hModel_, transform_, this->GetMosaicRT()->GetShaderResourceView());
     Model::Draw(hModel_);
 }
 
+
+
+//開放
 void Building::Release()
 {
 }
