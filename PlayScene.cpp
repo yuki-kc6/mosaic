@@ -6,7 +6,7 @@
 #include "Wall.h"
 #include "Engine/SceneManager.h"
 #include "StageTimer.h"
-#include "BuildingManager.h"
+#include "Building.h"
 #include "FPSgun.h"
 
 //コンストラクタ
@@ -25,15 +25,13 @@ void PlayScene::Initialize()
 	
 	Instantiate<Ground>(this);
 
-	Instantiate<BuildingManager>(this);
+	Instantiate<Building>(this);
 	
 	Instantiate<Player>(this);
 	
 	this->PushSensitive();
 
 	Instantiate<StageTimer>(this);
-
-	Instantiate<FPSgun>(this);
 }
 
 //更新

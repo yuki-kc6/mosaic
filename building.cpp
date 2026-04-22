@@ -22,7 +22,7 @@ void Building::Initialize()
     assert(hModel_ >= 0);
     //transform_.position_.y = ;
     //this->SetSensitive(true);
-    BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1));
+    BoxCollider* collision = new BoxCollider(transform_.position_, XMFLOAT3(10, 10, 10));
     AddCollider(collision);
     SetBrushSize(0.03f);
 	transform_.scale_ = { 5.0f,5.0f,5.0f };

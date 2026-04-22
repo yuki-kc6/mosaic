@@ -18,7 +18,7 @@ FPSCamera::~FPSCamera()
 
 void FPSCamera::Initialize()
 {
-	
+
 }
 
 void FPSCamera::Update()
