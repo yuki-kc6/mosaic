@@ -1,14 +1,14 @@
 #pragma once
 #include "Engine/GameObject.h"
-class BuildingManager : public GameObject
+class StageManager : public GameObject
 {
 
 public:
     //コンストラクタ
-    BuildingManager(GameObject* parent);
+    StageManager(GameObject* parent);
 
     //デストラクタ
-    ~BuildingManager();
+    ~StageManager();
 
     //初期化
     void Initialize() override;
