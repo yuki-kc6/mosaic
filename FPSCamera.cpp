@@ -1,17 +1,24 @@
 #include "FPSCamera.h"
 #include "Engine/Camera.h"
 #include "Engine/Direct3D.h"
+#include "FPSgun.h"
 
-FPSCamera::FPSCamera():DeltaX(0),DeltaY(0),currentMousePos({0,0,0})
+FPSCamera::FPSCamera(GameObject* parent)
+	:GameObject(parent,"FPSCamera"), DeltaX(0), DeltaY(0), currentMousePos({0,0,0})
 {
 	centerX = Direct3D::screenWidth_ / 2;
 	centerY = Direct3D::screenHeight_ / 2;
-	
+
 	currentMousePos = { (float)centerX,(float)centerY,0 };
 }
 
 FPSCamera::~FPSCamera()
 {
+}
+
+void FPSCamera::Initialize()
+{
+	
 }
 
 void FPSCamera::Update()
@@ -28,6 +35,14 @@ void FPSCamera::Update()
 
 	SetCursorPos(centerX, centerY);
 
+}
+
+void FPSCamera::Draw()
+{
+}
+
+void FPSCamera::Release()
+{
 }
 
 void FPSCamera::SetFpsCamera(Transform &cam,float sensitivity)

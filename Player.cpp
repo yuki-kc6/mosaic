@@ -9,6 +9,8 @@
 #include <iostream>
 #include <algorithm>
 #include "Engine/Image.h"
+//#include "gun.h"
+
 
 //コンストラクタ
 Player::Player(GameObject* parent)
@@ -40,20 +42,20 @@ void Player::Initialize()
 
     transform_.rotate_ = { 0,0,0 };
     
-    fpsCamera = new FPSCamera();
+    Instantiate<FPSCamera>(this);
     
     SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), 1.2f);
     AddCollider(collision);
-
-    
 }
 
 //更新
 void Player::Update()
 {
     //カメラ
-    fpsCamera->Update();
+	fpsCamera = (FPSCamera*)FindChildObject("FPSCamera");
     fpsCamera->SetFpsCamera(transform_,0.5f);
+
+ 
 
     //プレイヤーの移動
     {
@@ -129,7 +131,7 @@ void Player::Draw()
 //開放
 void Player::Release()
 {
-    delete fpsCamera;
+
 }
 
 void Player::OnGround()

@@ -7,6 +7,7 @@
 #include "Engine/SceneManager.h"
 #include "StageTimer.h"
 #include "BuildingManager.h"
+#include "FPSgun.h"
 
 //コンストラクタ
 PlayScene::PlayScene(GameObject * parent)
@@ -32,6 +33,7 @@ void PlayScene::Initialize()
 
 	Instantiate<StageTimer>(this);
 
+	Instantiate<FPSgun>(this);
 }
 
 //更新

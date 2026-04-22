@@ -101,6 +101,9 @@ namespace MosaicPrinter
 
 		int vertex = 4;
 		Direct3D::pContext_->Draw(vertex, 0);
+
+
+
 	}
 
 	void ShaderSet()
@@ -113,4 +116,5 @@ namespace MosaicPrinter
 		Direct3D::SetShader(Direct3D::SHADER_MASK);
 	}
 
+	
 }

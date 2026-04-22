@@ -17,6 +17,7 @@ void BuildingManager::Initialize()
 		building->Initialize();
 		building->SetPosition(XMFLOAT3(i * 10.0f, 0, 50.0f));
 	}
+
 }
 
 void BuildingManager::Update()

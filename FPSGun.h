@@ -2,15 +2,15 @@
 #include "Engine/GameObject.h"
 
     //◆◆◆を管理するクラス
-    class gun : public GameObject
+    class FPSgun : public GameObject
 {
 
 public:
     //コンストラクタ
-    gun(GameObject* parent);
+    FPSgun(GameObject* parent);
 
     //デストラクタ
-    ~gun();
+    ~FPSgun();
 
     //初期化
     void Initialize() override;
@@ -23,6 +23,7 @@ public:
 
     //開放
     void Release() override;
+
 private:
     int hModel_;
 }; 
