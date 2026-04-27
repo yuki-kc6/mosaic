@@ -43,7 +43,7 @@ void FPSgun::Update()
 	XMFLOAT3 FPSgunPosFloat3;
 	XMStoreFloat3(&FPSgunPosFloat3, FPSgunPos);
 	transform_.position_ = FPSgunPosFloat3;
-	transform_.matRotate_ = invView;
+	//transform_.matRotate_ = invView;
 	
 }
 
