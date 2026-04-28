@@ -26,6 +26,11 @@ void FPSgun::Update()
 	XMVECTOR vCamPos = XMLoadFloat3(&camPos);
 	XMMATRIX view = Camera::GetViewMatrix();
 
+	XMFLOAT3 camTar = Camera::GetTarget();
+	XMVECTOR vCamTar = XMLoadFloat3(&camTar);
+
+
+
 	// 逆行列でカメラ空間取得
 	XMMATRIX invView = XMMatrixInverse(nullptr, view);
 
@@ -43,7 +48,12 @@ void FPSgun::Update()
 	XMFLOAT3 FPSgunPosFloat3;
 	XMStoreFloat3(&FPSgunPosFloat3, FPSgunPos);
 	transform_.position_ = FPSgunPosFloat3;
-	//transform_.matRotate_ = invView;
+	
+	XMVECTOR vGunRot = vCamTar - vCamPos;
+	XMFLOAT3 gunRot;
+	XMStoreFloat3(&gunRot, vGunRot);
+
+	transform_.rotate_ = gunRot;
 	
 }
 

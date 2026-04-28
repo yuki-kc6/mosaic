@@ -292,7 +292,7 @@ GameObject * GameObject::GetRootJob()
 void GameObject::UpdateSub()
 {
 	Update();
-	Transform();
+	transform_.Calclation();
 
 	for (auto it = childList_.begin(); it != childList_.end(); it++)
 	{
@@ -321,6 +321,7 @@ void GameObject::DrawSub()
 	Draw();
 
 
+	CollisionDraw();
 	//リリース時は削除
 #ifdef _DEBUG
 		//コリジョンの描画

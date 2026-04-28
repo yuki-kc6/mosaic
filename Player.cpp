@@ -9,7 +9,7 @@
 #include <iostream>
 #include <algorithm>
 #include "Engine/Image.h"
-//#include "gun.h"
+#include "Engine/Audio.h"
 
 
 //コンストラクタ
@@ -46,6 +46,9 @@ void Player::Initialize()
     
     SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), 1.2f);
     AddCollider(collision);
+
+
+
 }
 
 //更新
@@ -181,5 +184,13 @@ void Player::RayCastToPaintObjects(RayCastData& data)
     {
         //オブジェクトにモザイクを塗る
        closestObj->PaintMosaic(UV);
+    }
+}
+
+void Player::OnCollision(GameObject* pTarget)
+{
+    if (pTarget->GetObjectName() == "Bulding")
+    {
+		transform_.position_.y += 0.3;
     }
 }

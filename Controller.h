@@ -1,15 +1,15 @@
 #pragma once
-#include "Engine/GameObject.h"
-    //◆◆◆を管理するクラス
-    class FPSgun : public GameObject
+#include "PaintObject.h"
+
+class Controller : public PaintObject
 {
 
 public:
     //コンストラクタ
-    FPSgun(GameObject* parent);
+    Controller(GameObject* parent);
 
     //デストラクタ
-    ~FPSgun();
+    ~Controller();
 
     //初期化
     void Initialize() override;
@@ -22,8 +22,10 @@ public:
 
     //開放
     void Release() override;
-
 private:
-    int hModel_;
-}; 
+    bool MoveForward();
+    bool MoveBack();
 
+    float moveSpeed_;
+
+};

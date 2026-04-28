@@ -111,6 +111,7 @@
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="FPSGun.cpp" />
     <ClCompile Include="StageManager.cpp" />
+    <ClCompile Include="Controller.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -198,6 +199,7 @@
     <ClInclude Include="Building.h" />
     <ClInclude Include="FPSGun.h" />
     <ClInclude Include="StageManager.h" />
+    <ClInclude Include="Controller.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">
