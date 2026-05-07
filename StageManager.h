@@ -21,4 +21,6 @@ public:
 
     //開放
     void Release() override;
+private:
+    std::vector<std::vector<int>> maps;
 };

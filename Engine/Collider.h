@@ -16,6 +16,11 @@ enum ColliderType
 	COLLIDER_CIRCLE		//球体
 };
 
+struct HitResult {
+	bool isHit;//衝突しているか
+	XMFLOAT3 pushBack;//押し戻し
+};
+
 //-----------------------------------------------------------
 //あたり判定を管理するクラス
 //-----------------------------------------------------------
@@ -61,6 +66,10 @@ public:
 	//引数：circleB	２つ目の球体判定
 	//戻値：接触していればtrue
 	bool IsHitCircleVsCircle(SphereCollider* circleA, SphereCollider* circleB);
+
+	XMFLOAT3 GetPushBackVecBoxVsCircle(BoxCollider* box, SphereCollider* sphere);
+
+
 
 	//テスト表示用の枠を描画
 	//引数：position	オブジェクトの位置

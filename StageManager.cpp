@@ -5,6 +5,7 @@
 
 StageManager::StageManager(GameObject* parent)
 {
+
 }
 
 StageManager::~StageManager()
@@ -13,6 +14,23 @@ StageManager::~StageManager()
 
 void StageManager::Initialize()
 {
+	CsvReader csv;
+	csv.Load("StageData.csv");
+	maps.clear();
+
+	for (int i = 0; i < csv.GetWidth();i++)
+	{
+		std::vector<int> mapsLine;
+		for (int j = 0; j < csv.GetHeight(); j++)
+		{
+			mapsLine.push_back(csv.GetValue(i, j));
+		}
+		maps.push_back(mapsLine);
+	}
+
+
+
+
 
 }
 
