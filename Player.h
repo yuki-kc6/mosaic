@@ -19,7 +19,7 @@ private:
 	void OnGround();
 	void RayCastToPaintObjects(RayCastData &data);
 	void PlayerCamera();
-	void OnCollision(GameObject* pTarget) override;
+	void OnCollision(GameObject* pTarget, HitResult result) override;
 	int hModel_;
 	int hCrossHair_;
 

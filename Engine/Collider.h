@@ -47,7 +47,7 @@ public:
 	//接触判定（継承先のSphereColliderかBoxColliderでオーバーライド）
 	//引数：target	相手の当たり判定
 	//戻値：接触してればtrue
-	virtual bool IsHit(Collider* target) = 0;
+	virtual HitResult IsHit(Collider* target) = 0;
 
 	//箱型同士の衝突判定
 	//引数：boxA	１つ目の箱型判定
@@ -78,5 +78,6 @@ public:
 	//セッター
 	void SetGameObject(GameObject* gameObject) { pGameObject_ = gameObject; }
 
+	bool isCharacter;
 };
 

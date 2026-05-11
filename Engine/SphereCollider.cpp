@@ -10,6 +10,7 @@ SphereCollider::SphereCollider(XMFLOAT3 center, float radius)
 	center_ = center;
 	size_ = XMFLOAT3(radius, radius, radius);
 	type_ = COLLIDER_CIRCLE;
+	result = { false, XMFLOAT3(0,0,0) };
 
 	//ƒŠƒŠ[ƒXŽž‚Í”»’è˜g‚Í•\Ž¦‚µ‚È‚¢
 #ifdef _DEBUG
@@ -21,10 +22,16 @@ SphereCollider::SphereCollider(XMFLOAT3 center, float radius)
 //ÚG”»’è
 //ˆø”Ftarget	‘ŠŽè‚Ì“–‚½‚è”»’è
 //–ß’lFÚG‚µ‚Ä‚ê‚Îtrue
-bool SphereCollider::IsHit(Collider* target)
+HitResult SphereCollider::IsHit(Collider* target)
 {
 	if (target->type_ == COLLIDER_BOX)
-		return IsHitBoxVsCircle((BoxCollider*)target, this);
+	{
+		result.isHit = IsHitBoxVsCircle((BoxCollider*)target, this);
+		result.pushBack = GetPushBackVecBoxVsCircle((BoxCollider*)target, this);
+	}
 	else
-		return IsHitCircleVsCircle((SphereCollider*)target, this);
+	{
+		result.isHit = IsHitCircleVsCircle((SphereCollider*)target, this);
+	}
+	return result;
 }

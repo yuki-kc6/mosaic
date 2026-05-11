@@ -187,10 +187,13 @@ void Player::RayCastToPaintObjects(RayCastData& data)
     }
 }
 
-void Player::OnCollision(GameObject* pTarget)
+void Player::OnCollision(GameObject* pTarget,HitResult result)
 {
-    if (pTarget->GetObjectName() == "Bulding")
+    if (pTarget->GetObjectName() == "Building")
     {
-		transform_.position_.y += 0.3;
+		XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
+		XMVECTOR vPushBack = XMLoadFloat3(&result.pushBack);
+        vPos = vPos - vPushBack;
+        XMStoreFloat3(&transform_.position_, vPos);
     }
 }

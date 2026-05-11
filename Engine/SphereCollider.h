@@ -20,6 +20,7 @@ private:
 	//ÚG”»’è
 	//ˆø”Ftarget	‘Šè‚Ì“–‚½‚è”»’è
 	//–ß’lFÚG‚µ‚Ä‚ê‚Îtrue
-	bool IsHit(Collider* target) override;
+	HitResult IsHit(Collider* target) override;
+	HitResult result;
 };
 

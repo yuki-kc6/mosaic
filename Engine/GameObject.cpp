@@ -245,10 +245,10 @@ void GameObject::Collision(GameObject * pTarget)
 	{
 		for (auto j = pTarget->colliderList_.begin(); j != pTarget->colliderList_.end(); j++)
 		{
-			if ((*i)->IsHit(*j))
+			if ((*i)->IsHit(*j).isHit)
 			{
 				//当たった
-				this->OnCollision(pTarget);
+				this->OnCollision(pTarget, (*i)->IsHit(*j));
 			}
 		}
 	}
@@ -263,7 +263,6 @@ void GameObject::Collision(GameObject * pTarget)
 		Collision(*i);
 	}
 }
-
 
 //テスト用の衝突判定枠を表示
 void GameObject::CollisionDraw()

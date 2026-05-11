@@ -11,6 +11,7 @@ BoxCollider::BoxCollider(XMFLOAT3 basePos, XMFLOAT3 size)
 	center_ = basePos;
 	size_ = size;
 	type_ = COLLIDER_BOX;
+	result = { false, XMFLOAT3(0,0,0) };
 
 	//ƒŠƒŠ[ƒXŽž‚Í”»’è˜g‚Í•\Ž¦‚µ‚È‚¢
 #ifdef _DEBUG
@@ -22,10 +23,16 @@ BoxCollider::BoxCollider(XMFLOAT3 basePos, XMFLOAT3 size)
 //ÚG”»’è
 //ˆø”Ftarget	‘ŠŽè‚Ì“–‚½‚è”»’è
 //–ß’lFÚG‚µ‚Ä‚ê‚Îtrue
-bool BoxCollider::IsHit(Collider* target)
+HitResult BoxCollider::IsHit(Collider* target)
 {
 	if (target->type_ == COLLIDER_BOX)
-		return IsHitBoxVsBox((BoxCollider*)target, this);
-	else
-		return IsHitBoxVsCircle(this, (SphereCollider*)target);
+		 result.isHit= IsHitBoxVsBox((BoxCollider*)target, this);
+
+	else {
+		result.isHit = IsHitBoxVsCircle(this, (SphereCollider*)target);
+		result.pushBack = GetPushBackVecBoxVsCircle(this, (SphereCollider*)target);
+	}
+
+
+	return result;
 }

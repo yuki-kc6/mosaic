@@ -6,7 +6,8 @@
 
 //コンストラクタ
 Collider::Collider():
-	pGameObject_(nullptr)
+	pGameObject_(nullptr),
+	isCharacter(false)
 {
 }
 
@@ -84,14 +85,18 @@ bool Collider::IsHitCircleVsCircle(SphereCollider* circleA, SphereCollider* circ
 	return false;
 }
 
+//球体と箱型の衝突で押し戻すベクトルを取得
+//引数：box	箱型判定
+//引数：sphere	球体判定
+//戻値：押し戻すベクトル
 XMFLOAT3 Collider::GetPushBackVecBoxVsCircle(BoxCollider* box, SphereCollider* sphere)
 {
 	XMFLOAT3 circlePos = Transform::Float3Add(sphere->pGameObject_->GetWorldPosition(), sphere->center_);
 	XMFLOAT3 boxPos = Transform::Float3Add(box->pGameObject_->GetWorldPosition(), box->center_);
 
-	float nearestX = max(boxPos.x - box->size_.x / 2, min(circlePos.x, boxPos.x + box->size_.x));
-	float nearestY = max(boxPos.y - box->size_.y / 2, min(circlePos.y, boxPos.y + box->size_.y));
-	float nearestZ = max(boxPos.z - box->size_.z / 2, min(circlePos.z, boxPos.z + box->size_.z));
+	float nearestX = max(boxPos.x - box->size_.x / 2, min(circlePos.x, boxPos.x + box->size_.x / 2));
+	float nearestY = max(boxPos.y - box->size_.y / 2, min(circlePos.y, boxPos.y + box->size_.y / 2));
+	float nearestZ = max(boxPos.z - box->size_.z / 2, min(circlePos.z, boxPos.z + box->size_.z / 2));
 
 	float dx = circlePos.x - nearestX;
 	float dy = circlePos.y - nearestY;
@@ -116,6 +121,7 @@ XMFLOAT3 Collider::GetPushBackVecBoxVsCircle(BoxCollider* box, SphereCollider* s
 
 
 }
+
 //テスト表示用の枠を描画
 //引数：position	オブジェクトの位置
 void Collider::Draw(XMFLOAT3 position)
