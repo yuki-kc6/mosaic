@@ -38,13 +38,14 @@ void Player::Initialize()
 
 
     transform_.position_.y = 1;
-    moveSpeed_ = 0.08;
+    transform_.position_.z = 20;
+    moveSpeed_ =0.5;
 
     transform_.rotate_ = { 0,0,0 };
     
     Instantiate<FPSCamera>(this);
     
-    SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), 1.2f);
+    SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), 1.5f);
     AddCollider(collision);
 
 
@@ -193,7 +194,7 @@ void Player::OnCollision(GameObject* pTarget,HitResult result)
     {
 		XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
 		XMVECTOR vPushBack = XMLoadFloat3(&result.pushBack);
-        vPos = vPos - vPushBack;
+        vPos = vPos + vPushBack;
         XMStoreFloat3(&transform_.position_, vPos);
     }
 }

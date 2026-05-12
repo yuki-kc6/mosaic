@@ -8,6 +8,7 @@
 #include "StageTimer.h"
 #include "Building.h"
 #include "FPSgun.h"
+#include "StageManager.h"
 
 //コンストラクタ
 PlayScene::PlayScene(GameObject * parent)
@@ -25,15 +26,17 @@ void PlayScene::Initialize()
 	
 	Instantiate<Ground>(this);
 
-	Instantiate<Building>(this);
+	//Instantiate<Building>(this);
 	
 	Instantiate<FPSgun>(this);	
-
-	Instantiate<Player>(this);
 	
 	this->PushSensitive();
 
 	Instantiate<StageTimer>(this);
+
+	Instantiate<StageManager>(this);
+
+	Instantiate<Player>(this);
 }
 
 //更新

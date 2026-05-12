@@ -18,7 +18,7 @@ void Ground::Initialize()
 {
     hModel_ = Model::Load("Models/map1.fbx");
     assert(hModel_ >= 0);
-    SetBrushSize(0.0005f);
+    SetBrushSize(0.005f);
 }
 
 //XV

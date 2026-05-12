@@ -18,13 +18,15 @@ Building::~Building()
 //初期化
 void Building::Initialize()
 {
-    hModel_ = Model::Load("Models/building1.fbx");
+
+    hModel_ = Model::Load("Models/building2.fbx");
     assert(hModel_ >= 0);
-    //transform_.position_.y = ;
+    
     //this->SetSensitive(true);
     BoxCollider* collision = new BoxCollider(transform_.position_, XMFLOAT3(25, 25, 25));
+   // transform_.position_.x = 30;
     AddCollider(collision);
-    SetBrushSize(0.03f);
+    SetBrushSize(0.003f);
 	transform_.scale_ = { 5.0f,5.0f,5.0f };
 }
 

@@ -8,7 +8,7 @@ PaintObject::PaintObject()
 	:GameObject(), mosaicRT(nullptr)
 {
 
-}
+} 
 
 PaintObject::PaintObject(GameObject* parent)
 	:GameObject(parent), mosaicRT(nullptr)

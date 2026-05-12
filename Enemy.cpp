@@ -42,7 +42,3 @@ void Enemy::Release()
 {
 }
 
-void Enemy::OnCollision(GameObject* pTarget)
-{
-   
-}

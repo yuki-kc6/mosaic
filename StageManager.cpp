@@ -10,6 +10,7 @@ StageManager::StageManager(GameObject* parent)
 
 StageManager::~StageManager()
 {
+
 }
 
 void StageManager::Initialize()
@@ -18,17 +19,33 @@ void StageManager::Initialize()
 	csv.Load("StageData.csv");
 	maps.clear();
 
-	for (int i = 0; i < csv.GetWidth();i++)
+	int w = csv.GetWidth();
+	int h = csv.GetHeight();
+
+	for (int y = 0; y < h; y++)
 	{
 		std::vector<int> mapsLine;
-		for (int j = 0; j < csv.GetHeight(); j++)
+		mapsLine.clear();
+		for (int x = 0; x < w; x++)
 		{
-			mapsLine.push_back(csv.GetValue(i, j));
+
+			mapsLine.push_back(csv.GetValue(x, y));
+
 		}
+
 		maps.push_back(mapsLine);
 	}
 
-
+	for (int z = 0; z < maps.size(); z++)
+	{
+		for (int x = 0; x < maps[z].size(); x++)
+		{
+			if (maps[z][x] == 1)
+			{
+				Instantiate<Building>(this)->SetPosition(x * 27.0f, 0.0f, -z * 27.0f);
+			}
+		}
+	}
 
 
 

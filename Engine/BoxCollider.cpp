@@ -2,7 +2,6 @@
 #include "SphereCollider.h"
 #include "Model.h"
 
-
 //コンストラクタ（当たり判定の作成）
 //引数：basePos	当たり判定の中心位置（ゲームオブジェクトの原点から見た位置）
 //引数：size	当たり判定のサイズ
