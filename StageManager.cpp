@@ -1,5 +1,6 @@
 #include "StageManager.h"
 #include "Building.h"	
+#include "Ground.h"
 #include "Engine/Model.h"
 #include "Engine/CsvReader.h"
 
@@ -42,7 +43,11 @@ void StageManager::Initialize()
 		{
 			if (maps[z][x] == 1)
 			{
-				Instantiate<Building>(this)->SetPosition(x * 27.0f, 0.0f, -z * 27.0f);
+				Instantiate<Building>(this)->SetPosition(x * 29.0f, 0.0f, -z * 29.0f);
+			}
+			else if (maps[z][x] == 0)
+			{
+				//Instantiate<Ground>(this)->SetPosition(x * 40.0f, 0.0f, -z * 29.0f);
 			}
 		}
 	}

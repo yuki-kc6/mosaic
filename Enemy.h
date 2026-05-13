@@ -12,4 +12,5 @@ public:
 	void Release() override;
 //	void OnCollision(GameObject* pTarget) override;
 private:
+	std::vector<std::vector<int>> maps;
 };

@@ -9,6 +9,7 @@
 #include "Building.h"
 #include "FPSgun.h"
 #include "StageManager.h"
+#include "EnemyManager.h"
 
 //コンストラクタ
 PlayScene::PlayScene(GameObject * parent)
@@ -20,9 +21,6 @@ PlayScene::PlayScene(GameObject * parent)
 void PlayScene::Initialize()
 {
 	MosaicPrinter::Initialize();
-
-
-	Instantiate<Enemy>(this);
 	
 	Instantiate<Ground>(this);
 
@@ -35,6 +33,7 @@ void PlayScene::Initialize()
 	Instantiate<StageTimer>(this);
 
 	Instantiate<StageManager>(this);
+	Instantiate<EnemyManager>(this);
 
 	Instantiate<Player>(this);
 }

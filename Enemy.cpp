@@ -14,22 +14,19 @@ Enemy::~Enemy()
 
 void Enemy::Initialize()
 {
-    hModel_ = Model::Load("Models/Enemy2.fbx");
+    hModel_ = Model::Load("Models/enemy2.fbx");
     assert(hModel_ >= 0);
 
     transform_.position_.y = 1;
 
-    SphereCollider* collision = new SphereCollider(transform_.position_, 1.2f);
-    AddCollider(collision);
-
-
+    transform_.scale_ = { 5.0,5.0,5.0 };
 
 }
 
 void Enemy::Update()
 {
-	transform_.position_.x += 0.01f;
-
+    //ビルから出てきて、ランダムな他のビルに向かって移動するというのをやりたい
+	transform_.position_.x += 0.1f;
 }
 
 void Enemy::Draw()
