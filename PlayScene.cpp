@@ -9,7 +9,7 @@
 #include "Building.h"
 #include "FPSgun.h"
 #include "StageManager.h"
-#include "EnemyManager.h"
+#include "NPCManager.h"
 
 //コンストラクタ
 PlayScene::PlayScene(GameObject * parent)
@@ -33,7 +33,7 @@ void PlayScene::Initialize()
 	Instantiate<StageTimer>(this);
 
 	Instantiate<StageManager>(this);
-	Instantiate<EnemyManager>(this);
+	Instantiate<NPCManager>(this);
 
 	Instantiate<Player>(this);
 }

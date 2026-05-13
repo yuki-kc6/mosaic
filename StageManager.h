@@ -22,6 +22,9 @@ public:
 
     //開放
     void Release() override;
+
+	int GetMap(int x, int z) { return maps[z][x]; }
+
 private:
     std::vector<std::vector<int>> maps;
 };

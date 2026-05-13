@@ -47,7 +47,6 @@ void StageManager::Initialize()
 			}
 			else if (maps[z][x] == 0)
 			{
-				//Instantiate<Ground>(this)->SetPosition(x * 40.0f, 0.0f, -z * 29.0f);
 			}
 		}
 	}
