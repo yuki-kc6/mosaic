@@ -25,7 +25,11 @@ void Enemy::Initialize()
 
 
 	//スポーンしたマスから移動する方向を決める
-	
+	currentX = transform_.position_.x/29.0f;
+	currentZ = transform_.position_.z/29.0f;
+
+
+
 
 
 	//目標とするビルを決める
@@ -38,6 +42,8 @@ void Enemy::Update()
 	{
 	case ENEMY_MOVE:
 		//ビルの横を移動させる
+		transform_.position_.x += 0.1f;
+		//回転行列をかける
 		//基本は真っすぐ、目標となるビルが道路をはさむ場合は後で
 		break;
 	case ENEMY_ENTERBUILDING:
@@ -45,6 +51,7 @@ void Enemy::Update()
 		break;
 	case ENEMY_ESCAPE:
 		//入って消える
+		KillMe();
 		break;
 	case ENEMY_PAINTED:
 		//プレイヤーに塗られたら回転して上昇していく

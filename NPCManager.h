@@ -28,5 +28,5 @@ public:
 private:
     std::vector<std::vector<int>> enemy;
 	StageManager* stageManager;
-
+    bool isSpawned;
 };

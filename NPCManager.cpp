@@ -22,7 +22,7 @@ void NPCManager::Initialize()
 
 void NPCManager::Update()
 {
-	//一定時間経過、
+	//一定時間経過、k
 	//vectorにNPCを登録
 	//ビルの隣のマスにスポーン
 	//Instantiate<Enemy>(this)->SetPosition(x * 29.0f, 0.0f, -z * 29.0f);

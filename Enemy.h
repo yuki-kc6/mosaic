@@ -11,6 +11,13 @@ enum EnemyState
 	ENEMY_PAINTED
 };
 
+enum EnemyDirection
+{
+	ENEMY_UP,
+	ENEMY_DOWN,
+	ENEMY_LEFT,
+	ENEMY_RIGHT
+};
 
 class Enemy :public PaintObject
 {
@@ -27,6 +34,12 @@ private:
 	std::vector<std::vector<int>> maps;
 	int goalX;
 	int goalZ;
+
+	int currentX;
+	int currentZ;
+
+	int nextX;
+	int nextZ;
 
 	int mapW;
 	int mapH;
