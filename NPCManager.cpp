@@ -17,7 +17,7 @@ NPCManager::~NPCManager()
 void NPCManager::Initialize()
 {
 	stageManager = (StageManager*)FindObject("StageManager");
-
+	Instantiate<Enemy>(this)->SetPosition(0.0f, 0.0f, 0.0f);
 }
 
 void NPCManager::Update()

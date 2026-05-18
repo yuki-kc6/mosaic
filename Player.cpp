@@ -71,7 +71,7 @@ void Player::Update()
       vMoveForward = XMVector3TransformNormal(vMoveForward, mRotate);
       vMoveRight = XMVector3TransformNormal(vMoveRight, mRotate);
 
-     //ˆÚ“®
+     //WASDˆÚ“®
         if (Input::IsKey(DIK_W))
         {
             vPos += vMoveForward*moveSpeed_;
@@ -89,16 +89,6 @@ void Player::Update()
             vPos -= vMoveRight*moveSpeed_;
         }
         XMStoreFloat3(&transform_.position_, vPos);
-    }
-
-
-    if (Input::IsKey(DIK_SPACE))
-    {
-        transform_.position_.y += 0.3;
-    }
-    if (Input::IsKey(DIK_B))
-    {
-        transform_.position_.y -= 0.3;
     }
 
 

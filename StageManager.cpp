@@ -45,8 +45,17 @@ void StageManager::Initialize()
 			{
 				Instantiate<Building>(this)->SetPosition(x * 29.0f, 0.0f, -z * 29.0f);
 			}
-			else if (maps[z][x] == 0)
+			if (maps[z][x] == 0)
 			{
+				//歩道、特に模様などなし
+			}
+			if (maps[z][x] == 2)
+			{
+				//道路、mapの繋がり方でrotateする
+			}
+			if (maps[z][x] == 3)
+			{
+				//横断歩道、道路に合わせてrotateする
 			}
 		}
 	}

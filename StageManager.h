@@ -24,6 +24,8 @@ public:
     void Release() override;
 
 	int GetMap(int x, int z) { return maps[z][x]; }
+	int GetMapW() { return maps[0].size(); }
+	int GetMapH() { return maps.size(); }
 
 private:
     std::vector<std::vector<int>> maps;

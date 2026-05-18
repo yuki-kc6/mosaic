@@ -5,6 +5,7 @@ class StageManager;
 
 enum EnemyState
 {
+	ENEMY_SPAWN,
 	ENEMY_MOVE,
 	ENEMY_ENTERBUILDING,
 	ENEMY_ESCAPE,
@@ -31,7 +32,12 @@ public:
 //	void OnCollision(GameObject* pTarget) override;
 private:
 	void Move();
-	std::vector<std::vector<int>> maps;
+	void Rotate(EnemyDirection dir);
+
+	int hEnemyModel_;
+	
+	int moveSpeed_;
+
 	int goalX;
 	int goalZ;
 
@@ -45,4 +51,5 @@ private:
 	int mapH;
 	StageManager* stageManager;
 	EnemyState state_;
+	EnemyDirection direction_;
 };
