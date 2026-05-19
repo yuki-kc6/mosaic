@@ -25,7 +25,6 @@ void Enemy::Initialize()
 
 	stageManager = (StageManager*)FindObject("StageManager");
 
-
 	//スポーンしたマスから移動する方向を決める
 	currentX = transform_.position_.x/29.0f;
 	currentZ = transform_.position_.z/29.0f;
@@ -52,45 +51,24 @@ void Enemy::Update()
 {
 	switch (state_)
 	{
-	case ENEMY_SPAWN:
-		//スポーンしたマスから
-		state_ = ENEMY_MOVE;
-		break;
 	case ENEMY_MOVE:
-		//ビルの横を移動させる
-		//currentXかcurrentZの座標が次のマスに動くまでは同じ方向に動かす
-		//goalZがcurrentZと同じならcurrentXだけを動かす
-		//違う場合は、mapの値で3の場所にある横断歩道を目標にする。
-
-		if (currentX < goalX)
-		transform_.position_.x += 0.1f;
-		currentX = transform_.position_.x / 29.0f;
-		currentZ = transform_.position_.z / 29.0f;
-
-
-
-		//回転行列をかける
-		//基本は真っすぐ、目標となるビルが道路をはさむ場合は後で
-		if (currentX = goalX)
+		DecideNextTile();//次に移動するマスを決める
+		MoveNextTile();//次のマスに移動する
+		if(currentX==goalX && currentZ==goalZ)
 		{
-			if (currentZ = goalZ)
-			{
-				state_ = ENEMY_ENTERBUILDING;
-			}
+			state_ = ENEMY_WAIT;
 		}
 		break;
-	case ENEMY_ENTERBUILDING:
-		//ビルについたらその方向を見る
-		transform_.rotate_.y = 180.0f;
+	case ENEMY_WAIT:
+		//ビルの中で待機する
 
-		break;
-	case ENEMY_ESCAPE:
-		//入って消える
-		KillMe();
+		//if()
+		// {
+		// state_=ENEMY_GETOUTBUILDING;
+		//}
 		break;
 	case ENEMY_PAINTED:
-		//プレイヤーに塗られたら回転して上昇していく
-	//その後、消える
+		
 		break;
 	default:
 		break;
@@ -113,8 +91,10 @@ void Enemy::Release()
 {
 }
 
-void Enemy::Move()
+void Enemy::MoveNextTile()
 {
+
+	//今のマスの真ん中から次のマスの真ん中まで
 	XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
 	XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
 	XMVECTOR vMoveForward = { 0,0,1,0 };
@@ -122,25 +102,35 @@ void Enemy::Move()
 	vMoveForward = XMVector3TransformNormal(vMoveForward, mRotate);
 
 	vPos += vMoveForward * moveSpeed_;
+	XMStoreFloat3(&transform_.position_, vPos);
+
+
+
 }
 
-void Enemy::Rotate(EnemyDirection dir)
+void Enemy::DecideNextTile()
 {
-	switch (dir)	
+	for (int dir = 0; dir < 4; dir++)
 	{
-	case ENEMY_UP:
-		break;
-	case ENEMY_DOWN:
-		break;
-	case ENEMY_LEFT:
-		break;
-	case ENEMY_RIGHT:
-		break;
-	default:
-		break;
-	}
+		int nx = currentX + dx[dir];
+		int nz = currentZ + dz[dir];
+
+		if(nx==goalX && nz==goalZ)
+			{
+			nextX = nx;
+			nextZ = nz;
+			return;
+		}
+
+		//if (nx < 0 || nx >= stageManager->GetMapW() || nz < 0 || nz >= stageManager->GetMapH()) continue;
+		//if (stageManager->GetMap(nx, nz) ==1&& stageManager->GetMap(nx, nz) == 2) continue;
+
+		nextX = nx;
+		nextZ = nz;
+
 
 	
-
+	}
 }
+
 

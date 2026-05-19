@@ -26,15 +26,15 @@ void PlayScene::Initialize()
 
 	//Instantiate<Building>(this);
 	
-	//Instantiate<FPSgun>(this);	
+	Instantiate<FPSgun>(this);	
 	
 	this->PushSensitive();
 
 	Instantiate<StageTimer>(this);
 
 	Instantiate<StageManager>(this);
-	Instantiate<NPCManager>(this);
-	Instantiate<Enemy>(this);
+	//Instantiate<NPCManager>(this);
+	//Instantiate<Enemy>(this);
 	Instantiate<Player>(this);
 }
 

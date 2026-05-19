@@ -8,7 +8,8 @@ enum EnemyState
 	ENEMY_SPAWN,
 	ENEMY_MOVE,
 	ENEMY_ENTERBUILDING,
-	ENEMY_ESCAPE,
+	ENEMY_GETOUTBUILDING,
+	ENEMY_WAIT,
 	ENEMY_PAINTED
 };
 
@@ -31,8 +32,9 @@ public:
 	void Release() override;
 //	void OnCollision(GameObject* pTarget) override;
 private:
-	void Move();
-	void Rotate(EnemyDirection dir);
+	void MoveNextTile();
+
+	void DecideNextTile();
 
 	int hEnemyModel_;
 	
@@ -40,6 +42,9 @@ private:
 
 	int goalX;
 	int goalZ;
+
+	int startX;
+	int startZ;
 
 	int currentX;
 	int currentZ;
@@ -52,4 +57,8 @@ private:
 	StageManager* stageManager;
 	EnemyState state_;
 	EnemyDirection direction_;
+	bool isInBuilding;
+	bool isGoal;
+	int dx[4] = { 1,0,-1,0 };
+	int dz[4] = { 0,1,0,-1 };
 };

@@ -43,6 +43,7 @@ void StageManager::Initialize()
 		{
 			if (maps[z][x] == 1)
 			{
+				//ビル
 				Instantiate<Building>(this)->SetPosition(x * 29.0f, 0.0f, -z * 29.0f);
 			}
 			if (maps[z][x] == 0)
@@ -75,5 +76,16 @@ void StageManager::Draw()
 
 void StageManager::Release()
 {
+}
+
+int StageManager::GetMap(int x, int z)
+{
+	if (z < 0 || z >= maps.size())
+		return -1;
+
+	if (x < 0 || x >= maps[z].size())
+		return -1;
+
+	return maps[z][x];
 }
 

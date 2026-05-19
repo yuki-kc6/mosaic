@@ -4,7 +4,6 @@
 #include "Engine/SphereCollider.h"
 #include "Ground.h"
 #include "Engine/Camera.h"
-#include "Bullet.h"
 #include "RenderTexture.h"
 #include <iostream>
 #include <algorithm>
@@ -57,7 +56,7 @@ void Player::Update()
 {
     //ƒJƒƒ‰
 	fpsCamera = (FPSCamera*)FindChildObject("FPSCamera");
-    fpsCamera->SetFpsCamera(transform_,0.5f);
+    
 
  
 
@@ -110,6 +109,8 @@ void Player::Update()
     }
 
     //this->OnGround();
+
+    fpsCamera->SetFpsCamera(transform_, 0.5f);
 }
 
 //•`‰æ
