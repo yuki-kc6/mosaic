@@ -25,6 +25,10 @@ void Enemy::Initialize()
 
 	stageManager = (StageManager*)FindObject("StageManager");
 
+	int mapW = stageManager->GetMapW();
+	int mapH = stageManager->GetMapH();
+
+
 	//スポーンしたマスから移動する方向を決める
 	currentX = transform_.position_.x/29.0f;
 	currentZ = transform_.position_.z/29.0f;
@@ -52,19 +56,47 @@ void Enemy::Update()
 	switch (state_)
 	{
 	case ENEMY_MOVE:
-		DecideNextTile();//次に移動するマスを決める
-		MoveNextTile();//次のマスに移動する
+		UpdateMove();
+		//スタート地点を探す
+		if (!isSerarchStarted)
+		{
+			for (int z = 0; z < mapH; z++)
+			{
+				for(int x=0; x<mapW; x++)
+				{
+					if(currentX == x && currentZ == z)
+					{
+						routeQueue.push({ z,x });
+						visited[z][x] = true;
+						isSerarchStarted = true;
+						break;
+					}
+				}
+			}
+		}
+		else if (!isRouteDecided)
+		{
+			//ルートが決まっていない場合はルートを決める
+			SerarchRoad();
+		}
+		else
+		{
+			MoveNextTile();//ルートが決まったら移動を開始する
+		}
+		
 		if(currentX==goalX && currentZ==goalZ)
 		{
 			state_ = ENEMY_WAIT;
 		}
+
 		break;
 	case ENEMY_WAIT:
 		//ビルの中で待機する
 
 		//if()
 		// {
-		// state_=ENEMY_GETOUTBUILDING;
+		// setGoal();
+		// state_=ENEMY_MOVE;
 		//}
 		break;
 	case ENEMY_PAINTED:
@@ -91,6 +123,11 @@ void Enemy::Release()
 {
 }
 
+void Enemy::UpdateMove()
+{
+
+}
+
 void Enemy::MoveNextTile()
 {
 
@@ -104,33 +141,48 @@ void Enemy::MoveNextTile()
 	vPos += vMoveForward * moveSpeed_;
 	XMStoreFloat3(&transform_.position_, vPos);
 
-
-
 }
 
-void Enemy::DecideNextTile()
+void Enemy::SerarchRoad()
 {
+	//BFS探索でルートを決める
+	if (routeQueue.empty())return;
+
+	auto p = routeQueue.front();
+	routeQueue.pop();
+
+	int z = p.first;
+	int x = p.second;
+
 	for (int dir = 0; dir < 4; dir++)
 	{
-		int nx = currentX + dx[dir];
-		int nz = currentZ + dz[dir];
+		int nx = x + dx[dir];
+		int nz = z + dz[dir];
+
+		int map = stageManager->GetMap(nx, nz);
+
+		if (nx < 0 || nx >= stageManager->GetMapW() || nz < 0 || nz >= stageManager->GetMapH()) continue;
+		if (map ==1 || map == 2) continue;
+		if (visited[nz][nx]) continue;
+
+		visited[nz][nx] = true;
+		parent[nz][nx] = { z, x};
+		routeQueue.push({ nz, nx });
 
 		if(nx==goalX && nz==goalZ)
-			{
-			nextX = nx;
-			nextZ = nz;
-			return;
+		{
+			isRouteDecided = true;
+
+			break;
 		}
 
-		//if (nx < 0 || nx >= stageManager->GetMapW() || nz < 0 || nz >= stageManager->GetMapH()) continue;
-		//if (stageManager->GetMap(nx, nz) ==1&& stageManager->GetMap(nx, nz) == 2) continue;
-
-		nextX = nx;
-		nextZ = nz;
-
-
-	
 	}
+}
+
+void Enemy::CreateRoute()
+{
+	//BFS探索で決定したルートをDirectionにする
+
 }
 
 

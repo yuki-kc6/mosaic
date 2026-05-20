@@ -1,5 +1,6 @@
 #pragma once
 #include "PaintObject.h"
+#include <queue>
 
 class StageManager;
 
@@ -16,9 +17,9 @@ enum EnemyState
 enum EnemyDirection
 {
 	ENEMY_UP,
+	ENEMY_RIGHT,
 	ENEMY_DOWN,
-	ENEMY_LEFT,
-	ENEMY_RIGHT
+	ENEMY_LEFT
 };
 
 class Enemy :public PaintObject
@@ -32,9 +33,13 @@ public:
 	void Release() override;
 //	void OnCollision(GameObject* pTarget) override;
 private:
+	void UpdateMove();
+
 	void MoveNextTile();
 
-	void DecideNextTile();
+	void SerarchRoad();
+	void CreateRoute();
+
 
 	int hEnemyModel_;
 	
@@ -61,4 +66,15 @@ private:
 	bool isGoal;
 	int dx[4] = { 1,0,-1,0 };
 	int dz[4] = { 0,1,0,-1 };
+
+
+	std::vector<EnemyDirection> route;
+	std::vector<std::vector<std::pair<int, int>>> parent;
+	std::queue<std::pair<int,int>> routeQueue;
+	std::vector<std::vector<bool>> visited;
+	
+	bool isSerarchStarted;
+	bool isRouteDecided;
+	int routeIndex_;
+
 };

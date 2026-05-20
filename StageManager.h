@@ -23,7 +23,7 @@ public:
     //開放
     void Release() override;
 
-    int GetMap(int x, int z);
+    int GetMap(int z, int x);
 	int GetMapW() { return maps[0].size(); }
 	int GetMapH() { return maps.size(); }
 
