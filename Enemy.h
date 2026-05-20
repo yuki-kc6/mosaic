@@ -4,6 +4,7 @@
 
 class StageManager;
 
+//敵の状態
 enum EnemyState
 {
 	ENEMY_SPAWN,
@@ -14,6 +15,7 @@ enum EnemyState
 	ENEMY_PAINTED
 };
 
+//敵の移動する方向
 enum EnemyDirection
 {
 	ENEMY_UP,
@@ -35,46 +37,60 @@ public:
 private:
 	void UpdateMove();
 
-	void MoveNextTile();
+	void MoveRoute();
 
 	void SerarchRoad();
 	void CreateRoute();
 
 
+
+	//次の目標地点の3D座標
+	XMFLOAT3 targetPos;
+
+	//次の目標地点のマス座標
+	int nextTargetX;
+	int nextTargetZ;
+
 	int hEnemyModel_;
 	
+	//移動速度
 	int moveSpeed_;
 
+	//ゴールのマス座標
 	int goalX;
 	int goalZ;
 
+	//スタートのマス座標
 	int startX;
 	int startZ;
 
+	//現在のマス座標
 	int currentX;
 	int currentZ;
 
-	int nextX;
-	int nextZ;
-
+	//マップの大きさ
 	int mapW;
 	int mapH;
-	StageManager* stageManager;
+
+	StageManager* stageManager;//ステージマネージャーへのポインタ
+	//状態
 	EnemyState state_;
+	//移動する方向
 	EnemyDirection direction_;
-	bool isInBuilding;
+
 	bool isGoal;
+	//BFS探索のための方向配列
 	int dx[4] = { 1,0,-1,0 };
 	int dz[4] = { 0,1,0,-1 };
 
 
-	std::vector<EnemyDirection> route;
-	std::vector<std::vector<std::pair<int, int>>> parent;
-	std::queue<std::pair<int,int>> routeQueue;
-	std::vector<std::vector<bool>> visited;
+	std::vector<EnemyDirection> route;//スタートからゴールまでのルートをDirectionで表す
+	std::vector<std::vector<std::pair<int, int>>> parent;//BFS探索のための親ノードを保存する配列
+	std::queue<std::pair<int, int>> routeQueue;//BFS探索のためのキュー
+	std::vector<std::vector<bool>> visited;//BFS探索のための訪問済み配列
 	
-	bool isSerarchStarted;
-	bool isRouteDecided;
-	int routeIndex_;
+	bool isSerarchStarted;//BFS探索が始まったかどうか
+	bool isRouteDecided;//ルートが決まったかどうか
+	int routeIndex_;//現在のルートのどこにいるか
 
 };
