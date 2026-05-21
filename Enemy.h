@@ -9,8 +9,7 @@ enum EnemyState
 {
 	ENEMY_SPAWN,
 	ENEMY_MOVE,
-	ENEMY_ENTERBUILDING,
-	ENEMY_GETOUTBUILDING,
+	ENEMY_SETTARGETPOS,
 	ENEMY_WAIT,
 	ENEMY_PAINTED
 };
@@ -41,7 +40,7 @@ private:
 
 	void SerarchRoad();
 	void CreateRoute();
-
+	void SetTargetPos();
 
 
 	//次の目標地点の3D座標

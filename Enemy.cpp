@@ -29,7 +29,7 @@ void Enemy::Initialize()
 	int mapH = stageManager->GetMapH();
 
 
-	//スポーンしたマスから移動する方向を決める
+	//スポーンしたマス
 	currentX = transform_.position_.x/29.0f;
 	currentZ = transform_.position_.z/29.0f;
 
@@ -55,9 +55,43 @@ void Enemy::Update()
 {
 	switch (state_)
 	{
+
+	case ENEMY_SPAWN:
+		if (!isSerarchStarted)
+		{
+			for (int z = 0; z < mapH; z++)
+			{
+				for (int x = 0; x < mapW; x++)
+				{
+					if (currentX == x && currentZ == z)
+					{
+						startX = x;
+						startZ = z;
+						routeQueue.push({ z,x });
+						visited[z][x] = true;
+						isSerarchStarted = true;
+						break;
+					}
+				}
+			}
+		}
+		else if (!isRouteDecided)
+		{
+			//ルートが決まっていない場合はルートを決める
+			SerarchRoad();
+			state_ = ENEMY_SETTARGETPOS;
+		}
+		break;
+
+	case ENEMY_SETTARGETPOS:
+		SetTargetPos();
+		state_ = ENEMY_MOVE;
+		break;
+
 	case ENEMY_MOVE:
 		UpdateMove();
 		break;
+
 	case ENEMY_WAIT:
 		//ビルの中で待機する
 
@@ -93,77 +127,17 @@ void Enemy::Release()
 
 void Enemy::UpdateMove()
 {
-	if (!isSerarchStarted)
-	{
-		for (int z = 0; z < mapH; z++)
-		{
-			for (int x = 0; x < mapW; x++)
-			{
-				if (currentX == x && currentZ == z)
-				{
-					startX = x;
-					startZ = z;
-					routeQueue.push({ z,x });
-					visited[z][x] = true;
-					isSerarchStarted = true;
-					break;
-				}
-			}
-		}
-	}
-	else if (!isRouteDecided)
-	{
-		//ルートが決まっていない場合はルートを決める
-		SerarchRoad();
-	}
-	else
-	{
-		MoveRoute();//ルートが決まったら移動を開始する
-	}
+	MoveRoute();//道にそって移動する
 
-	if (currentX == goalX && currentZ == goalZ)
+	//マスの真ん中に到達したら次のマスを設定する
+	if (transform_.position_.x == targetPos.x && transform_.position_.z == targetPos.z)
 	{
-		state_ = ENEMY_WAIT;
+		state_ = ENEMY_SETTARGETPOS;
 	}
 }
 
 void Enemy::MoveRoute()
 {
-	direction_ = route[routeIndex_];
-
-	//次のマスをrouteの中のDirectionに従って決める
-	switch (route[routeIndex_])
-	{
-	case ENEMY_UP:
-		transform_.rotate_.y = 0;
-		nextTargetZ--;
-		break;
-
-	case ENEMY_DOWN:
-		transform_.rotate_.y = 180;
-		nextTargetZ++;
-		break;
-
-	case ENEMY_LEFT:
-		transform_.rotate_.y = 270;
-		nextTargetX--;
-		break;
-
-	case ENEMY_RIGHT:
-		transform_.rotate_.y = 90;
-		nextTargetX++;
-		break;
-	}
-
-	targetPos =
-	{
-		nextTargetX * 29.0f,
-		0,
-		-nextTargetZ * 29.0f
-	};
-	
-
-
 	//今のマスの真ん中から次のマスの真ん中まで
 	XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
 	XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
@@ -174,9 +148,9 @@ void Enemy::MoveRoute()
 	vPos += vMoveForward * moveSpeed_;
 	XMStoreFloat3(&transform_.position_, vPos);
 
+	//targetPosを目指して移動する
 
-
-
+	routeIndex_++;
 
 }
 
@@ -245,6 +219,46 @@ void Enemy::CreateRoute()
 
 		}
 		std::reverse(route.begin(), route.end());
+}
+
+void Enemy::SetTargetPos()
+{
+	direction_ = route[routeIndex_];
+
+	nextTargetX = currentX;
+	nextTargetZ = currentZ;
+
+	//次のマスをrouteの中のDirectionに従って決める
+	switch (route[routeIndex_])
+	{
+	case ENEMY_UP:
+		transform_.rotate_.y = 0;
+		nextTargetZ--;
+		break;
+
+	case ENEMY_DOWN:
+		transform_.rotate_.y = 180;
+		nextTargetZ++;
+		break;
+
+	case ENEMY_LEFT:
+		transform_.rotate_.y = 270;
+		nextTargetX--;
+		break;
+
+	case ENEMY_RIGHT:
+		transform_.rotate_.y = 90;
+		nextTargetX++;
+		break;
+	}
+
+	targetPos =
+	{
+		nextTargetX * 29.0f,
+		0,
+		-nextTargetZ * 29.0f
+	};
+
 }
 
 
