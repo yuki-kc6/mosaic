@@ -17,7 +17,7 @@ public:
     //更新
     void Update() override;
 
-    //描画
+     //描画
     void Draw() override;
 
     //開放

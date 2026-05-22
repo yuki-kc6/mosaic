@@ -28,11 +28,13 @@ void Building::Initialize()
     AddCollider(collision);
     SetBrushSize(0.003f);
 	transform_.scale_ = { 5.0f,5.0f,5.0f };
+	
 }
 
 //更新
 void Building::Update()
 {
+    transform_.position_.y = 10.0f;
 }
 
 //描画

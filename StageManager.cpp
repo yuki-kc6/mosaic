@@ -3,8 +3,10 @@
 #include "Ground.h"
 #include "Engine/Model.h"
 #include "Engine/CsvReader.h"
+#include "Enemy.h"
 
 StageManager::StageManager(GameObject* parent)
+	:GameObject(parent, "StageManager")
 {
 
 }
@@ -45,6 +47,7 @@ void StageManager::Initialize()
 			{
 				//ビル
 				Instantiate<Building>(this)->SetPosition(x * 29.0f, 0.0f, -z * 29.0f);
+				Instantiate<Enemy>(this)->SetPosition(x * 29.0f, 0.0f, -z * 29.0f);
 			}
 			if (maps[z][x] == 0)
 			{

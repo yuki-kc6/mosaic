@@ -25,30 +25,59 @@ void Enemy::Initialize()
 
 	stageManager = (StageManager*)FindObject("StageManager");
 
-	int mapW = stageManager->GetMapW();
-	int mapH = stageManager->GetMapH();
+	mapW = stageManager->GetMapW();
+	mapH = stageManager->GetMapH();
 
 
 	//スポーンしたマス
 	currentX = transform_.position_.x/29.0f;
 	currentZ = transform_.position_.z/29.0f;
+	currentZ = -currentZ;//マップの座標とワールド座標はz軸が逆なので
 
 	direction_ = ENEMY_RIGHT;//とりあえず右に行くことにする
 
 	//目標とするビルを決める
 	//基本的には
-	for (int z = currentZ; z < stageManager->GetMapH(); z++)
+	if (stageManager->GetMap(currentX + 2, currentZ) == 1)
 	{
-		for (int x = currentX; x < stageManager->GetMapW(); x++)
+		if(currentX + 2 < mapW)
 		{
-			if (stageManager->GetMap(x, z) == 1)
-			{
-				goalX = x;
-				goalZ = z;
-				break;
-			}
+			goalX = currentX + 2;
+			goalZ = currentZ;
 		}
 	}
+	else if (stageManager->GetMap(currentX - 2, currentZ) == 1)
+	{
+		if(currentX - 2 >= 0)
+		{
+			goalX = currentX - 2;
+			goalZ = currentZ;
+		}
+	}
+
+	route.clear();
+	parent.clear();//BFS探索のための親ノードを保存する配列
+	routeQueue = std::queue<std::pair<int, int>>();//BFS探索のためのキュー
+	visited.clear();//BFS探索のための訪問済み配列
+
+	parent.clear();
+	parent.resize(
+		mapH,
+		std::vector<std::pair<int, int>>(
+			mapW,
+			{ -1,-1 }
+		)
+	);
+
+	visited.clear();
+	visited.resize(
+		mapH,
+		std::vector<bool>(
+			mapW,
+			false
+		)
+	);
+	moveSpeed_ = 0.5f;
 }
 
 void Enemy::Update()
@@ -59,26 +88,20 @@ void Enemy::Update()
 	case ENEMY_SPAWN:
 		if (!isSerarchStarted)
 		{
-			for (int z = 0; z < mapH; z++)
-			{
-				for (int x = 0; x < mapW; x++)
-				{
-					if (currentX == x && currentZ == z)
-					{
-						startX = x;
-						startZ = z;
-						routeQueue.push({ z,x });
-						visited[z][x] = true;
-						isSerarchStarted = true;
-						break;
-					}
-				}
-			}
+			startX = currentX;
+			startZ = currentZ;
+			routeQueue.push({ currentZ,currentX });
+			visited[currentZ][currentX] = true;
+			isSerarchStarted = true;
 		}
-		else if (!isRouteDecided)
+
+		if (!isRouteDecided)
 		{
 			//ルートが決まっていない場合はルートを決める
-			SerarchRoad();
+			SearchRoad();
+		}
+		else
+		{
 			state_ = ENEMY_SETTARGETPOS;
 		}
 		break;
@@ -106,13 +129,7 @@ void Enemy::Update()
 		break;
 	default:
 		break;
-	}
-
-
-
-
-
-    
+	}   
 }
 
 void Enemy::Draw()
@@ -138,23 +155,28 @@ void Enemy::UpdateMove()
 
 void Enemy::MoveRoute()
 {
-	//今のマスの真ん中から次のマスの真ん中まで
-	XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
-	XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
-	XMVECTOR vMoveForward = { 0,0,1,0 };
-
-	vMoveForward = XMVector3TransformNormal(vMoveForward, mRotate);
-
-	vPos += vMoveForward * moveSpeed_;
-	XMStoreFloat3(&transform_.position_, vPos);
-
 	//targetPosを目指して移動する
+	XMVECTOR vPos =
+		XMLoadFloat3(&transform_.position_);
 
-	routeIndex_++;
+	XMVECTOR vTarget =
+		XMLoadFloat3(&targetPos);
+
+	XMVECTOR v =
+		vTarget - vPos;
+
+	v = XMVector3Normalize(v);
+
+	vPos += v * moveSpeed_;
+
+	XMStoreFloat3(
+		&transform_.position_,
+		vPos
+	);
 
 }
 
-void Enemy::SerarchRoad()
+void Enemy::SearchRoad()
 {
 	//BFS探索をする
 	if (routeQueue.empty())return;
@@ -172,6 +194,10 @@ void Enemy::SerarchRoad()
 
 		int map = stageManager->GetMap(nx, nz);
 
+
+		
+
+
 		if (nx < 0 || nx >= stageManager->GetMapW() || nz < 0 || nz >= stageManager->GetMapH()) continue;
 		if (map ==1 || map == 2) continue;
 		if (visited[nz][nx]) continue;
@@ -180,7 +206,7 @@ void Enemy::SerarchRoad()
 		parent[nz][nx] = { z, x};
 		routeQueue.push({ nz, nx });
 
-		if(nx==goalX && nz==goalZ)
+		if (nx == goalX && nz == goalZ)
 		{
 			isRouteDecided = true;
 			CreateRoute();
@@ -193,7 +219,7 @@ void Enemy::SerarchRoad()
 void Enemy::CreateRoute()
 {
 	//BFS探索から最短経路を作成してrouteに入れる
-		if (!isRouteDecided) return;
+	if (!isRouteDecided) return;
 		int z= parent[goalZ][goalX].first;
 		int x = parent[goalZ][goalX].second;
 
@@ -201,6 +227,11 @@ void Enemy::CreateRoute()
 		{
 			int nowX = x;
 			int nowZ = z;
+
+			if (z < 0 || x < 0)
+			{
+				return;
+			}
 
 			z = parent[nowZ][nowX].first;
 			x = parent[nowZ][nowX].second;
@@ -223,6 +254,8 @@ void Enemy::CreateRoute()
 
 void Enemy::SetTargetPos()
 {
+	if (route.empty()) return;
+
 	direction_ = route[routeIndex_];
 
 	nextTargetX = currentX;

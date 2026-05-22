@@ -1,6 +1,7 @@
 #pragma once
 #include "PaintObject.h"
 #include <queue>
+#include <vector>
 
 class StageManager;
 
@@ -38,7 +39,7 @@ private:
 
 	void MoveRoute();
 
-	void SerarchRoad();
+	void SearchRoad();
 	void CreateRoute();
 	void SetTargetPos();
 
@@ -88,8 +89,8 @@ private:
 	std::queue<std::pair<int, int>> routeQueue;//BFS探索のためのキュー
 	std::vector<std::vector<bool>> visited;//BFS探索のための訪問済み配列
 	
-	bool isSerarchStarted;//BFS探索が始まったかどうか
-	bool isRouteDecided;//ルートが決まったかどうか
-	int routeIndex_;//現在のルートのどこにいるか
+	bool isSerarchStarted=false;//BFS探索が始まったかどうか
+	bool isRouteDecided=false;//ルートが決まったかどうか
+	int routeIndex_=0;//現在のルートのどこにいるか
 
 };
