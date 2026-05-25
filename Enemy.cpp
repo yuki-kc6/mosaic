@@ -153,40 +153,25 @@ void Enemy::Release()
 
 void Enemy::UpdateMove()
 {
-	//OutputDebugStringA(("pos: " + std::to_string(transform_.position_.x) + ", " + std::to_string(transform_.position_.z) + "\n").c_str());
-	//OutputDebugStringA(("target: " + std::to_string(targetPos.x) + ", " + std::to_string(targetPos.z) + "\n").c_str());
+	// ターゲット座標を固定
+	targetPos.x = 10.0f;
+	targetPos.y = transform_.position_.y;
+	targetPos.z = 10.0f;
 
-	Player* player= (Player*)FindObject("Player");
-	//targetPos.x = player->GetPosition().x;//プレイヤーの位置を目標にする
-	//targetPos.z = player->GetPosition().z;//プレイヤーの位置を目標にする
-	//targetPos.y = player->GetPosition().y;//プレイヤーの高さに合わせる
+	XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
+	XMVECTOR vTarget = XMLoadFloat3(&targetPos);
+	XMVECTOR v = vTarget - vPos;
 
+	// 正規化して進める
+	v = XMVector3Normalize(v);
+	vPos += XMVectorScale(v, moveSpeed_);
+	XMStoreFloat3(&transform_.position_, vPos);
 
-	MoveRoute();//道にそって移動する
-
-
-
-	//マスの真ん中に到達したら次のマスを設定する
-	float dx =
-		targetPos.x -
-		transform_.position_.x;
-
-	float dz =
-		targetPos.z -
-		transform_.position_.z;
-
-	float dist =
-		sqrtf(dx * dx + dz * dz);
-
-	if (dist < moveSpeed_)
-	{
-		transform_.position_ = targetPos;
-
-		currentX = nextTargetX;
-		currentZ = nextTargetZ;
-
-		state_ = ENEMY_SETTARGETPOS;
-	}
+	// デバッグ出力（座標がどうなっているか確認）
+	char buf[256];
+	sprintf_s(buf, "EnemyPos: X=%.2f, Y=%.2f, Z=%.2f\n",
+		transform_.position_.x, transform_.position_.y, transform_.position_.z);
+	OutputDebugStringA(buf);
 }
 
 void Enemy::MoveRoute()
