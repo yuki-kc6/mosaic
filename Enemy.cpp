@@ -28,7 +28,6 @@ void Enemy::Initialize()
 	mapW = stageManager->GetMapW();
 	mapH = stageManager->GetMapH();
 
-
 	//スポーンしたマス
 	currentX = transform_.position_.x/29.0f;
 	currentZ = transform_.position_.z/29.0f;
@@ -54,7 +53,7 @@ void Enemy::Initialize()
 			goalZ = currentZ;
 		}
 	}
-
+	routeIndex_ = 0;
 	route.clear();
 	parent.clear();//BFS探索のための親ノードを保存する配列
 	routeQueue = std::queue<std::pair<int, int>>();//BFS探索のためのキュー
@@ -94,20 +93,16 @@ void Enemy::Update()
 			visited[currentZ][currentX] = true;
 			isSerarchStarted = true;
 		}
-
-		if (!isRouteDecided)
+		else
 		{
 			//ルートが決まっていない場合はルートを決める
 			SearchRoad();
-		}
-		else
-		{
-			state_ = ENEMY_SETTARGETPOS;
 		}
 		break;
 
 	case ENEMY_SETTARGETPOS:
 		SetTargetPos();
+		routeIndex_++;
 		state_ = ENEMY_MOVE;
 		break;
 
@@ -147,8 +142,24 @@ void Enemy::UpdateMove()
 	MoveRoute();//道にそって移動する
 
 	//マスの真ん中に到達したら次のマスを設定する
-	if (transform_.position_.x == targetPos.x && transform_.position_.z == targetPos.z)
+	float dx =
+		targetPos.x -
+		transform_.position_.x;
+
+	float dz =
+		targetPos.z -
+		transform_.position_.z;
+
+	float dist =
+		sqrtf(dx * dx + dz * dz);
+
+	if (dist < moveSpeed_)
 	{
+		transform_.position_ = targetPos;
+
+		currentX = nextTargetX;
+		currentZ = nextTargetZ;
+
 		state_ = ENEMY_SETTARGETPOS;
 	}
 }
@@ -174,6 +185,7 @@ void Enemy::MoveRoute()
 		vPos
 	);
 
+
 }
 
 void Enemy::SearchRoad()
@@ -195,8 +207,16 @@ void Enemy::SearchRoad()
 		int map = stageManager->GetMap(nx, nz);
 
 
-		
-
+		if (nx == goalX && nz == goalZ)
+		{
+			visited[nz][nx] = true;
+			parent[nz][nx] = { z, x };
+			routeQueue.push({ nz, nx });
+			isRouteDecided = true;
+			CreateRoute();
+			state_ = ENEMY_SETTARGETPOS;
+			break;
+		}
 
 		if (nx < 0 || nx >= stageManager->GetMapW() || nz < 0 || nz >= stageManager->GetMapH()) continue;
 		if (map ==1 || map == 2) continue;
@@ -205,13 +225,6 @@ void Enemy::SearchRoad()
 		visited[nz][nx] = true;
 		parent[nz][nx] = { z, x};
 		routeQueue.push({ nz, nx });
-
-		if (nx == goalX && nz == goalZ)
-		{
-			isRouteDecided = true;
-			CreateRoute();
-			break;
-		}
 
 	}
 }
@@ -236,16 +249,16 @@ void Enemy::CreateRoute()
 			z = parent[nowZ][nowX].first;
 			x = parent[nowZ][nowX].second;
 
-			if (currentX > x)
+			if (nowX > x)
 				route.push_back(ENEMY_RIGHT);
 
-			else if (currentX < x)
+			else if (nowX < x)
 				route.push_back(ENEMY_LEFT);
 
-			else if (currentZ > z)
+			else if (nowZ > z)
 				route.push_back(ENEMY_DOWN);
 
-			else if (currentZ < z)
+			else if (nowZ < z)
 				route.push_back(ENEMY_UP);
 
 		}
@@ -256,7 +269,15 @@ void Enemy::SetTargetPos()
 {
 	if (route.empty()) return;
 
+
+	if (routeIndex_ >= route.size())
+	{
+		state_ = ENEMY_WAIT;
+		return;
+	}
 	direction_ = route[routeIndex_];
+
+
 
 	nextTargetX = currentX;
 	nextTargetZ = currentZ;
