@@ -93,4 +93,7 @@ private:
 	bool isRouteDecided=false;//ルートが決まったかどうか
 	int routeIndex_=0;//現在のルートのどこにいるか
 
+	bool isInitialized_ = false;
+
+
 };

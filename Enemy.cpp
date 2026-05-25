@@ -3,6 +3,7 @@
 #include "Engine/SphereCollider.h"
 #include "Engine/CsvReader.h"
 #include "StageManager.h"
+#include "Player.h"
 
 Enemy::Enemy(GameObject* parent)
     : PaintObject(parent, "Enemy")
@@ -19,7 +20,7 @@ void Enemy::Initialize()
     hModel_ = Model::Load("Models/enemy2.fbx");
     assert(hModel_ >= 0);
 
-	state_ = ENEMY_SPAWN;
+	state_ = ENEMY_MOVE;
 
     transform_.position_.y = 1;
 
@@ -77,54 +78,67 @@ void Enemy::Initialize()
 		)
 	);
 	moveSpeed_ = 0.5f;
+	
+
+	targetPos.x = 10.0f;
+	targetPos.y = transform_.position_.y;
+	targetPos.z = 10.0f;
 }
 
 void Enemy::Update()
 {
-	switch (state_)
+	//SetPositionの関係でもう一度初期化する
+	if(!isInitialized_)
 	{
+		//Initialize();
+		isInitialized_ = true;
+	}
 
-	case ENEMY_SPAWN:
-		if (!isSerarchStarted)
-		{
-			startX = currentX;
-			startZ = currentZ;
-			routeQueue.push({ currentZ,currentX });
-			visited[currentZ][currentX] = true;
-			isSerarchStarted = true;
-		}
-		else
-		{
-			//ルートが決まっていない場合はルートを決める
-			SearchRoad();
-		}
-		break;
+	//switch (state_)
+	//{
 
-	case ENEMY_SETTARGETPOS:
-		SetTargetPos();
-		routeIndex_++;
-		state_ = ENEMY_MOVE;
-		break;
+	//case ENEMY_SPAWN:
+	//	if (!isSerarchStarted)
+	//	{
+	//		startX = currentX;
+	//		startZ = currentZ;
+	//		routeQueue.push({ currentZ,currentX });
+	//		visited[currentZ][currentX] = true;
+	//		isSerarchStarted = true;
+	//	}
+	//	else
+	//	{
+	//		//ルートが決まっていない場合はルートを決める
+	//		SearchRoad();
+	//	}
+	//	break;
 
-	case ENEMY_MOVE:
-		UpdateMove();
-		break;
+	//case ENEMY_SETTARGETPOS:
+	//	SetTargetPos();
+	//	routeIndex_++;
+	//	state_ = ENEMY_MOVE;
+	//	break;
 
-	case ENEMY_WAIT:
-		//ビルの中で待機する
+	//case ENEMY_MOVE:
+	//	UpdateMove();
+	//	break;
 
-		//if()
-		// {
-		// setGoal();
-		// state_=ENEMY_MOVE;
-		//}
-		break;
-	case ENEMY_PAINTED:
-		
-		break;
-	default:
-		break;
-	}   
+	//case ENEMY_WAIT:
+	//	//ビルの中で待機する
+
+	//	//if()
+	//	// {
+	//	// setGoal();
+	//	// state_=ENEMY_MOVE;
+	//	//}
+	//	break;
+	//case ENEMY_PAINTED:
+	//	
+	//	break;
+	//default:
+	//	break;
+	//}   
+	UpdateMove();
 }
 
 void Enemy::Draw()
@@ -139,7 +153,18 @@ void Enemy::Release()
 
 void Enemy::UpdateMove()
 {
+	//OutputDebugStringA(("pos: " + std::to_string(transform_.position_.x) + ", " + std::to_string(transform_.position_.z) + "\n").c_str());
+	//OutputDebugStringA(("target: " + std::to_string(targetPos.x) + ", " + std::to_string(targetPos.z) + "\n").c_str());
+
+	Player* player= (Player*)FindObject("Player");
+	//targetPos.x = player->GetPosition().x;//プレイヤーの位置を目標にする
+	//targetPos.z = player->GetPosition().z;//プレイヤーの位置を目標にする
+	//targetPos.y = player->GetPosition().y;//プレイヤーの高さに合わせる
+
+
 	MoveRoute();//道にそって移動する
+
+
 
 	//マスの真ん中に到達したら次のマスを設定する
 	float dx =
@@ -178,7 +203,7 @@ void Enemy::MoveRoute()
 
 	v = XMVector3Normalize(v);
 
-	vPos += v * moveSpeed_;
+	vPos += XMVectorScale(v, moveSpeed_);
 
 	XMStoreFloat3(
 		&transform_.position_,
@@ -193,40 +218,42 @@ void Enemy::SearchRoad()
 	//BFS探索をする
 	if (routeQueue.empty())return;
 
-	auto p = routeQueue.front();
-	routeQueue.pop();
-
-	int z = p.first;
-	int x = p.second;
-
-	for (int dir = 0; dir < 4; dir++)
+	while (!routeQueue.empty())
 	{
-		int nx = x + dx[dir];
-		int nz = z + dz[dir];
+		auto p = routeQueue.front();
+		routeQueue.pop();
 
-		int map = stageManager->GetMap(nx, nz);
+		int z = p.first;
+		int x = p.second;
 
-
-		if (nx == goalX && nz == goalZ)
+		for (int dir = 0; dir < 4; dir++)
 		{
+			int nx = x + dx[dir];
+			int nz = z + dz[dir];
+
+			if (nx < 0 || nx >= mapW || nz < 0 || nz >= mapH) continue;
+
+			// ゴール到達
+			if (nx == goalX && nz == goalZ)
+			{
+				parent[nz][nx] = { z, x };
+				CreateRoute();
+				state_ = ENEMY_SETTARGETPOS;
+				return;
+			}
+
+			int map = stageManager->GetMap(nx, nz);
+			if (map == 1 || map == 2) continue;
+			if (visited[nz][nx]) continue;
+
 			visited[nz][nx] = true;
 			parent[nz][nx] = { z, x };
 			routeQueue.push({ nz, nx });
-			isRouteDecided = true;
-			CreateRoute();
-			state_ = ENEMY_SETTARGETPOS;
-			break;
 		}
-
-		if (nx < 0 || nx >= stageManager->GetMapW() || nz < 0 || nz >= stageManager->GetMapH()) continue;
-		if (map ==1 || map == 2) continue;
-		if (visited[nz][nx]) continue;
-
-		visited[nz][nx] = true;
-		parent[nz][nx] = { z, x};
-		routeQueue.push({ nz, nx });
-
 	}
+
+	// キューが空になってもゴール未到達＝経路なし
+	OutputDebugStringA("route not found!\n");
 }
 
 void Enemy::CreateRoute()
@@ -309,7 +336,7 @@ void Enemy::SetTargetPos()
 	targetPos =
 	{
 		nextTargetX * 29.0f,
-		0,
+		transform_.position_.y,
 		-nextTargetZ * 29.0f
 	};
 
