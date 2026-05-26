@@ -77,12 +77,7 @@ void Enemy::Initialize()
 			false
 		)
 	);
-	moveSpeed_ = 0.5;
-	
-
-	targetPos.x = 10.0f;
-	targetPos.y = transform_.position_.y;
-	targetPos.z = 10.0f;
+	moveSpeed_ = 0.2f;
 }
 
 void Enemy::Update()
@@ -98,7 +93,6 @@ void Enemy::Update()
 		SearchRoad();
 
 	}
-	//transform_.position_.x += 1.0f;
 	MoveRoute();
 
 }
@@ -126,7 +120,7 @@ void Enemy::MoveRoute()
 
 	// 正規化して進める
 	v = XMVector3Normalize(v);
-	vPos += XMVectorScale(v, moveSpeed_);
+	vPos += v * moveSpeed_;
 	XMStoreFloat3(&transform_.position_, vPos);
 
 	float dist =
@@ -140,10 +134,9 @@ void Enemy::MoveRoute()
 
 		SetTargetPos();
 
-		
+
 		return;
 	}
-
 
 }
 
@@ -167,7 +160,19 @@ void Enemy::SearchRoad()
 
 			if (nx < 0 || nx >= mapW || nz < 0 || nz >= mapH) continue;
 
-			// ゴール到達
+			int map = stageManager->GetMap(nx, nz);
+
+			if (map == 1 || map == 2)
+			{
+				// ゴールだけは許可したいなら別処理
+				if (!(nx == goalX && nz == goalZ))
+				{
+					continue;
+				}
+			}
+
+			if (visited[nz][nx]) continue;
+
 			if (nx == goalX && nz == goalZ)
 			{
 				parent[nz][nx] = { z, x };
@@ -175,10 +180,6 @@ void Enemy::SearchRoad()
 				state_ = ENEMY_SETTARGETPOS;
 				return;
 			}
-
-			int map = stageManager->GetMap(nx, nz);
-			if (map == 1 || map == 2) continue;
-			if (visited[nz][nx]) continue;
 
 			visited[nz][nx] = true;
 			parent[nz][nx] = { z, x };
