@@ -55,7 +55,7 @@ void Enemy::Initialize()
 		}
 	}
 	routeIndex_ = 0;
-	route.clear();
+
 	parent.clear();//BFS探索のための親ノードを保存する配列
 	routeQueue = std::queue<std::pair<int, int>>();//BFS探索のためのキュー
 	visited.clear();//BFS探索のための訪問済み配列
@@ -77,7 +77,7 @@ void Enemy::Initialize()
 			false
 		)
 	);
-	moveSpeed_ = 0.5f;
+	moveSpeed_ = 0.5;
 	
 
 	targetPos.x = 10.0f;
@@ -90,55 +90,17 @@ void Enemy::Update()
 	//SetPositionの関係でもう一度初期化する
 	if(!isInitialized_)
 	{
-		//Initialize();
+		Initialize();
 		isInitialized_ = true;
+		startX = currentX;
+		startZ = currentZ;
+		routeQueue.push({ currentZ,currentX });
+		SearchRoad();
+
 	}
+	//transform_.position_.x += 1.0f;
+	MoveRoute();
 
-	//switch (state_)
-	//{
-
-	//case ENEMY_SPAWN:
-	//	if (!isSerarchStarted)
-	//	{
-	//		startX = currentX;
-	//		startZ = currentZ;
-	//		routeQueue.push({ currentZ,currentX });
-	//		visited[currentZ][currentX] = true;
-	//		isSerarchStarted = true;
-	//	}
-	//	else
-	//	{
-	//		//ルートが決まっていない場合はルートを決める
-	//		SearchRoad();
-	//	}
-	//	break;
-
-	//case ENEMY_SETTARGETPOS:
-	//	SetTargetPos();
-	//	routeIndex_++;
-	//	state_ = ENEMY_MOVE;
-	//	break;
-
-	//case ENEMY_MOVE:
-	//	UpdateMove();
-	//	break;
-
-	//case ENEMY_WAIT:
-	//	//ビルの中で待機する
-
-	//	//if()
-	//	// {
-	//	// setGoal();
-	//	// state_=ENEMY_MOVE;
-	//	//}
-	//	break;
-	//case ENEMY_PAINTED:
-	//	
-	//	break;
-	//default:
-	//	break;
-	//}   
-	UpdateMove();
 }
 
 void Enemy::Draw()
@@ -153,62 +115,34 @@ void Enemy::Release()
 
 void Enemy::UpdateMove()
 {
-	//OutputDebugStringA(("pos: " + std::to_string(transform_.position_.x) + ", " + std::to_string(transform_.position_.z) + "\n").c_str());
-	//OutputDebugStringA(("target: " + std::to_string(targetPos.x) + ", " + std::to_string(targetPos.z) + "\n").c_str());
+	
+}
 
-	Player* player= (Player*)FindObject("Player");
-	//targetPos.x = player->GetPosition().x;//プレイヤーの位置を目標にする
-	//targetPos.z = player->GetPosition().z;//プレイヤーの位置を目標にする
-	//targetPos.y = player->GetPosition().y;//プレイヤーの高さに合わせる
+void Enemy::MoveRoute()
+{
+	XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
+	XMVECTOR vTarget = XMLoadFloat3(&targetPos);
+	XMVECTOR v = vTarget - vPos;
 
-
-	MoveRoute();//道にそって移動する
-
-
-
-	//マスの真ん中に到達したら次のマスを設定する
-	float dx =
-		targetPos.x -
-		transform_.position_.x;
-
-	float dz =
-		targetPos.z -
-		transform_.position_.z;
+	// 正規化して進める
+	v = XMVector3Normalize(v);
+	vPos += XMVectorScale(v, moveSpeed_);
+	XMStoreFloat3(&transform_.position_, vPos);
 
 	float dist =
-		sqrtf(dx * dx + dz * dz);
+		XMVectorGetX(
+			XMVector3Length(vTarget - vPos));
 
 	if (dist < moveSpeed_)
 	{
 		transform_.position_ = targetPos;
 
-		currentX = nextTargetX;
-		currentZ = nextTargetZ;
 
-		state_ = ENEMY_SETTARGETPOS;
+		SetTargetPos();
+
+		
+		return;
 	}
-}
-
-void Enemy::MoveRoute()
-{
-	//targetPosを目指して移動する
-	XMVECTOR vPos =
-		XMLoadFloat3(&transform_.position_);
-
-	XMVECTOR vTarget =
-		XMLoadFloat3(&targetPos);
-
-	XMVECTOR v =
-		vTarget - vPos;
-
-	v = XMVector3Normalize(v);
-
-	vPos += XMVectorScale(v, moveSpeed_);
-
-	XMStoreFloat3(
-		&transform_.position_,
-		vPos
-	);
 
 
 }
@@ -258,88 +192,34 @@ void Enemy::SearchRoad()
 
 void Enemy::CreateRoute()
 {
-	//BFS探索から最短経路を作成してrouteに入れる
-	if (!isRouteDecided) return;
-		int z= parent[goalZ][goalX].first;
-		int x = parent[goalZ][goalX].second;
+	int x = goalX;
+	int z = goalZ;
 
-		while (z != startZ || x != startX)
-		{
-			int nowX = x;
-			int nowZ = z;
+	while (!(x == startX && z == startZ))
+	{
+		path.push_back({ z, x });
 
-			if (z < 0 || x < 0)
-			{
-				return;
-			}
+		auto p = parent[z][x];
 
-			z = parent[nowZ][nowX].first;
-			x = parent[nowZ][nowX].second;
+		z = p.first;
+		x = p.second;
+	}
 
-			if (nowX > x)
-				route.push_back(ENEMY_RIGHT);
+	path.push_back({ startZ, startX });
 
-			else if (nowX < x)
-				route.push_back(ENEMY_LEFT);
+	std::reverse(path.begin(), path.end());
 
-			else if (nowZ > z)
-				route.push_back(ENEMY_DOWN);
-
-			else if (nowZ < z)
-				route.push_back(ENEMY_UP);
-
-		}
-		std::reverse(route.begin(), route.end());
+	routeIndex_ = 0;
 }
 
 void Enemy::SetTargetPos()
 {
-	if (route.empty()) return;
+	targetPos.x = path[routeIndex_].second * 29.0f;
+	targetPos.y = transform_.position_.y;
+	targetPos.z = -path[routeIndex_].first * 29.0f;
 
-
-	if (routeIndex_ >= route.size())
-	{
-		state_ = ENEMY_WAIT;
-		return;
-	}
-	direction_ = route[routeIndex_];
-
-
-
-	nextTargetX = currentX;
-	nextTargetZ = currentZ;
-
-	//次のマスをrouteの中のDirectionに従って決める
-	switch (route[routeIndex_])
-	{
-	case ENEMY_UP:
-		transform_.rotate_.y = 0;
-		nextTargetZ--;
-		break;
-
-	case ENEMY_DOWN:
-		transform_.rotate_.y = 180;
-		nextTargetZ++;
-		break;
-
-	case ENEMY_LEFT:
-		transform_.rotate_.y = 270;
-		nextTargetX--;
-		break;
-
-	case ENEMY_RIGHT:
-		transform_.rotate_.y = 90;
-		nextTargetX++;
-		break;
-	}
-
-	targetPos =
-	{
-		nextTargetX * 29.0f,
-		transform_.position_.y,
-		-nextTargetZ * 29.0f
-	};
-
+	if(routeIndex_ < path.size() - 1)
+	routeIndex_++;
 }
 
 

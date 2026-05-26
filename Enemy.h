@@ -54,7 +54,7 @@ private:
 	int hEnemyModel_;
 	
 	//移動速度
-	int moveSpeed_;
+	float moveSpeed_;
 
 	//ゴールのマス座標
 	int goalX;
@@ -84,7 +84,7 @@ private:
 	int dz[4] = { 0,1,0,-1 };
 
 
-	std::vector<EnemyDirection> route;//スタートからゴールまでのルートをDirectionで表す
+	std::vector<std::pair<int, int>> path;//最短経路を復元するための
 	std::vector<std::vector<std::pair<int, int>>> parent;//BFS探索のための親ノードを保存する配列
 	std::queue<std::pair<int, int>> routeQueue;//BFS探索のためのキュー
 	std::vector<std::vector<bool>> visited;//BFS探索のための訪問済み配列
