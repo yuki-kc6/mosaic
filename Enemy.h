@@ -10,7 +10,8 @@ public:
 	void Draw() override;
 	void Release() override;
 private:
-	bool UpdatePainted();
+	bool isUpdatePainted = false;
+	
 
 };
 

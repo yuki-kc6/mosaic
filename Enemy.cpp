@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include "Engine/Model.h"
 
 Enemy::Enemy(GameObject* parent)
 	: TownNPC(parent)
@@ -23,7 +24,11 @@ void Enemy::Update()
 
 	if (IsAllPainted())
 	{
-		KillMe();
+		if (!isUpdatePainted)
+		{
+			hModel_ = Model::Load("Models/gun.fbx");
+			isUpdatePainted = true;
+		}
 	}
 
 }

@@ -9,6 +9,7 @@
 #include <algorithm>
 #include "Engine/Image.h"
 #include "Engine/Audio.h"
+#include "FPSGun.h"
 
 
 //コンストラクタ
@@ -47,7 +48,7 @@ void Player::Initialize()
     SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), 1.5f);
     AddCollider(collision);
 
-
+	
 
 }
 
