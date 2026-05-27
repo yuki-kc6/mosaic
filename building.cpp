@@ -34,7 +34,7 @@ void Building::Initialize()
 //更新
 void Building::Update()
 {
-    transform_.position_.y = 10.0f;
+	transform_.position_.y = -1;
 }
 
 //描画

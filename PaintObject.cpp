@@ -18,7 +18,7 @@ PaintObject::PaintObject(GameObject* parent)
 
 PaintObject::PaintObject(GameObject* parent, const std::string& name)
 	:GameObject(parent,name), mosaicRT(nullptr),textureSize(512),
-	isAllPaint(0),score_(0),
+	isAllPainted(false),score_(0),
 	paintedCount(0),isSensitive(false),isOK(false),brushSize(0.05f)
 {
 	paintObjectList.push_back(this);
@@ -38,12 +38,13 @@ void PaintObject::PaintMosaic(XMFLOAT2 uv)
 
 	if (score_> 0.3)
 	{
-		isAllPaint = 1.0;
+		paintAll = 1.0;
+		isAllPainted = true;
 		isOK = true;
 	}
 
 	MosaicPrinter::BeginPaint(mosaicRT);
-	MosaicPrinter::Paint(mosaicRT, uv, brushSize, isAllPaint);
+	MosaicPrinter::Paint(mosaicRT, uv, brushSize, paintAll);
 	MosaicPrinter::EndPaint();
 	
 }

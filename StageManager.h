@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include <vector>
+#include <iostream>
 class StageManager : public GameObject
 {
 
@@ -27,7 +28,13 @@ public:
 	int GetMapW() { return maps[0].size(); }
 	int GetMapH() { return maps.size(); }
 
+    const std::vector<std::pair<int, int>>& GetBuildingList() const
+    {
+        return buildingList;
+    }
+
 private:
     std::vector<std::vector<int>> maps;
+	std::vector<std::pair<int, int>> buildingList;
     int a = 0;
 };

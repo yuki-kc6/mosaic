@@ -34,6 +34,8 @@ public:
 
 	bool IsClear() { return isOK; }
 
+	bool IsAllPainted() { return isAllPainted; }
+
 	void SetBrushSize(float size) { brushSize = size; }
 
 private:
@@ -44,7 +46,9 @@ private:
 	int paintedCount;
 	int gridSize;
 	std::vector<std::vector<bool>> isPaint;
-	float isAllPaint;//シェーダーに合わせるためにboolではなきfloat
+	float paintAll;//シェーダーに塗られたら1.0fを渡すための変数
+
+	bool isAllPainted;//全て塗られたかどうか
 
 	bool isSensitive;
 	bool isOK;

@@ -18,7 +18,7 @@ void Ground::Initialize()
 {
     hModel_ = Model::Load("Models/map1.fbx");
     assert(hModel_ >= 0);
-    SetBrushSize(0.005f);
+    SetBrushSize(0.001f);
 	//transform_.position_.y = -0.8f;
 	transform_.scale_ = { 10.0f,10.0f,10.0f };
 }

@@ -112,6 +112,7 @@
     <ClCompile Include="FPSGun.cpp" />
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="NPCManager.cpp" />
+    <ClCompile Include="TownNPC.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -200,6 +201,7 @@
     <ClInclude Include="FPSGun.h" />
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="NPCManager.h" />
+    <ClInclude Include="TownNPC.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">
