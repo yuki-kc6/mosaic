@@ -38,7 +38,7 @@ void Player::Initialize()
 
 
     transform_.position_.y = 1;
-    transform_.position_.z = 20;
+    transform_.position_.z = -30;
     moveSpeed_ =0.5;
 
     transform_.rotate_ = { 0,0,0 };
@@ -103,6 +103,7 @@ void Player::Update()
     gan.start = Camera::GetPosition();
     XMStoreFloat3(&gan.dir,ganTarget);
    
+
 
     if (Input::IsMouseButton(0))
     {

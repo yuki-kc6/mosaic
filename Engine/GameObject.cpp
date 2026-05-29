@@ -320,7 +320,6 @@ void GameObject::DrawSub()
 	Draw();
 
 
-	CollisionDraw();
 	//リリース時は削除
 #ifdef _DEBUG
 		//コリジョンの描画

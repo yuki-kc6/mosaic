@@ -15,9 +15,6 @@ void TitleScene::Initialize()
 {
 	Instantiate<TitleHeader>(this);
 
-	SceneManager* sm = (SceneManager*)FindObject("SceneManager");
-	sm->ChangeScene(SCENE_ID_PLAY);
-
 
 }
 

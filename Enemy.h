@@ -11,7 +11,5 @@ public:
 	void Release() override;
 private:
 	bool isUpdatePainted = false;
-	
-
 };
 

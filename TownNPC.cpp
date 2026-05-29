@@ -22,7 +22,7 @@ void TownNPC::Initialize()
 
 	state_ = NPC_START;
 
-	SetBrushSize(0.5f);
+	SetBrushSize(0.2f);
 
 	transform_.position_.y = 1;
 
@@ -123,6 +123,8 @@ void TownNPC::MoveRoute()
 	XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
 	XMVECTOR vTarget = XMLoadFloat3(&targetPos);
 	XMVECTOR v = vTarget - vPos;
+
+	SetDirection(v);
 
 	// 正規化して進める
 	v = XMVector3Normalize(v);
@@ -249,6 +251,23 @@ void TownNPC::SetGoal()
 		break;
 	}
 
+
+}
+
+void TownNPC::SetDirection(XMVECTOR v)
+{
+	XMVECTOR forward = { 0,0,1,0 };
+
+	v = XMVector3Normalize(v);
+
+	XMFLOAT3 dir;
+	XMStoreFloat3(&dir, v);
+
+	transform_.rotate_.y =
+		XMConvertToDegrees(
+			atan2f(dir.x, dir.z));
+
+	
 
 }
 

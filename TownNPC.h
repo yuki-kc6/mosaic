@@ -44,6 +44,8 @@ private:
 	void SetTargetPos();//次の目標地点の3D座標をセットする関数
 	void SetGoal();//ゴールをビルからランダムに決める関数
 
+	void SetDirection(XMVECTOR v);
+
 	//次の目標地点の3D座標
 	XMFLOAT3 targetPos;
 

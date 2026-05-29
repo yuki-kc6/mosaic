@@ -20,15 +20,11 @@ PlayScene::PlayScene(GameObject * parent)
 //‰Šú‰»
 void PlayScene::Initialize()
 {
-
-
-
-
 	MosaicPrinter::Initialize();
 	
 	Instantiate<Ground>(this);
 	
-	Instantiate<FPSgun>(this);	
+	//Instantiate<FPSgun>(this);	
 	
 	this->PushSensitive();
 
