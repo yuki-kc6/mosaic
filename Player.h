@@ -17,7 +17,7 @@ public:
 	void Release() override;
 private:
 	void OnGround();
-	void RayCastToPaintObjects(RayCastData &data);
+	bool RayCastToPaintObjects(RayCastData &data);
 	void PlayerCamera();
 	void OnCollision(GameObject* pTarget, HitResult result) override;
 	int hModel_;
@@ -29,6 +29,8 @@ private:
 	
 	float centerX;
 	float centerY;
+
+	int gunSoundID;
 
 };
 

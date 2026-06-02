@@ -16,7 +16,7 @@ void FPSgun::Initialize()
 {
 	hModel_ = Model::Load("Models/gun.fbx");
 	SetScale(XMFLOAT3(0.2f, 0.2f, 0.2f));
-	//SetPosition(XMFLOAT3(0, 0.5, 0));
+	SetPosition(XMFLOAT3(0, 0.5, 0));
 	SetRotate(XMFLOAT3(0, -80, 0));
 }
 

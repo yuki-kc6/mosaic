@@ -10,6 +10,7 @@
 #include "FPSgun.h"
 #include "StageManager.h"
 #include "NPCManager.h"
+#include "Engine/Audio.h"
 
 //コンストラクタ
 PlayScene::PlayScene(GameObject * parent)
@@ -24,7 +25,7 @@ void PlayScene::Initialize()
 	
 	Instantiate<Ground>(this);
 	
-	//Instantiate<FPSgun>(this);	
+	Instantiate<FPSgun>(this);	
 	
 	this->PushSensitive();
 
@@ -50,6 +51,7 @@ void PlayScene::Draw()
 void PlayScene::Release()
 {
 	MosaicPrinter::Release();
+	Audio::Release();
 }
 
 void PlayScene::PushSensitive()

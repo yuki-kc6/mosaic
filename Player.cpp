@@ -48,7 +48,7 @@ void Player::Initialize()
     SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), 1.5f);
     AddCollider(collision);
 
-	
+	//gunSoundID = Audio::Load("gun.wav");
 
 }
 
@@ -107,7 +107,15 @@ void Player::Update()
 
     if (Input::IsMouseButton(0))
     {
-        this->RayCastToPaintObjects(gan);
+        if (this->RayCastToPaintObjects(gan))
+        {
+			//Audio::Stop(gunSoundID);
+            //Audio::Play(gunSoundHit);
+        }
+        else
+        {
+			//Audio::Play(gunSoundMiss);
+        }
     }
 
     //this->OnGround();
@@ -151,10 +159,10 @@ void Player::OnGround()
     }
 }
 
-void Player::RayCastToPaintObjects(RayCastData& data)
+bool Player::RayCastToPaintObjects(RayCastData& data)
 {
     PaintObject* closestObj = nullptr;
-    float dist = FLT_MAX;
+    float dist = 30.0;
     XMFLOAT2 UV = { 0,0 };
     // PaintObject 継承クラスだけに絞ってループ
     for (PaintObject* pObj : PaintObject::GetPaintObjectList()) {
@@ -178,7 +186,9 @@ void Player::RayCastToPaintObjects(RayCastData& data)
     {
         //オブジェクトにモザイクを塗る
        closestObj->PaintMosaic(UV);
+	   return true;
     }
+	return false;
 }
 
 void Player::OnCollision(GameObject* pTarget,HitResult result)
