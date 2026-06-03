@@ -25,7 +25,7 @@ void PlayScene::Initialize()
 	
 	Instantiate<Ground>(this);
 	
-	Instantiate<FPSgun>(this);	
+	//Instantiate<FPSgun>(this);	
 	
 	this->PushSensitive();
 

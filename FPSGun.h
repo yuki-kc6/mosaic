@@ -23,6 +23,9 @@ public:
     //開放
     void Release() override;
 
+    void BangEffect();
+
+
 private:
     int hModel_;
 }; 

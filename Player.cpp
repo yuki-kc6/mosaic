@@ -44,7 +44,7 @@ void Player::Initialize()
     transform_.rotate_ = { 0,0,0 };
     
     Instantiate<FPSCamera>(this);
-    
+
     SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), 1.5f);
     AddCollider(collision);
 
