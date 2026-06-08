@@ -5,6 +5,7 @@
 
 class RenderTexture;
 class PaintObject;
+class FPSgun;
 
 class Player:public GameObject
 {
@@ -24,6 +25,7 @@ private:
 	int hCrossHair_;
 
 	FPSCamera* fpsCamera;
+	FPSgun* fpsGun;
 
 	float moveSpeed_;
 	

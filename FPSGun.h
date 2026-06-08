@@ -1,6 +1,6 @@
 #pragma once
 #include "Engine/GameObject.h"
-    //◆◆◆を管理するクラス
+#include "Engine/VFX.h"
     class FPSgun : public GameObject
 {
 
@@ -25,8 +25,10 @@ public:
 
     void BangEffect();
 
-
 private:
+    XMFLOAT3 GetMazzlePosition();
+
     int hModel_;
+    EmitterData effectData_;
 }; 
 

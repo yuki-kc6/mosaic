@@ -58,7 +58,7 @@ void Player::Update()
 {
     //ƒJƒƒ‰
 	fpsCamera = (FPSCamera*)FindChildObject("FPSCamera");
-    
+    fpsGun= (FPSgun*)FindChildObject("FPSgun");
 
  
 
@@ -110,6 +110,7 @@ void Player::Update()
     {
         if (this->RayCastToPaintObjects(gan))
         {
+			fpsGun->BangEffect();
 			//Audio::Stop(gunSoundID);
             //Audio::Play(gunSoundHit);
         }

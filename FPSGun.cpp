@@ -1,7 +1,6 @@
 #include "FPSGun.h"
 #include "Engine/Model.h"
 #include "Engine/Camera.h"
-
 FPSgun::FPSgun(GameObject* parent)
 	:GameObject(parent, "FPSgun"),hModel_(-1)
 {
@@ -18,6 +17,11 @@ void FPSgun::Initialize()
 	SetScale(XMFLOAT3(0.2f, 0.2f, 0.2f));
 	//transform_.rotate_.y = 100.0f; // モデルの向きを調整
     transform_.pParent_ = nullptr;
+	effectData_.textureFileName = "Assets/cloudA.png";
+    effectData_.speed = 0.1;
+    effectData_.accel = 1.0;
+
+
 }
 
 void FPSgun::Update()
@@ -57,4 +61,28 @@ void FPSgun::Draw()
 
 void FPSgun::Release()
 {
+}
+
+void FPSgun::BangEffect()
+{
+    effectData_.position = GetMazzlePosition();
+	VFX::Start(effectData_);
+}
+
+XMFLOAT3 FPSgun::GetMazzlePosition()
+{
+    XMFLOAT3 camPos = Camera::GetPosition();
+    XMFLOAT3 camTarget = Camera::GetTarget();
+
+    XMVECTOR vCamPos = XMLoadFloat3(&camPos);
+    XMVECTOR vCamTarget = XMLoadFloat3(&camTarget);
+
+    XMVECTOR vForward = XMVector3Normalize(vCamTarget - vCamPos);
+
+    // ★銃口の位置 = 銃の位置 + 前方向に少しオフセット
+    XMVECTOR vMuzzle = XMLoadFloat3(&transform_.position_) + vForward * 1.0f;
+
+    XMFLOAT3 muzzlePos;
+    XMStoreFloat3(&muzzlePos, vMuzzle);
+    return muzzlePos;
 }
