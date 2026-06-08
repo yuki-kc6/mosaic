@@ -16,8 +16,8 @@ void FPSgun::Initialize()
 {
 	hModel_ = Model::Load("Models/gun.fbx");
 	SetScale(XMFLOAT3(0.2f, 0.2f, 0.2f));
-	//SetPosition(XMFLOAT3(0, 0.5, 0));
-	SetRotate(XMFLOAT3(0, -80, 0));
+	//transform_.rotate_.y = 100.0f; // モデルの向きを調整
+    transform_.pParent_ = nullptr;
 }
 
 void FPSgun::Update()
@@ -32,15 +32,21 @@ void FPSgun::Update()
     XMVECTOR vRight = XMVector3Normalize(XMVector3Cross(vForward, XMVectorSet(0, 1, 0, 0)));
     XMVECTOR vUp = XMVector3Normalize(XMVector3Cross(vRight, vForward));
 
-    // この3つの値で画面上の位置を調整
+    // 位置をカメラ基準で固定
     XMVECTOR vGunPos = vCamPos
-        + vForward * 3.0f   // 前方向
-        + vRight * 0.8f   // 右方向
-        + vUp * -0.5f; // 上下方向
+        + vForward * 3.0f
+		+ vRight *-1.0f
+        + vUp * -0.6f;
 
     XMFLOAT3 gunPos;
     XMStoreFloat3(&gunPos, vGunPos);
     SetPosition(gunPos);
+
+    // ★向きもカメラに追従させる
+    GameObject* pParent = GetParent();
+    XMFLOAT3 ro = pParent->GetRotate();
+    transform_.rotate_.y = ro.y;
+    transform_.rotate_.x = ro.x;
 }
 
 void FPSgun::Draw()
