@@ -108,9 +108,10 @@ void Player::Update()
 
     if (Input::IsMouseButton(0))
     {
+        fpsGun->BangEffect();
         if (this->RayCastToPaintObjects(gan))
         {
-			fpsGun->BangEffect();
+			
 			//Audio::Stop(gunSoundID);
             //Audio::Play(gunSoundHit);
         }
@@ -166,6 +167,8 @@ bool Player::RayCastToPaintObjects(RayCastData& data)
     PaintObject* closestObj = nullptr;
     float dist = 30.0;
     XMFLOAT2 UV = { 0,0 };
+	XMFLOAT3 normal = { 0,0,0 };
+	XMFLOAT3 hitPos = { 0,0,0 };
     // PaintObject 継承クラスだけに絞ってループ
     for (PaintObject* pObj : PaintObject::GetPaintObjectList()) {
         RayCastData ray = data; // コピーして使用
@@ -181,13 +184,21 @@ bool Player::RayCastToPaintObjects(RayCastData& data)
                 dist = ray.dist;
                 closestObj = pObj;
                 UV = ray.uv;
+                normal = ray.normal;
+                hitPos = XMFLOAT3(
+                    data.start.x + data.dir.x * ray.dist,
+                    data.start.y + data.dir.y * ray.dist,
+                    data.start.z + data.dir.z * ray.dist
+                );
+
             }
         }
     }
     if (closestObj != nullptr)
     {
+
         //オブジェクトにモザイクを塗る
-       closestObj->PaintMosaic(UV);
+       closestObj->PaintMosaic(UV,hitPos,normal);
 	   return true;
     }
 	return false;

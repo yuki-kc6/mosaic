@@ -2,7 +2,7 @@
 #include "Engine/Model.h"
 #include "Engine/Camera.h"
 FPSgun::FPSgun(GameObject* parent)
-	:GameObject(parent, "FPSgun"),hModel_(-1)
+	:GameObject(parent, "FPSgun"),hModel_(-1),hmit(-1)
 {
 
 }
@@ -17,11 +17,11 @@ void FPSgun::Initialize()
 	SetScale(XMFLOAT3(0.2f, 0.2f, 0.2f));
 	//transform_.rotate_.y = 100.0f; // モデルの向きを調整
     transform_.pParent_ = nullptr;
-	effectData_.textureFileName = "Assets/cloudA.png";
-    effectData_.speed = 0.1;
+	effectData_.textureFileName = "cloudA.png";
+    effectData_.speed = 3.0;
     effectData_.accel = 1.0;
-
-
+    effectData_.delay = 0;
+    effectData_.directionRnd = { 1,1,1 };
 }
 
 void FPSgun::Update()
@@ -51,6 +51,9 @@ void FPSgun::Update()
     XMFLOAT3 ro = pParent->GetRotate();
     transform_.rotate_.y = ro.y;
     transform_.rotate_.x = ro.x;
+
+	XMStoreFloat3(&effectData_.direction, vForward);
+
 }
 
 void FPSgun::Draw()
@@ -65,8 +68,12 @@ void FPSgun::Release()
 
 void FPSgun::BangEffect()
 {
+    if (hmit != -1)
+    {
+        VFX::End(hmit);
+    }
     effectData_.position = GetMazzlePosition();
-	VFX::Start(effectData_);
+	hmit=VFX::Start(effectData_);
 }
 
 XMFLOAT3 FPSgun::GetMazzlePosition()

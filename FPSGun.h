@@ -27,7 +27,7 @@ public:
 
 private:
     XMFLOAT3 GetMazzlePosition();
-
+    int hmit;
     int hModel_;
     EmitterData effectData_;
 }; 

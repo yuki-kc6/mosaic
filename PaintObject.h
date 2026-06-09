@@ -19,7 +19,7 @@ public:
 	virtual void Release(void)override = 0;
 
 	//モザイクを塗るための関数
-	void PaintMosaic(XMFLOAT2 uv);
+	void PaintMosaic(XMFLOAT2 uv, XMFLOAT3 hitPos, XMFLOAT3 normal);
 
 	void CalculateScore(XMFLOAT2 uv, float brushSize);
 
@@ -39,6 +39,7 @@ public:
 	void SetBrushSize(float size) { brushSize = size; }
 
 private:
+	void PaintEffect(XMFLOAT3 hitPos,XMFLOAT3 normal);
 	RenderTexture* mosaicRT;//オブジェクトごとにRenderTextureを作成
 	static std::list<PaintObject*> paintObjectList;
 	int textureSize;

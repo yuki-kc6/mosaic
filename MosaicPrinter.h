@@ -5,7 +5,7 @@
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 
-struct CONSTANT_BUFFER
+struct MOSAIC_CONSTANT_BUFFER
 {
 	XMFLOAT2 center;  // ’†SÀ•W
 	float radius;     // “h‚è‚Ì”¼Œa

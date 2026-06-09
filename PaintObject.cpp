@@ -1,7 +1,7 @@
 #include "PaintObject.h"
 #include "Engine/Direct3D.h"
 #include "Engine/FbxParts.h"
-
+#include "Engine/VFX.h"
 std::list<PaintObject*> PaintObject::paintObjectList;
 
 PaintObject::PaintObject()
@@ -31,7 +31,7 @@ PaintObject::PaintObject(GameObject* parent, const std::string& name)
 	isPaint = std::vector<std::vector<bool>>(gridSize, std::vector<bool>(gridSize, false));
 }
 
-void PaintObject::PaintMosaic(XMFLOAT2 uv)
+void PaintObject::PaintMosaic(XMFLOAT2 uv,XMFLOAT3 hitPos,XMFLOAT3 normal)
 {
 	this->CalculateScore(uv, brushSize);
 	score_= (float)paintedCount / (float)((gridSize * gridSize));
@@ -42,7 +42,7 @@ void PaintObject::PaintMosaic(XMFLOAT2 uv)
 		isAllPainted = true;
 		isOK = true;
 	}
-
+	PaintEffect(hitPos,normal);
 	MosaicPrinter::BeginPaint(mosaicRT);
 	MosaicPrinter::Paint(mosaicRT, uv, brushSize, paintAll);
 	MosaicPrinter::EndPaint();
@@ -78,3 +78,32 @@ void PaintObject::CalculateScore(XMFLOAT2 uv,float brush)
 		}
 	}
 }
+
+void PaintObject::PaintEffect(XMFLOAT3 hitPos,XMFLOAT3 normal)
+{
+	EmitterData data;
+	data.textureFileName = "cloudA.png";
+	data.position = hitPos;
+
+	// 法線方向に飛ぶ
+	data.direction = normal;
+	data.directionRnd = XMFLOAT3(60.0f, 60.0f, 60.0f); // 広めに散らばる
+
+	data.speed = 0.5f;      // 遅めに
+	data.speedRnd = 0.5f;   // 速度をバラバラに
+	data.accel = 0.9f;      // 徐々に減速
+	data.gravity = 0.05f;   // 重力で落ちる
+
+	data.size = XMFLOAT2(1.0f, 1.0f);  // 小さめ
+	data.sizeRnd = XMFLOAT2(0.5f, 0.5f);
+	data.scale = XMFLOAT2(0.95f, 0.95f); // 徐々に小さく
+
+	data.lifeTime = 20;   
+	data.number = 10;       // 一度に10粒
+	data.delay = 0;         // 1回だけ発生
+
+	data.deltaColor = XMFLOAT4(0, 0, 0, -0.05f); // 徐々に透明に
+
+	VFX::Start(data);
+}
+

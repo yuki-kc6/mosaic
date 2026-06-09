@@ -24,7 +24,7 @@ namespace MosaicPrinter
 	{
 		//•K—v‚ÈÝ’è€–Ú
 		D3D11_BUFFER_DESC cb;
-		cb.ByteWidth = sizeof(CONSTANT_BUFFER);
+		cb.ByteWidth = sizeof(MOSAIC_CONSTANT_BUFFER);
 		cb.Usage = D3D11_USAGE_DYNAMIC;
 		cb.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 		cb.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
@@ -78,7 +78,7 @@ namespace MosaicPrinter
 	{
 		Direct3D::pContext_->PSSetConstantBuffers(0, 1, &pConstantBuffer_);
 
-		CONSTANT_BUFFER cb;
+		MOSAIC_CONSTANT_BUFFER cb;
 		D3D11_MAPPED_SUBRESOURCE pdata;
 		cb.center = hitUV;
 		cb.radius = brushSize;
