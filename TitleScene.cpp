@@ -2,6 +2,7 @@
 #include "Engine/Input.h"
 #include "Engine/SceneManager.h"
 #include "TitleHeader.h"
+#include "StageManager.h"
 
 //コンストラクタ
 TitleScene::TitleScene(GameObject* parent)
@@ -14,7 +15,7 @@ TitleScene::TitleScene(GameObject* parent)
 void TitleScene::Initialize()
 {
 	Instantiate<TitleHeader>(this);
-
+	Instantiate<StageManager>(this);
 
 }
 
