@@ -26,10 +26,13 @@ public:
     //ŠJ•ú
     void Release() override;
 private:
+
     float prevTime;
     float startTime;
     float maxTime;
     float elapsed;
     std::chrono::system_clock::time_point  start, end;//ŽžŠÔ‚ð‘ª‚é
     Text* timer;
+
+
 };

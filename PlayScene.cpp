@@ -23,17 +23,15 @@ void PlayScene::Initialize()
 {
 	MosaicPrinter::Initialize();
 	
-	Instantiate<Ground>(this);
-	
-	//Instantiate<FPSgun>(this);	
-	
-	this->PushSensitive();
+	Instantiate<Ground>(this);	
 
 	Instantiate<StageTimer>(this);
 
 	Instantiate<StageManager>(this);
 	//Instantiate<NPCManager>(this);
 	Instantiate<Player>(this);
+
+	this->PushSensitive();
 }
 
 //XV

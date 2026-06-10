@@ -32,6 +32,12 @@ void Player::Initialize()
     //hModel_ = Model::Load("Models/PlayerKari.fbx");
     //assert(hModel_ >= 0);
 
+    if (GetParent()->GetObjectName() == ("PlayScene"))
+    {
+        isPlayScene = true;
+    }
+
+
     hCrossHair_ = Image::Load("crosshair.png");
     centerX = Direct3D::screenWidth_ / 2;
     centerY = Direct3D::screenHeight_ / 2;

@@ -126,6 +126,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Building.cpp" />
+    <ClCompile Include="DummyPlayer.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="NPCManager.cpp" />
     <ClCompile Include="Engine\Audio.cpp" />
@@ -164,11 +165,13 @@
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="StageTimer.cpp" />
     <ClCompile Include="TitleHeader.cpp" />
+    <ClCompile Include="TitleLogo.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="TownNPC.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Building.h" />
+    <ClInclude Include="DummyPlayer.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="NPCManager.h" />
     <ClInclude Include="Engine\Audio.h" />
@@ -207,6 +210,7 @@
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="StageTimer.h" />
     <ClInclude Include="TitleHeader.h" />
+    <ClInclude Include="TitleLogo.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="TownNPC.h" />
   </ItemGroup>

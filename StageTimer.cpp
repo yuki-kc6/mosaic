@@ -33,7 +33,6 @@ void StageTimer::Update()
 		sm->ChangeScene(SCENE_ID_RESULT);
 	}
 
-
 }
 
 void StageTimer::Draw()

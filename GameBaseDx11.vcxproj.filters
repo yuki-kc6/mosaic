@@ -113,6 +113,8 @@
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="NPCManager.cpp" />
     <ClCompile Include="TownNPC.cpp" />
+    <ClCompile Include="TitleLogo.cpp" />
+    <ClCompile Include="DummyPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -202,6 +204,8 @@
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="NPCManager.h" />
     <ClInclude Include="TownNPC.h" />
+    <ClInclude Include="TitleLogo.h" />
+    <ClInclude Include="DummyPlayer.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

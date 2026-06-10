@@ -22,5 +22,13 @@ public:
 	//ŠJ•ú
 	void Release() override;
 private:
-	
+	int hTitleModel;
+	int hTitleMessageModel;
+
+	XMFLOAT3 camPos;
+	XMFLOAT3 camTargetPos;
+	XMVECTOR vCamPos;
+	XMVECTOR vCamTargetPos;
+
+	bool isStart;
 };

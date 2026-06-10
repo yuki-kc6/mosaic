@@ -34,6 +34,8 @@ private:
 
 	int gunSoundID;
 
+	bool isPlayScene;
+
 };
 
 
