@@ -18,7 +18,7 @@ FPSCamera::~FPSCamera()
 
 void FPSCamera::Initialize()
 {
-
+	SetCursorPos(centerX, centerY);
 }
 
 void FPSCamera::Update()

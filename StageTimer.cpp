@@ -17,7 +17,7 @@ void StageTimer::Initialize()
 {
 	
 	start = std::chrono::system_clock::now(); // Œv‘ªŠJŽn‚µ‚½ŽžŠÔ
-	maxTime = 60.0f;
+	maxTime = 600.0f;
 	timer = new Text;
 	timer->Initialize();
 }

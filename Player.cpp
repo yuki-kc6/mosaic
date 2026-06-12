@@ -44,10 +44,11 @@ void Player::Initialize()
 
 
     transform_.position_.y = 1;
-    transform_.position_.z = -30;
+    transform_.position_.z = -70;
+    transform_.position_.x = 70;
     moveSpeed_ =0.5;
 
-    transform_.rotate_ = { 0,0,0 };
+    transform_.rotate_ = { 0,90,0 };
     
     Instantiate<FPSCamera>(this);
     Instantiate<FPSgun>(this);
