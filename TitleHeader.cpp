@@ -2,7 +2,7 @@
 #include "Engine/Image.h"
 
 TitleHeader::TitleHeader(GameObject* parent)
-	: GameObject(parent, "Player"), hPic_(-1)
+	: GameObject(parent, "TitleHeader"), hPic_(-1)
 {
 }
 
@@ -23,7 +23,7 @@ void TitleHeader::Update()
 
 void TitleHeader::Draw()
 {
-	transform_.position_ = { 0,-10,0 };
+	transform_.position_ = { 0,-600,0 };
 	transform_.scale_ = { 0.2,0.2,1 };
 	Image::SetTransform(hPic_, transform_);
 	Image::Draw(hPic_);

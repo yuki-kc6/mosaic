@@ -188,6 +188,15 @@ namespace Model
 	//レイキャスト（レイを飛ばして当たり判定）
 	void RayCast(int handle, RayCastData *data)
 	{
+		if (handle < 0 ||
+			handle >= _datas.size() ||
+			_datas[handle] == nullptr)
+		{
+			return;
+		}
+
+
+
 			XMFLOAT3 target = Transform::Float3Add(data->start, data->dir);
 			XMMATRIX matInv = XMMatrixInverse(nullptr, _datas[handle]->transform.GetWorldMatrix());
 			XMVECTOR vecStart = XMVector3TransformCoord(XMLoadFloat3(&data->start), matInv);

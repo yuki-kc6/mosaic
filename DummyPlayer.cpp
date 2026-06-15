@@ -16,7 +16,7 @@ void DummyPlayer::Initialize()
 	transform_.position_.y = 1;
 	transform_.position_.z = -70;
 	transform_.position_.x = 70;
-	transform_.scale_ = { 0.1,0.1,0.1 };
+	transform_.scale_ = { 0.05,0.05,0.05 };
 	transform_.rotate_ = { 0,90,0 };
 }
 

@@ -18,51 +18,42 @@ TitleScene::TitleScene(GameObject* parent)
 //初期化
 void TitleScene::Initialize()
 {
-	Instantiate<TitleHeader>(this);
 	Instantiate<Ground>(this);
 
 	Instantiate<StageManager>(this);
 	Instantiate<DummyPlayer>(this);
-	
-	isStart = false;
 
-	Camera::SetPosition({ 200, 10, -70 });
-
-	Camera::SetTarget(FindObject("DummyPlayer")->GetPosition());
+	Instantiate<TitleHeader>(this);
 
 	hTitlePic_ = Image::Load("titleName.png");
 
-	camPos = Camera::GetPosition();
+	isStart = false;
+
+	XMFLOAT3 pos = FindObject("DummyPlayer")->GetPosition();
+
+	Camera::SetPosition({ 200, 10, -70 });
+
+	Camera::SetTarget(pos);
+
 	currentPos = Camera::GetPosition();
 
-	camTargetPos = Camera::GetTarget();
-	targetPos = Camera::GetTarget();
-
-	currentLook = Camera::GetTarget();
-
-	targetLook = Camera::GetPosition();
-	vCamPos = XMLoadFloat3(&camPos);
-	vCamTargetPos = XMLoadFloat3(&camTargetPos);
-
-
-	XMVECTOR v = { 0,9,0 };
-	vCamTargetPos = vCamTargetPos + v;
-
-
 	
+
+	targetPos = {
+		pos.x,
+		5,
+		pos.z
+	};
 }
 
 //更新
 void TitleScene::Update()
 {
-	
 
 	if (Input::IsKeyDown(DIK_SPACE))
 	{
 		isStart = true;
-
-		//SceneManager* sm = (SceneManager*)FindObject("SceneManager");
-		//sm->ChangeScene(SCENE_ID_PLAY);
+		FindObject("TitleHeader")->KillMe();
 	}
 
 	if (isStart)
@@ -74,22 +65,31 @@ void TitleScene::Update()
 		XMStoreFloat3(&currentPos, vCurrentPos);
 
 
-		// 注視点のLerp（位置と関係なく独立して動く）
-		XMVECTOR vCurrentLook = XMLoadFloat3(&currentLook);
-		XMVECTOR vTargetLook = XMLoadFloat3(&targetLook); 
-		vCurrentLook = XMVectorLerp(vCurrentLook, vTargetLook, 0.01f);
-		XMStoreFloat3(&currentLook, vCurrentLook);
+		currentAngleY += (targetAngle - currentAngleY) * 0.03f;
+
+		XMVECTOR vDir = XMVector3TransformNormal(
+			XMVectorSet(0, 0, 1, 0),
+			XMMatrixRotationY(XMConvertToRadians(currentAngleY))
+			);
+
+		XMFLOAT3 newLook;
+		XMStoreFloat3(&newLook, vTargetPos + vDir * 10.0f);
+		currentLook = newLook;
 
 		Camera::SetPosition(currentPos);
 		Camera::SetTarget(currentLook);
 
 
-		if (Input::IsKeyDown(DIK_Z))
+		XMVECTOR vDiff = vTargetPos - vCurrentPos;
+		float dist = XMVectorGetX(XMVector3Length(vDiff));
+
+		if (dist < 0.1f)
 		{
 			SceneManager* sm = (SceneManager*)FindObject("SceneManager");
 			sm->ChangeScene(SCENE_ID_PLAY);
 		}
 	}
+
 }
 
 //描画
