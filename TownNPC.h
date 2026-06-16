@@ -41,10 +41,10 @@ private:
 
 	void SearchRoad();//ゴールまでBFS探索する関数
 	void CreateRoute();//最短経路を復元する
-	void SetTargetPos();//次の目標地点の3D座標をセットする関数
+	void SetTargetPos(NPCDirection dir);//次の目標地点の3D座標をセットする関数
 	void SetGoal();//ゴールをビルからランダムに決める関数
 
-	void SetDirection(XMVECTOR v);
+	NPCDirection SetDirection();//NPCの方向を決める関数
 
 	//次の目標地点の3D座標
 	XMFLOAT3 targetPos;
@@ -98,6 +98,7 @@ protected:
 	bool UpdateStart();
 	bool UpdateWait();
 	bool UpdatePainted();
+
 
 	int hEnemyModel_;
 

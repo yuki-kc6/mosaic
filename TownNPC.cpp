@@ -17,8 +17,10 @@ TownNPC::~TownNPC()
 
 void TownNPC::Initialize()
 {
-	hModel_ = Model::Load("Models/enemy2.fbx");
+	hModel_ = Model::Load("Models/Player.fbx");
 	assert(hModel_ >= 0);
+
+	transform_.scale_ = { 0.05,0.05,0.05 };
 
 	state_ = NPC_START;
 
@@ -88,7 +90,8 @@ bool TownNPC::UpdateStart()
 	SetGoal();
 	routeQueue.push({ currentZ,currentX });
 	SearchRoad();
-	SetTargetPos();
+	direction_ = SetDirection();
+	SetTargetPos(direction_);
 
 	return true;
 }
@@ -124,8 +127,6 @@ void TownNPC::MoveRoute()
 	XMVECTOR vTarget = XMLoadFloat3(&targetPos);
 	XMVECTOR v = vTarget - vPos;
 
-	SetDirection(v);
-
 	// 正規化して進める
 	v = XMVector3Normalize(v);
 	vPos += v * moveSpeed_;
@@ -139,10 +140,11 @@ void TownNPC::MoveRoute()
 	{
 		transform_.position_ = targetPos;
 
-		currentX = transform_.position_.x / 29.0f;
-		currentZ = -transform_.position_.z / 29.0f;
+		currentX = nextTargetX;
+		currentZ = nextTargetZ;
 
-		SetTargetPos();
+		direction_ = SetDirection();
+		SetTargetPos(direction_);
 		return;
 	}
 
@@ -220,11 +222,36 @@ void TownNPC::CreateRoute()
 	routeIndex_ = 0;
 }
 
-void TownNPC::SetTargetPos()
+void TownNPC::SetTargetPos(NPCDirection dir)
 {
-	targetPos.x = path[routeIndex_].second * 29.0f;
-	targetPos.y = transform_.position_.y;
-	targetPos.z = -path[routeIndex_].first * 29.0f;
+
+	nextTargetX = path[routeIndex_].second * 29.0f;
+	nextTargetZ = -path[routeIndex_].first * 29.0f;
+
+	const float roadOffset = 5.0f;
+
+	switch (dir)
+	{
+	case NPC_UP:
+		targetPos.x = nextTargetX+roadOffset;
+		transform_.rotate_.y = 180;
+		break;
+
+	case NPC_RIGHT:
+		targetPos.z = nextTargetZ + roadOffset;
+		transform_.rotate_.y = 90;
+		break;
+
+	case NPC_DOWN:
+		targetPos.x = nextTargetX-roadOffset;
+		transform_.rotate_.y = 0;
+		break;
+
+	case NPC_LEFT:
+		targetPos.z = nextTargetZ- roadOffset;
+		transform_.rotate_.y = 270;
+		break;
+	}
 
 	if (routeIndex_ < path.size() - 1)
 		routeIndex_++;
@@ -254,21 +281,19 @@ void TownNPC::SetGoal()
 
 }
 
-void TownNPC::SetDirection(XMVECTOR v)
+NPCDirection TownNPC::SetDirection()
 {
-	XMVECTOR forward = { 0,0,1,0 };
+	int dx = path[routeIndex_].second - currentX;
+	int dz = path[routeIndex_].first - currentZ;
 
-	v = XMVector3Normalize(v);
-
-	XMFLOAT3 dir;
-	XMStoreFloat3(&dir, v);
-
-	transform_.rotate_.y =
-		XMConvertToDegrees(
-			atan2f(dir.x, dir.z));
-
-	
-
+	if (dx > 0)
+		return  NPC_RIGHT;
+	else if (dx < 0)
+		return  NPC_LEFT;
+	else if (dz > 0)
+		return  NPC_DOWN;
+	else if (dz < 0)
+		return  NPC_UP;
 }
 
 
