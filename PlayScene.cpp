@@ -68,8 +68,12 @@ void PlayScene::MissionAllClear()
 	bool isClear=false;
     PaintObject* closestObj = nullptr;
     for (PaintObject* pObj : sensitiveList_) {
-		if (!pObj->IsClear())continue;
-		isClear = pObj->IsClear();
+		if (!pObj->IsClear())
+		{ 
+			isClear = false;
+			break;
+		}
+		isClear = true;
     }
     if (isClear)
     {

@@ -11,7 +11,7 @@ public:
 	PaintObject();
 	PaintObject(GameObject* parent);
 	PaintObject(GameObject* parent, const std::string& name);
-	//virtual ~PaintObject()override;
+	 ~PaintObject();
 	//GameObject‚©‚ç‚»‚Ì‚Ü‚Üˆø‚«Œp‚®
 	virtual void Initialize(void)override = 0;
 	virtual void Update(void)override = 0;

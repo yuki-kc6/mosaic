@@ -17,7 +17,7 @@ TownNPC::~TownNPC()
 
 void TownNPC::Initialize()
 {
-	hModel_ = Model::Load("Models/Player.fbx");
+	hModel_ = Model::Load("Models/manekin.fbx");
 	assert(hModel_ >= 0);
 
 	transform_.scale_ = { 0.05,0.05,0.05 };

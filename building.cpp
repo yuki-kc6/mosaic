@@ -19,7 +19,7 @@ Building::~Building()
 void Building::Initialize()
 {
 
-    hModel_ = Model::Load("Models/building1.fbx");
+    hModel_ = Model::Load("Models/building2.fbx");
     assert(hModel_ >= 0);
     
     //this->SetSensitive(true);

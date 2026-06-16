@@ -2,6 +2,7 @@
 #include "Engine/Direct3D.h"
 #include "Engine/FbxParts.h"
 #include "Engine/VFX.h"
+#include "Engine/Global.h"
 std::list<PaintObject*> PaintObject::paintObjectList;
 
 PaintObject::PaintObject()
@@ -29,6 +30,13 @@ PaintObject::PaintObject(GameObject* parent, const std::string& name)
 	gridSize = textureSize / 4;
 
 	isPaint = std::vector<std::vector<bool>>(gridSize, std::vector<bool>(gridSize, false));
+}
+
+PaintObject::~PaintObject()
+{
+	paintObjectList.remove(this);
+
+	SAFE_DELETE(mosaicRT);
 }
 
 void PaintObject::PaintMosaic(XMFLOAT2 uv,XMFLOAT3 hitPos,XMFLOAT3 normal)

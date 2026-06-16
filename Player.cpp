@@ -181,6 +181,8 @@ bool Player::RayCastToPaintObjects(RayCastData& data)
         RayCastData ray = data; // コピーして使用
         // 描画されていない、または死んでいるオブジェクトはスキップ
         if (!pObj->IsVisibled() || pObj->IsDead()) continue;
+
+
         // GameObject の hModel_ 使用して判定 
         Model::RayCast(pObj->GetModelHandle(), &ray);
 
@@ -199,6 +201,15 @@ bool Player::RayCastToPaintObjects(RayCastData& data)
                 );
 
             }
+            char buf[256];
+            sprintf_s(
+                buf,
+                "UV=%f %f\n",
+                UV.x,
+                UV.y
+            );
+
+            OutputDebugStringA(buf);
         }
     }
     if (closestObj != nullptr)
