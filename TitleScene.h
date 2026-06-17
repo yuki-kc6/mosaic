@@ -28,6 +28,8 @@ public:
 private:
 	int hTitlePic_;
 
+	int goPic_;
+
 	XMFLOAT3 currentPos;
 	XMFLOAT3 targetPos;
 

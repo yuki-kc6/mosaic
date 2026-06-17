@@ -18,10 +18,13 @@ void DummyPlayer::Initialize()
 	transform_.position_.x = 70;
 	transform_.scale_ = { 0.05,0.05,0.05 };
 	transform_.rotate_ = { 0,90,0 };
+	state_ = IDLE;
+	Model::SetAnimFrame(hModel_, 0.0f, 60.0f, 1.0f);
 }
 
 void DummyPlayer::Update()
 {
+
 }
 
 void DummyPlayer::Draw()

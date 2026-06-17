@@ -1,9 +1,17 @@
 #pragma once
 #include "Engine/GameObject.h"
+
+enum PlayerState
+{
+    IDLE,
+    CLEAR
+};
+
+
+
 class DummyPlayer :
     public GameObject
 {
-
 public:
     //コンストラクタ
     DummyPlayer(GameObject* parent);
@@ -23,7 +31,9 @@ public:
     //開放
     void Release() override;
 
+    void SetState(PlayerState state);
+
 private:
-    
+    PlayerState state_;
 };
 

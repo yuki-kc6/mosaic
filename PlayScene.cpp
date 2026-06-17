@@ -25,7 +25,7 @@ void PlayScene::Initialize()
 	
 	Instantiate<Ground>(this);	
 
-	//Instantiate<StageTimer>(this);
+	Instantiate<StageTimer>(this);
 
 	Instantiate<StageManager>(this);
 	//Instantiate<NPCManager>(this);
