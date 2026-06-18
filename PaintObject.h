@@ -5,7 +5,7 @@
 #include <list>
 #include <vector>
 class PaintObject :
-    public GameObject
+	public GameObject
 {
 public:
 	PaintObject();
