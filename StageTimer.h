@@ -2,6 +2,7 @@
 #include "Engine/GameObject.h"
 #include <chrono>
 
+
 class Text;
 
 class StageTimer : public GameObject
@@ -28,11 +29,14 @@ public:
 private:
 
     float prevTime;
+    float deltaTime;
     float startTime;
     float maxTime;
+    float currentTime;
     float elapsed;
     std::chrono::system_clock::time_point  start, end;//ŽžŠÔ‚ð‘ª‚é
     Text* timer;
-
+    int hTimerPic_;
+    int hOutLinePic_;
 
 };

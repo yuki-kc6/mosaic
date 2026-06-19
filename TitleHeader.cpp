@@ -23,15 +23,16 @@ void TitleHeader::Update()
 
 void TitleHeader::Draw()
 {
-	transform_.position_ = { 0,-600,0 };
-	transform_.scale_ = { 0.2,0.2,1 };
-	Image::SetTransform(hPic_, transform_);
+	Transform title;
+	title.position_ = { 0,-600,0 };
+	title.scale_ = { 0.2,0.2,1 };
+	Image::SetTransform(hPic_, title);
 	Image::Draw(hPic_);
 
-	Transform title;
-	title.position_ = { 3,500,0 };
-	transform_.scale_ = { 1,1,1 };
-	Image::SetTransform(hTitle_, title);
+	Transform push;
+	push.position_ = { 3,500,0 };
+	push.scale_ = { 1,1,1 };
+	Image::SetTransform(hTitle_, push);
 	Image::Draw(hTitle_);
 }
 

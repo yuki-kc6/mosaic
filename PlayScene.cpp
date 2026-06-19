@@ -25,11 +25,13 @@ void PlayScene::Initialize()
 	
 	Instantiate<Ground>(this);	
 
-	Instantiate<StageTimer>(this);
-
 	Instantiate<StageManager>(this);
 	//Instantiate<NPCManager>(this);
+
+	Instantiate<StageTimer>(this);
+
 	Instantiate<Player>(this);
+
 
 	this->PushSensitive();
 }
