@@ -52,8 +52,10 @@ void TitleScene::Update()
 
 	if (Input::IsKeyDown(DIK_SPACE))
 	{
+		if(isStart=false)
+			FindObject("TitleHeader")->KillMe();
 		isStart = true;
-		FindObject("TitleHeader")->KillMe();
+		
 	}
 
 	if (isStart)

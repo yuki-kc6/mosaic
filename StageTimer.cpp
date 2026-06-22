@@ -5,7 +5,7 @@
 #include "Engine/Image.h"
 
 StageTimer::StageTimer(GameObject* parent)
-	:prevTime(0),startTime(0),maxTime(0),timer(nullptr),hTimerPic_(-1)
+	:limitTime(0),hTimerPic_(-1)
 {
 }
 
@@ -21,37 +21,48 @@ void StageTimer::Initialize()
 	hOutLinePic_ = Image::Load("TimerOutLine.png");
 	assert(hOutLinePic_ >= 0);
 
-	start = std::chrono::system_clock::now(); // 計測開始した時間
-	maxTime = 600.0f;
-	timer = new Text;
-	timer->Initialize();
+	startTime = std::chrono::steady_clock::now(); // 計測開始した時間
+	limitTime = 30.0f;
+	remainTime = limitTime;
 }
 
 void StageTimer::Update()
 {
-	end = std::chrono::system_clock::now();
+	auto now = std::chrono::steady_clock::now();
 
-	elapsed = std::chrono::duration_cast<std::chrono::seconds>(end - start).count();
-	if (maxTime - elapsed < 0)
+	float elapsed = std::chrono::duration<float>(now - startTime).count();
+
+	remainTime = limitTime - elapsed;
+
+	if (remainTime <= 0.0f)
 	{
 		SceneManager* sm = (SceneManager*)FindObject("SceneManager");
 		sm->ChangeScene(SCENE_ID_RESULT);
 	}
+	
+	timeGauge = remainTime / limitTime;
+
+
 
 }
 
 void StageTimer::Draw()
 {
+	float currentWidth = 800.0f * timeGauge;
 
 	Transform bar;
-	bar.position_ = { 0,900,0 };
-	bar.scale_ = { 1.5,1.5,1.5 };
-	//Image::SetRect(hTimerPic_,) 時間に合わせて右側が切り取られていく
+
+	bar.position_.x =  -(800.0f - currentWidth)+30 ;
+	bar.position_.y = 900;
+	bar.position_.z = 0;
+	bar.scale_ = { 1,1.5,1 };
+	
+	Image::SetRect(hTimerPic_, 0, 0, currentWidth , 64); //時間に合わせて右側が切り取られていく
 	Image::SetTransform(hTimerPic_,bar);
 	Image::Draw(hTimerPic_);
 
 	Transform barOut;
-	barOut.position_ = { 0,900,0 };
+	barOut.position_ = { 600,900,0 };
 	barOut.scale_ = { 1.5,1.5,1.5 };
 	Image::SetTransform(hOutLinePic_, barOut);
 	Image::Draw(hOutLinePic_);

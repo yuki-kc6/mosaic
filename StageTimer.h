@@ -28,15 +28,13 @@ public:
     void Release() override;
 private:
 
-    float prevTime;
-    float deltaTime;
-    float startTime;
-    float maxTime;
-    float currentTime;
-    float elapsed;
-    std::chrono::system_clock::time_point  start, end;//ŠÔ‚ğ‘ª‚é
-    Text* timer;
+    float limitTime;//§ŒÀŠÔ
+    float remainTime;//c‚èŠÔ
+
+    std::chrono::steady_clock::time_point  startTime;//ŠJn
+
+    float timeGauge;
+
     int hTimerPic_;
     int hOutLinePic_;
-
 };
