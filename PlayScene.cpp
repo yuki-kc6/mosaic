@@ -40,6 +40,14 @@ void PlayScene::Initialize()
 void PlayScene::Update()
 {
 	this->MissionAllClear();
+	StageTimer* timer=(StageTimer*)FindObject("StageTimer");
+	if (timer->GetIsTimeOver())
+	{
+		TimerOverEffect();
+	}
+
+
+
 }
 
 //•`‰æ
@@ -82,4 +90,9 @@ void PlayScene::MissionAllClear()
 		SceneManager* sm = (SceneManager*)FindObject("SceneManager");
 		sm->ChangeScene(SCENE_ID_RESULT);
     }
+}
+
+void PlayScene::TimerOverEffect()
+{
+	
 }

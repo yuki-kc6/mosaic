@@ -17,7 +17,7 @@ TownNPC::~TownNPC()
 
 void TownNPC::Initialize()
 {
-	hModel_ = Model::Load("Models/manekin.fbx");
+	hModel_ = Model::Load("Models/manekin2.fbx");
 	assert(hModel_ >= 0);
 
 	transform_.scale_ = { 0.05,0.05,0.05 };
@@ -35,6 +35,8 @@ void TownNPC::Initialize()
 
 	direction_ = NPC_RIGHT;
 
+	
+	 //Model::SetAnimFrame(hModel_, 0, 30, 0.5);
 
 	moveSpeed_ = 0.1f;
 }

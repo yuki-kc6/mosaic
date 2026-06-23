@@ -36,8 +36,7 @@ void StageTimer::Update()
 
 	if (remainTime <= 0.0f)
 	{
-		SceneManager* sm = (SceneManager*)FindObject("SceneManager");
-		sm->ChangeScene(SCENE_ID_RESULT);
+		isTimeOver = true;
 	}
 	
 	timeGauge = remainTime / limitTime;
@@ -73,3 +72,4 @@ void StageTimer::Draw()
 void StageTimer::Release()
 {
 }
+

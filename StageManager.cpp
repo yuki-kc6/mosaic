@@ -46,7 +46,7 @@ void StageManager::Initialize()
 			if (maps[z][x] == 1)
 			{
 				//ビル
-				Instantiate<Building>(this)->SetPosition(x * 29.0f, 0.0f, -z * 29.0f);
+				//Instantiate<Building>(this)->SetPosition(x * 29.0f, 0.0f, -z * 29.0f);
 				buildingList.push_back({ z,x });
 				if (a <2)
 				{

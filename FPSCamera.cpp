@@ -4,7 +4,7 @@
 #include "FPSgun.h"
 
 FPSCamera::FPSCamera(GameObject* parent)
-	:GameObject(parent,"FPSCamera"), DeltaX(0), DeltaY(0), currentMousePos({0,0,0})
+	:GameObject(parent,"FPSCamera"), DeltaX(0), DeltaY(0), currentMousePos({0,0,0}),isPlay(true)
 {
 	centerX = Direct3D::screenWidth_ / 2;
 	centerY = Direct3D::screenHeight_ / 2;
@@ -47,38 +47,41 @@ void FPSCamera::Release()
 
 void FPSCamera::SetFpsCamera(Transform &cam,float sensitivity)
 {
-	XMVECTOR vPos = XMLoadFloat3(&cam.position_);
-
-	cam.rotate_.y += DeltaX*sensitivity;
-	cam.rotate_.x += DeltaY*sensitivity;
-
-	if (cam.rotate_.x > 80.0f)
+	if (isPlay = true)
 	{
-		cam.rotate_.x = 80.0f;
+
+		XMVECTOR vPos = XMLoadFloat3(&cam.position_);
+
+		cam.rotate_.y += DeltaX * sensitivity;
+		cam.rotate_.x += DeltaY * sensitivity;
+
+		if (cam.rotate_.x > 80.0f)
+		{
+			cam.rotate_.x = 80.0f;
+		}
+
+		if (cam.rotate_.x < -80.0f)
+		{
+			cam.rotate_.x = -80.0f;
+		}
+
+		XMMATRIX camRotate = XMMatrixRotationRollPitchYaw(XMConvertToRadians(cam.rotate_.x), XMConvertToRadians(cam.rotate_.y), 0);
+
+
+		XMVECTOR vCam = { 0,1.7f, 0, 0 };//カメラ位置ベクトル
+
+		XMVECTOR forward = XMVector3TransformNormal(XMVectorSet(0, 0, 1, 0), camRotate);
+
+		//カメラ位置設定
+		XMFLOAT3 camPos;
+		XMStoreFloat3(&camPos, vPos + vCam);
+
+		Camera::SetPosition(camPos);
+
+		//カメラターゲット設定
+		XMFLOAT3 camTarget;
+		XMStoreFloat3(&camTarget, vPos + vCam + forward);
+
+		Camera::SetTarget(camTarget);
 	}
-
-	if (cam.rotate_.x < -80.0f)
-	{
-		cam.rotate_.x = -80.0f;
-	}
-
-	XMMATRIX camRotate = XMMatrixRotationRollPitchYaw(XMConvertToRadians(cam.rotate_.x), XMConvertToRadians(cam.rotate_.y), 0);
-
-
-	XMVECTOR vCam = { 0,1.7f, 0, 0 };//カメラ位置ベクトル
-
-	XMVECTOR forward = XMVector3TransformNormal(XMVectorSet(0, 0, 1, 0), camRotate);
-
-	//カメラ位置設定
-	XMFLOAT3 camPos;
-	XMStoreFloat3(&camPos, vPos + vCam);
-
-	Camera::SetPosition(camPos);
-
-	//カメラターゲット設定
-	XMFLOAT3 camTarget;
-	XMStoreFloat3(&camTarget, vPos + vCam + forward);
-
-	Camera::SetTarget(camTarget);
-
 }

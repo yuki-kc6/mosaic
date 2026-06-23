@@ -28,6 +28,8 @@ public:
 
 	void SetFpsCamera(Transform &cam, float sensitivity);
 
+	void SetIsPlay(bool state) { isPlay = state; }
+
 	const int GetMouseDeltaX()const { return DeltaX; }
 	const int GetMouseDeltaY()const { return DeltaY; }
 
@@ -40,5 +42,6 @@ private:
 	int centerX;
 	int centerY;
 
+	bool isPlay;
 };
 
