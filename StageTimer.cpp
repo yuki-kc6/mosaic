@@ -48,14 +48,14 @@ void StageTimer::Update()
 
 void StageTimer::Draw()
 {
-	float currentWidth = 800.0f * timeGauge;
+	float currentWidth = 550.0f * timeGauge;
 
 	Transform bar;
 
-	bar.position_.x =  -(800.0f - currentWidth)+30 ;
+	bar.position_.x =  -(800.0f - currentWidth)*1.5+430 ;
 	bar.position_.y = 900;
 	bar.position_.z = 0;
-	bar.scale_ = { 1,1.5,1 };
+	bar.scale_ = { 1.5,1.5,1.5 };
 	
 	Image::SetRect(hTimerPic_, 0, 0, currentWidth , 64); //ŠÔ‚É‡‚í‚¹‚Ä‰E‘¤‚ªØ‚èæ‚ç‚ê‚Ä‚¢‚­
 	Image::SetTransform(hTimerPic_,bar);
