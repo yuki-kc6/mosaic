@@ -41,9 +41,11 @@ void PlayScene::Update()
 {
 	this->MissionAllClear();
 	StageTimer* timer=(StageTimer*)FindObject("StageTimer");
-	if (timer->GetIsTimeOver())
-	{
-		TimerOverEffect();
+	if (timer != nullptr) {
+		if (timer->GetIsTimeOver())
+		{
+			TimerOverEffect();
+		}
 	}
 
 

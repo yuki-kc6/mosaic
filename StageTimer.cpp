@@ -5,7 +5,7 @@
 #include "Engine/Image.h"
 
 StageTimer::StageTimer(GameObject* parent)
-	:limitTime(0),hTimerPic_(-1)
+	:limitTime(0),hTimerPic_(-1),isTimeOver(false)
 {
 }
 
