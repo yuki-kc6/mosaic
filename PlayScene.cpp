@@ -89,6 +89,7 @@ void PlayScene::MissionAllClear()
     }
     if (isClear)
     {
+		ClearEffect();
 		SceneManager* sm = (SceneManager*)FindObject("SceneManager");
 		sm->ChangeScene(SCENE_ID_RESULT);
     }
@@ -97,4 +98,9 @@ void PlayScene::MissionAllClear()
 void PlayScene::TimerOverEffect()
 {
 	
+}
+
+void PlayScene::ClearEffect()
+{
+
 }

@@ -5,7 +5,7 @@
 #include "Engine/Image.h"
 
 StageTimer::StageTimer(GameObject* parent)
-	:limitTime(0),hTimerPic_(-1),isTimeOver(false)
+	:limitTime(0),hTimerPic_(-1),isTimeOver(false),isStart(true)
 {
 }
 
@@ -28,19 +28,21 @@ void StageTimer::Initialize()
 
 void StageTimer::Update()
 {
-	auto now = std::chrono::steady_clock::now();
-
-	float elapsed = std::chrono::duration<float>(now - startTime).count();
-
-	remainTime = limitTime - elapsed;
-
-	if (remainTime <= 0.0f)
+	if (isStart)
 	{
-		isTimeOver = true;
-	}
-	
-	timeGauge = remainTime / limitTime;
+		auto now = std::chrono::steady_clock::now();
 
+		float elapsed = std::chrono::duration<float>(now - startTime).count();
+
+		remainTime = limitTime - elapsed;
+
+		if (remainTime <= 0.0f)
+		{
+			isTimeOver = true;
+		}
+
+		timeGauge = remainTime / limitTime;
+	}
 
 
 }

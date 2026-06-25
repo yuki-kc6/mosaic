@@ -28,6 +28,8 @@ public:
     void Release() override;
 
     bool GetIsTimeOver() { return isTimeOver; }
+
+    void SetTimer(bool start) { isStart = start; }
 private:
 
     float limitTime;//êßå¿éûä‘
@@ -41,5 +43,7 @@ private:
     int hOutLinePic_;
 
     bool isTimeOver;
+
+    bool isStart;
 
 };

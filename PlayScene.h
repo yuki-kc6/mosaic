@@ -27,6 +27,7 @@ private:
 	void PushSensitive();
 	void MissionAllClear();
 	void TimerOverEffect();
+	void ClearEffect();
 
 	std::list<PaintObject*> sensitiveList_;
 };
