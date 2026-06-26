@@ -317,7 +317,9 @@ void GameObject::UpdateSub()
 
 void GameObject::DrawSub()
 {
-	Draw();
+	if (IsVisibled()) {
+		Draw();
+	}
 
 
 	//ƒŠƒŠ[ƒX‚Ííœ

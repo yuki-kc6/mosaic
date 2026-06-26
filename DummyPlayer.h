@@ -7,8 +7,6 @@ enum PlayerState
     CLEAR
 };
 
-
-
 class DummyPlayer :
     public GameObject
 {

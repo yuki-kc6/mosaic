@@ -16,6 +16,7 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Release() override;
+	void SetIsPlay(bool state) { isPlay = state; }
 private:
 	void OnGround();
 	bool RayCastToPaintObjects(RayCastData &data);
@@ -34,7 +35,7 @@ private:
 
 	int gunSoundID;
 
-	bool isPlayScene;
+	bool isPlay;
 
 };
 

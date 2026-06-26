@@ -33,7 +33,6 @@ public:
 	const int GetMouseDeltaX()const { return DeltaX; }
 	const int GetMouseDeltaY()const { return DeltaY; }
 
-private:
 	XMFLOAT3 currentMousePos;
 
 	int DeltaX;

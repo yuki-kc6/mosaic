@@ -32,11 +32,8 @@ void Player::Initialize()
     //hModel_ = Model::Load("Models/PlayerKari.fbx");
     //assert(hModel_ >= 0);
 
-    if (GetParent()->GetObjectName() == ("PlayScene"))
-    {
-        isPlayScene = true;
-    }
-
+   
+    isPlay = true;
 
     hCrossHair_ = Image::Load("crosshair.png");
     centerX = Direct3D::screenWidth_ / 2;
@@ -68,69 +65,70 @@ void Player::Update()
     fpsGun= (FPSgun*)FindChildObject("FPSgun");
 
  
+    if (isPlay) {
+        //プレイヤーの移動
+        {
+            XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
+            XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+            XMVECTOR vMoveForward = { 0,0,1,0 };
+            XMVECTOR vMoveRight = { 1,0,0,0 };
 
-    //プレイヤーの移動
-    {
-      XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
-      XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
-      XMVECTOR vMoveForward = { 0,0,1,0 };
-      XMVECTOR vMoveRight = { 1,0,0,0 };
+            vMoveForward = XMVector3TransformNormal(vMoveForward, mRotate);
+            vMoveRight = XMVector3TransformNormal(vMoveRight, mRotate);
 
-      vMoveForward = XMVector3TransformNormal(vMoveForward, mRotate);
-      vMoveRight = XMVector3TransformNormal(vMoveRight, mRotate);
+            //WASD移動
+            if (Input::IsKey(DIK_W))
+            {
+                vPos += vMoveForward * moveSpeed_;
+            }
+            if (Input::IsKey(DIK_S))
+            {
+                vPos -= vMoveForward * moveSpeed_;
+            }
+            if (Input::IsKey(DIK_D))
+            {
+                vPos += vMoveRight * moveSpeed_;
+            }
+            if (Input::IsKey(DIK_A))
+            {
+                vPos -= vMoveRight * moveSpeed_;
+            }
+            XMStoreFloat3(&transform_.position_, vPos);
+        }
 
-     //WASD移動
-        if (Input::IsKey(DIK_W))
+
+        XMVECTOR ganTarget;
+        XMFLOAT3 camPos = Camera::GetPosition();
+        XMFLOAT3 camTar = Camera::GetTarget();
+        XMVECTOR vCamPosition = XMLoadFloat3(&camPos);
+        XMVECTOR vCamTarget = XMLoadFloat3(&camTar);
+        ganTarget = vCamTarget - vCamPosition;
+
+        RayCastData gan;
+        gan.start = Camera::GetPosition();
+        XMStoreFloat3(&gan.dir, ganTarget);
+
+
+
+        if (Input::IsMouseButton(0))
         {
-            vPos += vMoveForward*moveSpeed_;
+            fpsGun->BangEffect();
+            if (this->RayCastToPaintObjects(gan))
+            {
+
+                //Audio::Stop(gunSoundID);
+                //Audio::Play(gunSoundHit);
+            }
+            else
+            {
+                //Audio::Play(gunSoundMiss);
+            }
         }
-        if (Input::IsKey(DIK_S))
-        {
-            vPos -= vMoveForward*moveSpeed_;
-        }
-        if (Input::IsKey(DIK_D))
-        {
-            vPos += vMoveRight*moveSpeed_;
-        }
-        if (Input::IsKey(DIK_A))
-        {
-            vPos -= vMoveRight*moveSpeed_;
-        }
-        XMStoreFloat3(&transform_.position_, vPos);
+
+        //this->OnGround();
+
+        fpsCamera->SetFpsCamera(transform_, 0.5f);
     }
-
-
-    XMVECTOR ganTarget;
-    XMFLOAT3 camPos = Camera::GetPosition();
-    XMFLOAT3 camTar = Camera::GetTarget();
-    XMVECTOR vCamPosition = XMLoadFloat3(&camPos);
-    XMVECTOR vCamTarget= XMLoadFloat3(&camTar);
-    ganTarget = vCamTarget-vCamPosition;
-
-    RayCastData gan;
-    gan.start = Camera::GetPosition();
-    XMStoreFloat3(&gan.dir,ganTarget);
-   
-
-
-    if (Input::IsMouseButton(0))
-    {
-        fpsGun->BangEffect();
-        if (this->RayCastToPaintObjects(gan))
-        {
-			
-			//Audio::Stop(gunSoundID);
-            //Audio::Play(gunSoundHit);
-        }
-        else
-        {
-			//Audio::Play(gunSoundMiss);
-        }
-    }
-
-    //this->OnGround();
-
-    fpsCamera->SetFpsCamera(transform_, 0.5f);
 }
 
 //描画
@@ -201,15 +199,7 @@ bool Player::RayCastToPaintObjects(RayCastData& data)
                 );
 
             }
-            char buf[256];
-            sprintf_s(
-                buf,
-                "UV=%f %f\n",
-                UV.x,
-                UV.y
-            );
 
-            OutputDebugStringA(buf);
         }
     }
     if (closestObj != nullptr)

@@ -9,8 +9,11 @@
 #include "Building.h"
 #include "FPSgun.h"
 #include "StageManager.h"
+#include "DummyPlayer.h"
 #include "NPCManager.h"
 #include "Engine/Audio.h"
+#include "Engine/Camera.h"
+
 
 //コンストラクタ
 PlayScene::PlayScene(GameObject * parent)
@@ -26,7 +29,8 @@ void PlayScene::Initialize()
 	Instantiate<Ground>(this);	
 
 	Instantiate<StageManager>(this);
-	//Instantiate<NPCManager>(this);
+	Instantiate<NPCManager>(this);
+	Instantiate<DummyPlayer>(this);
 
 	Instantiate<StageTimer>(this);
 
@@ -40,6 +44,7 @@ void PlayScene::Initialize()
 void PlayScene::Update()
 {
 	this->MissionAllClear();
+
 	StageTimer* timer=(StageTimer*)FindObject("StageTimer");
 	if (timer != nullptr) {
 		if (timer->GetIsTimeOver())
@@ -47,8 +52,6 @@ void PlayScene::Update()
 			TimerOverEffect();
 		}
 	}
-
-
 
 }
 
@@ -90,8 +93,8 @@ void PlayScene::MissionAllClear()
     if (isClear)
     {
 		ClearEffect();
-		SceneManager* sm = (SceneManager*)FindObject("SceneManager");
-		sm->ChangeScene(SCENE_ID_RESULT);
+		//SceneManager* sm = (SceneManager*)FindObject("SceneManager");
+		//sm->ChangeScene(SCENE_ID_RESULT);
     }
 }
 
@@ -102,5 +105,75 @@ void PlayScene::TimerOverEffect()
 
 void PlayScene::ClearEffect()
 {
+	
+
+	FPSCamera* fpsCamera=(FPSCamera*)FindObject("FPSCamera");
+	if (fpsCamera) {
+		fpsCamera->SetIsPlay(false);
+	}
+
+	FPSgun* fpsGun = (FPSgun*)FindObject("FPSgun");
+	if (fpsGun) {
+		fpsGun->KillMe();
+	}
+	Player* player = (Player*)FindObject("Player");
+	if (player) {
+		player->SetIsPlay(false);
+	}
+	DummyPlayer* dummyPlayer = (DummyPlayer*)FindObject("DummyPlayer");
+	if (dummyPlayer) {
+		dummyPlayer->Visible();
+	}
+	StageTimer* timer = (StageTimer*)FindObject("StageTimer");
+	if (timer) {
+		timer->Invisible();
+	}
+
+
+
+	XMFLOAT3 offset = { 1.0f, 1.0f, -2.5f };
+
+	XMFLOAT3 currentCameraPos=	Camera::GetPosition();
+	XMFLOAT3 currentCameraTarget = Camera::GetTarget();
+
+	XMVECTOR vCurrentCameraPos = XMLoadFloat3(&currentCameraPos);
+	XMVECTOR vCurrentCameraTarget = XMLoadFloat3(&currentCameraTarget);
+
+	XMFLOAT3 playerPos = player->GetPosition();
+	XMFLOAT3 cameraPos;
+
+	XMVECTOR vPlayerPos;
+	XMVECTOR vCameraPos;
+	
+
+	vCameraPos = XMVectorLerp(vCurrentCameraPos, vCurrentCameraTarget, 0.05f);
+
+	XMFLOAT3 cameraTarget = player->GetPosition();
+	cameraTarget.y += 1.5f;   // 顔あたり
+	cameraTarget.z -= 3.0f;   // プレイヤーの後ろ
+
+	XMVECTOR vTargetPos = XMLoadFloat3(&cameraTarget);
+
+	vCameraPos = XMVectorLerp(
+		vCurrentCameraPos,
+		vTargetPos,
+		0.05f
+	);
+
+
+	XMStoreFloat3(&cameraPos, vCameraPos);
+
+	Camera::SetPosition(cameraPos);
+	Camera::SetTarget(cameraTarget);
+
+
+
+
+
+
+
+
+
+
 
 }

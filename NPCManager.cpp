@@ -26,7 +26,7 @@ void NPCManager::Initialize()
 		{
 			if (stageManager->GetMap(i, j) == 1)
 			{
-				Instantiate<Enemy>(this)->SetPosition(j * 29.0f, 0.0f, -i * 29.0f);
+				//Instantiate<Enemy>(this)->SetPosition(j * 29.0f, 0.0f, -i * 29.0f);
 			}
 		}
 	}
@@ -34,10 +34,7 @@ void NPCManager::Initialize()
 
 void NPCManager::Update()
 {
-	//一定時間経過、k
-	//vectorにNPCを登録
-	//ビルのマスにスポーン
-	//Instantiate<Enemy>(this)->SetPosition(x * 29.0f, 0.0f, -z * 29.0f);
+	
 	
 }
 

@@ -1,5 +1,7 @@
 #include "DummyPlayer.h"
+#include "Player.h"
 #include "Engine/Model.h"
+
 
 DummyPlayer::DummyPlayer(GameObject* parent)
 	:GameObject(parent,"DummyPlayer")
@@ -20,11 +22,17 @@ void DummyPlayer::Initialize()
 	transform_.rotate_ = { 0,90,0 };
 	state_ = IDLE;
 	Model::SetAnimFrame(hModel_, 0.0f, 60.0f, 1.0f);
+	if (GetParent()->GetObjectName() == "PlayScene") {
+		Invisible();
+
+	}
 }
 
 void DummyPlayer::Update()
 {
-
+	if (GetParent()->GetObjectName() == "PlayScene") {
+		transform_.position_=FindObject("Player")->GetPosition();
+	}
 }
 
 void DummyPlayer::Draw()

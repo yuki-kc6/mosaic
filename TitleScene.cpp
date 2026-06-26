@@ -3,6 +3,7 @@
 #include "Engine/SceneManager.h"
 #include "TitleHeader.h"
 #include "StageManager.h"
+#include "NPCManager.h"
 #include "DummyPlayer.h"
 #include "Engine/Camera.h"
 #include "Ground.h"
@@ -21,6 +22,7 @@ void TitleScene::Initialize()
 	Instantiate<Ground>(this);
 
 	Instantiate<StageManager>(this);
+	Instantiate<NPCManager>(this);
 	Instantiate<DummyPlayer>(this);
 
 	Instantiate<TitleHeader>(this);

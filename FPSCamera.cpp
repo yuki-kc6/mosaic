@@ -47,7 +47,7 @@ void FPSCamera::Release()
 
 void FPSCamera::SetFpsCamera(Transform &cam,float sensitivity)
 {
-	if (isPlay = true)
+	if (isPlay)
 	{
 
 		XMVECTOR vPos = XMLoadFloat3(&cam.position_);
