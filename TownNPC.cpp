@@ -36,7 +36,7 @@ void TownNPC::Initialize()
 	direction_ = NPC_RIGHT;
 
 	
-	 //Model::SetAnimFrame(hModel_, 0, 30, 0.5);
+	 Model::SetAnimFrame(hModel_, 0, 30, 0.5);
 
 	moveSpeed_ = 0.1f;
 }

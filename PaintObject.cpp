@@ -44,7 +44,7 @@ void PaintObject::PaintMosaic(XMFLOAT2 uv,XMFLOAT3 hitPos,XMFLOAT3 normal)
 	this->CalculateScore(uv, brushSize);
 	score_= (float)paintedCount / (float)((gridSize * gridSize));
 
-	if (score_> 0.5)
+	if (score_> 0.7)
 	{
 		paintAll = 1.0;
 		isAllPainted = true;

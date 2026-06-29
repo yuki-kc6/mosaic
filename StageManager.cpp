@@ -46,10 +46,10 @@ void StageManager::Initialize()
 			if (maps[z][x] == 1)
 			{
 				//ビル
-				//Instantiate<Building>(this)->SetPosition(x * 29.0f, 0.0f, -z * 29.0f);
+				Instantiate<Building>(this)->SetPosition(x * 29.0f, 0.0f, -z * 29.0f);
 				if (a < 0)
 				{
-					Instantiate<Enemy>(this)->SetPosition(x * 29.0f, 0.0f, -z * 29.0f);
+				//	Instantiate<Enemy>(this)->SetPosition(x * 29.0f, 0.0f, -z * 29.0f);
 					a++;
 				}
 				buildingList.push_back({ z,x });
