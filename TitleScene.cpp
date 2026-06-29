@@ -68,7 +68,7 @@ void TitleScene::Update()
 		vCurrentPos = XMVectorLerp(vCurrentPos, vTargetPos, 0.05f);
 		XMStoreFloat3(&currentPos, vCurrentPos);
 
-
+		//ƒJƒƒ‰‚ğ‰ñ“]‚³‚¹‚é
 		currentAngleY += (targetAngle - currentAngleY) * 0.03f;
 
 		XMVECTOR vDir = XMVector3TransformNormal(

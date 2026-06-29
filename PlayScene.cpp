@@ -43,14 +43,15 @@ void PlayScene::Initialize()
 //更新
 void PlayScene::Update()
 {
-	this->MissionAllClear();
+	if (this->CheckMissionClear() || this->CheckTimeOver())
+	{
+		if (!isEndCameraStarted) {
+			StartEndCamera();
 
-	StageTimer* timer=(StageTimer*)FindObject("StageTimer");
-	if (timer != nullptr) {
-		if (timer->GetIsTimeOver())
-		{
-			TimerOverEffect();
 		}
+
+
+		UpdateEndCamera();
 	}
 
 }
@@ -78,9 +79,9 @@ void PlayScene::PushSensitive()
 
 }
 
-void PlayScene::MissionAllClear()
+bool PlayScene::CheckMissionClear()
 {
-	bool isClear=false;
+	bool isClear = false;
     PaintObject* closestObj = nullptr;
     for (PaintObject* pObj : sensitiveList_) {
 		if (!pObj->IsClear())
@@ -88,14 +89,23 @@ void PlayScene::MissionAllClear()
 			isClear = false;
 			break;
 		}
+		ClearEffect();
 		isClear = true;
     }
-    if (isClear)
-    {
-		ClearEffect();
-		//SceneManager* sm = (SceneManager*)FindObject("SceneManager");
-		//sm->ChangeScene(SCENE_ID_RESULT);
-    }
+	return isClear;
+}
+
+bool PlayScene::CheckTimeOver()
+{
+	bool isTimeOver = false;
+	StageTimer* timer = (StageTimer*)FindObject("StageTimer");
+	if (timer != nullptr) {
+		if (timer->GetIsTimeOver())
+		{
+			isTimeOver = timer->GetIsTimeOver();
+		}
+	}
+	return isTimeOver;
 }
 
 void PlayScene::TimerOverEffect()
@@ -105,9 +115,18 @@ void PlayScene::TimerOverEffect()
 
 void PlayScene::ClearEffect()
 {
-	
+	DummyPlayer* dummyPlayer = (DummyPlayer*)FindObject("DummyPlayer");
+	if (dummyPlayer) {
+		dummyPlayer->SetState(CLEAR);
+	}
 
-	FPSCamera* fpsCamera=(FPSCamera*)FindObject("FPSCamera");
+	
+	
+}
+
+void PlayScene::StartEndCamera()
+{
+	FPSCamera* fpsCamera = (FPSCamera*)FindObject("FPSCamera");
 	if (fpsCamera) {
 		fpsCamera->SetIsPlay(false);
 	}
@@ -118,62 +137,70 @@ void PlayScene::ClearEffect()
 	}
 	Player* player = (Player*)FindObject("Player");
 	if (player) {
+		player->Invisible();
 		player->SetIsPlay(false);
 	}
 	DummyPlayer* dummyPlayer = (DummyPlayer*)FindObject("DummyPlayer");
 	if (dummyPlayer) {
 		dummyPlayer->Visible();
+
 	}
 	StageTimer* timer = (StageTimer*)FindObject("StageTimer");
 	if (timer) {
+		timer->SetTimer(false);
 		timer->Invisible();
 	}
 
 
+	float rotY = player->GetRotate().y;
+	float rad = XMConvertToRadians(rotY);
 
-	XMFLOAT3 offset = { 1.0f, 1.0f, -2.5f };
+	XMFLOAT3 playerPos = player->GetPosition();
 
-	XMFLOAT3 currentCameraPos=	Camera::GetPosition();
+
+	endCameraPos.x = playerPos.x - sinf(rad) * 30.0f;
+	endCameraPos.y = playerPos.y + 10.0f;
+	endCameraPos.z = playerPos.z - cosf(rad) * 30.0f;
+
+
+	endCameraTarget.x = playerPos.x;
+	endCameraTarget.y = playerPos.y + 3.0f;
+	endCameraTarget.z = playerPos.z;
+}
+
+void PlayScene::UpdateEndCamera()
+{
+
+	XMFLOAT3 currentCameraPos = Camera::GetPosition();
 	XMFLOAT3 currentCameraTarget = Camera::GetTarget();
 
 	XMVECTOR vCurrentCameraPos = XMLoadFloat3(&currentCameraPos);
 	XMVECTOR vCurrentCameraTarget = XMLoadFloat3(&currentCameraTarget);
 
-	XMFLOAT3 playerPos = player->GetPosition();
-	XMFLOAT3 cameraPos;
+	XMVECTOR vEndCameraPos = XMLoadFloat3(&endCameraPos);
+	XMVECTOR vEndCameraTarget = XMLoadFloat3(&endCameraTarget);
 
-	XMVECTOR vPlayerPos;
+
 	XMVECTOR vCameraPos;
-	
+	XMVECTOR vCameraTarget;
 
-	vCameraPos = XMVectorLerp(vCurrentCameraPos, vCurrentCameraTarget, 0.05f);
+	vCameraPos = XMVectorLerp(vCurrentCameraPos, vEndCameraPos, 0.03f);
+	vCameraTarget = XMVectorLerp(vCurrentCameraTarget, vEndCameraTarget, 0.03f);
 
-	XMFLOAT3 cameraTarget = player->GetPosition();
-	cameraTarget.y += 1.5f;   // 顔あたり
-	cameraTarget.z -= 3.0f;   // プレイヤーの後ろ
-
-	XMVECTOR vTargetPos = XMLoadFloat3(&cameraTarget);
-
-	vCameraPos = XMVectorLerp(
-		vCurrentCameraPos,
-		vTargetPos,
-		0.05f
-	);
-
-
+	XMFLOAT3 cameraPos;
+	XMFLOAT3 cameraTarget;
 	XMStoreFloat3(&cameraPos, vCameraPos);
+	XMStoreFloat3(&cameraTarget, vCameraTarget);
 
 	Camera::SetPosition(cameraPos);
 	Camera::SetTarget(cameraTarget);
 
+	endFrame++;
 
-
-
-
-
-
-
-
-
+	if (endFrame >= kTitleChangeFrame)
+	{
+		SceneManager* sm = (SceneManager*)FindObject("SceneManager");
+		sm->ChangeScene(SCENE_ID_TITLE);
+	}
 
 }

@@ -25,9 +25,23 @@ public:
 	void Release() override;	
 private:
 	void PushSensitive();
-	void MissionAllClear();
+	bool CheckMissionClear();
+	bool CheckTimeOver();
+
 	void TimerOverEffect();
 	void ClearEffect();
 
+	void StartEndCamera();
+	void UpdateEndCamera();
+
+
+
+	XMFLOAT3 endCameraPos;
+	XMFLOAT3 endCameraTarget;
+	
+	bool isEndCameraStarted;
+
+	int endFrame = 0;
+	const int kTitleChangeFrame = 180; // 3•b
 	std::list<PaintObject*> sensitiveList_;
 };

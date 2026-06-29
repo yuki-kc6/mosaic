@@ -33,5 +33,6 @@ public:
 
 private:
     PlayerState state_;
+    int hClearModel_;
 };
 

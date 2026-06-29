@@ -5,7 +5,7 @@
 #include "Engine/Image.h"
 
 StageTimer::StageTimer(GameObject* parent)
-	:limitTime(0),hTimerPic_(-1),isTimeOver(false),isStart(true)
+	:GameObject(parent,"StageTimer"),limitTime(0), hTimerPic_(-1), isTimeOver(false), isStart(true)
 {
 }
 
@@ -22,7 +22,7 @@ void StageTimer::Initialize()
 	assert(hOutLinePic_ >= 0);
 
 	startTime = std::chrono::steady_clock::now(); // Œv‘ªŠJŽn‚µ‚½ŽžŠÔ
-	limitTime = 300.0f;
+	limitTime = 30.0f;
 	remainTime = limitTime;
 }
 
