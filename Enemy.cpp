@@ -1,8 +1,7 @@
 #include "Enemy.h"
-#include "Engine/Model.h"
 
 Enemy::Enemy(GameObject* parent)
-	: TownNPC(parent)
+	:TownNPC(parent)
 {
 }
 

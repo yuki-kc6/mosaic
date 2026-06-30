@@ -185,7 +185,7 @@ void PlayScene::UpdateEndCamera()
 	XMVECTOR vCameraTarget;
 
 	vCameraPos = XMVectorLerp(vCurrentCameraPos, vEndCameraPos, 0.03f);
-	vCameraTarget = XMVectorLerp(vCurrentCameraTarget, vEndCameraTarget, 0.03f);
+	vCameraTarget = XMVectorLerp(vCurrentCameraTarget, vEndCameraTarget, 0.01f);
 
 	XMFLOAT3 cameraPos;
 	XMFLOAT3 cameraTarget;

@@ -22,7 +22,7 @@ void StageTimer::Initialize()
 	assert(hOutLinePic_ >= 0);
 
 	startTime = std::chrono::steady_clock::now(); // Œv‘ªŠJŽn‚µ‚½ŽžŠÔ
-	limitTime = 30.0f;
+	limitTime = 900.0f;
 	remainTime = limitTime;
 }
 

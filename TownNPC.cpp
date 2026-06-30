@@ -6,7 +6,7 @@
 #include "Player.h"
 
 TownNPC::TownNPC(GameObject* parent)
-	: PaintObject(parent, "Enemy")
+	: PaintObject(parent, "TownNPC")
 {
 
 }
@@ -35,8 +35,7 @@ void TownNPC::Initialize()
 
 	direction_ = NPC_RIGHT;
 
-	
-	 Model::SetAnimFrame(hModel_, 0, 30, 0.5);
+	Model::SetAnimFrame(hModel_, 0, 30, 0.5);
 
 	moveSpeed_ = 0.1f;
 }
@@ -112,11 +111,10 @@ void TownNPC::ResetRouteSearch()
 	parent.clear();//BFS探索のための親ノードを保存する配列
 	routeQueue = std::queue<std::pair<int, int>>();//BFS探索のためのキュー
 	visited.clear();//BFS探索のための訪問済み配列
+	path.clear();//経路の配列
 
-	parent.clear();
 	parent.resize(mapH, std::vector<std::pair<int, int>>(mapW, { -1,-1 }));
 
-	visited.clear();
 	visited.resize(mapH, std::vector<bool>(mapW, false));
 
 	startX = currentX;
@@ -142,8 +140,8 @@ void TownNPC::MoveRoute()
 	{
 		transform_.position_ = targetPos;
 
-		currentX = nextTargetX;
-		currentZ = nextTargetZ;
+		currentX = path[routeIndex_ - 1].second;
+		currentZ = path[routeIndex_ - 1].first;
 
 		direction_ = SetDirection();
 		SetTargetPos(direction_);
@@ -221,7 +219,7 @@ void TownNPC::CreateRoute()
 
 	std::reverse(path.begin(), path.end());
 
-	routeIndex_ = 0;
+	routeIndex_ = 1;
 }
 
 void TownNPC::SetTargetPos(NPCDirection dir)
@@ -235,27 +233,31 @@ void TownNPC::SetTargetPos(NPCDirection dir)
 	switch (dir)
 	{
 	case NPC_UP:
-		targetPos.x = nextTargetX+roadOffset;
-		transform_.rotate_.y = 180;
+		targetPos.x = nextTargetX + roadOffset;
+		targetPos.z = nextTargetZ;
+		transform_.rotate_.y = 0;
 		break;
 
 	case NPC_RIGHT:
-		targetPos.z = nextTargetZ + roadOffset;
+		targetPos.x = nextTargetX;
+		targetPos.z = nextTargetZ +roadOffset;
 		transform_.rotate_.y = 90;
 		break;
 
 	case NPC_DOWN:
 		targetPos.x = nextTargetX-roadOffset;
-		transform_.rotate_.y = 0;
+		targetPos.z = nextTargetZ;
+		transform_.rotate_.y = 180;
 		break;
 
 	case NPC_LEFT:
-		targetPos.z = nextTargetZ- roadOffset;
+		targetPos.x = nextTargetX;
+		targetPos.z = nextTargetZ-roadOffset;
 		transform_.rotate_.y = 270;
 		break;
 	}
 
-	if (routeIndex_ < path.size() - 1)
+	if (routeIndex_ < path.size()-1)
 		routeIndex_++;
 }
 

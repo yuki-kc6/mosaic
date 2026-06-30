@@ -27,6 +27,8 @@ public:
     int GetMap(int z, int x);
 	int GetMapW() { return maps[0].size(); }
 	int GetMapH() { return maps.size(); }
+    float GetGridSize() { return gridSize; }
+
 
     const std::vector<std::pair<int, int>>& GetBuildingList() const
     {
@@ -37,4 +39,5 @@ private:
     std::vector<std::vector<int>> maps;
 	std::vector<std::pair<int, int>> buildingList;
     int a = 0;
+    float gridSize;
 };
