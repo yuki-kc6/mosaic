@@ -42,5 +42,6 @@ public:
 	int centerY;
 
 	bool isPlay;
+	bool isCursorHidden = false;
 };
 

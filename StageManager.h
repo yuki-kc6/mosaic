@@ -2,6 +2,16 @@
 #include "Engine/GameObject.h"
 #include <vector>
 #include <iostream>
+
+
+enum MapChip
+{
+    MAP_SIDEWALK = 0,
+    MAP_BUILDING = 1,
+    MAP_ROAD = 2,
+    MAP_CROSSWALK = 3
+};
+
 class StageManager : public GameObject
 {
 
@@ -36,6 +46,7 @@ public:
     }
 
 private:
+    void BuildStage();
     std::vector<std::vector<int>> maps;
 	std::vector<std::pair<int, int>> buildingList;
     int a = 0;

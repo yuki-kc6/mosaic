@@ -26,9 +26,10 @@ public:
     //開放
     void Release() override;
 private:
+    void SpawnNPC();
     std::vector<std::vector<int>> enemyList;
 
 	StageManager* stageManager;
     bool isSpawned;
-	float spawnTimer_;
+    float 
 };

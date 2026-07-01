@@ -1,6 +1,24 @@
 #include "FPSGun.h"
 #include "Engine/Model.h"
 #include "Engine/Camera.h"
+
+namespace
+{
+    constexpr float GUN_SCALE = 0.2f;
+    constexpr float CAMERA_HEIGHT = 1.7f;
+
+    constexpr float EFFECT_SPEED = 3.0f;
+    constexpr float EFFECT_ACCEL = 1.0f;
+    constexpr int EFFECT_DELAY = 0;
+
+    constexpr XMFLOAT3 EFFECT_DIRECTION_RND = { 1.0f, 1.0f, 1.0f };
+
+    constexpr float GUN_FORWARD_OFFSET = 3.0f;
+    constexpr float GUN_RIGHT_OFFSET = -1.0f;
+    constexpr float GUN_UP_OFFSET = -0.6f;
+
+}
+
 FPSgun::FPSgun(GameObject* parent)
 	:GameObject(parent, "FPSgun"),hModel_(-1),hmit(-1)
 {
@@ -14,14 +32,13 @@ FPSgun::~FPSgun()
 void FPSgun::Initialize()
 {
 	hModel_ = Model::Load("Models/gun.fbx");
-	SetScale(XMFLOAT3(0.2f, 0.2f, 0.2f));
-	//transform_.rotate_.y = 100.0f; // モデルの向きを調整
+	SetScale(XMFLOAT3(GUN_SCALE,GUN_SCALE,GUN_SCALE));
     transform_.pParent_ = nullptr;
 	effectData_.textureFileName = "cloudA.png";
-    effectData_.speed = 3.0;
-    effectData_.accel = 1.0;
-    effectData_.delay = 0;
-    effectData_.directionRnd = { 1,1,1 };
+    effectData_.speed = EFFECT_SPEED;
+    effectData_.accel = EFFECT_ACCEL;
+    effectData_.delay = EFFECT_DELAY;
+    effectData_.directionRnd = EFFECT_DIRECTION_RND;
 }
 
 void FPSgun::Update()
@@ -38,15 +55,15 @@ void FPSgun::Update()
 
     // 位置をカメラ基準で固定
     XMVECTOR vGunPos = vCamPos
-        + vForward * 3.0f
-		+ vRight *-1.0f
-        + vUp * -0.6f;
+        + vForward * GUN_FORWARD_OFFSET
+		+ vRight *GUN_RIGHT_OFFSET
+        + vUp * GUN_UP_OFFSET;
 
     XMFLOAT3 gunPos;
     XMStoreFloat3(&gunPos, vGunPos);
     SetPosition(gunPos);
 
-    // ★向きもカメラに追従させる
+    // 向きもカメラに追従させる
     GameObject* pParent = GetParent();
     XMFLOAT3 ro = pParent->GetRotate();
     transform_.rotate_.y = ro.y;

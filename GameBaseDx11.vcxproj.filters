@@ -106,14 +106,11 @@
     <ClCompile Include="FPSCamera.cpp" />
     <ClCompile Include="TitleHeader.cpp" />
     <ClCompile Include="StageTimer.cpp" />
-    <ClCompile Include="ResultHeader.cpp" />
-    <ClCompile Include="ResultScene.cpp" />
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="FPSGun.cpp" />
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="NPCManager.cpp" />
     <ClCompile Include="TownNPC.cpp" />
-    <ClCompile Include="TitleLogo.cpp" />
     <ClCompile Include="DummyPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -197,14 +194,11 @@
     <ClInclude Include="FPSCamera.h" />
     <ClInclude Include="TitleHeader.h" />
     <ClInclude Include="StageTimer.h" />
-    <ClInclude Include="ResultHeader.h" />
-    <ClInclude Include="ResultScene.h" />
     <ClInclude Include="Building.h" />
     <ClInclude Include="FPSGun.h" />
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="NPCManager.h" />
     <ClInclude Include="TownNPC.h" />
-    <ClInclude Include="TitleLogo.h" />
     <ClInclude Include="DummyPlayer.h" />
   </ItemGroup>
   <ItemGroup>

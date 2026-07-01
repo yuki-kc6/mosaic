@@ -2,6 +2,14 @@
 #include "Engine/Model.h"
 #include "Engine/Direct3D.h"
 #include "RenderTexture.h"
+
+namespace
+{
+    constexpr float GROUND_SCALE = 10.0f;
+    constexpr float BRUSH_SIZE = 0.001f;
+ 
+}
+
 //コンストラクタ
 Ground::Ground(GameObject* parent)
     :PaintObject(parent, "Ground")
@@ -18,9 +26,8 @@ void Ground::Initialize()
 {
     hModel_ = Model::Load("Models/map1.fbx");
     assert(hModel_ >= 0);
-    SetBrushSize(0.001f);
-	//transform_.position_.y = -0.8f;
-	transform_.scale_ = { 10.0f,10.0f,10.0f };
+    SetBrushSize(BRUSH_SIZE);
+	transform_.scale_ = { GROUND_SCALE, GROUND_SCALE, GROUND_SCALE };
 }
 
 //更新

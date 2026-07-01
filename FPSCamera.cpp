@@ -3,11 +3,18 @@
 #include "Engine/Direct3D.h"
 #include "FPSgun.h"
 
-FPSCamera::FPSCamera(GameObject* parent)
-	:GameObject(parent,"FPSCamera"), DeltaX(0), DeltaY(0), currentMousePos({0,0,0}),isPlay(true)
+namespace
 {
-	centerX = Direct3D::screenWidth_ / 2;
-	centerY = Direct3D::screenHeight_ / 2;
+	constexpr float CAMERA_SENSITIVITY = 0.2f;
+	constexpr float CAMERA_MAX_PITCH = 80.0f;
+	constexpr float CAMERA_HEIGHT = 1.7f;
+}
+
+FPSCamera::FPSCamera(GameObject* parent)
+	:GameObject(parent, "FPSCamera"), DeltaX(0), DeltaY(0), currentMousePos({ 0,0,0 }), isPlay(true), isCursorHidden(false)
+{
+	centerX = Direct3D::screenWidth_ / 2;//スタート時のマウス座標を画面中央に設定
+	centerY = Direct3D::screenHeight_ / 2;//
 
 	currentMousePos = { (float)centerX,(float)centerY,0 };
 }
@@ -23,7 +30,12 @@ void FPSCamera::Initialize()
 
 void FPSCamera::Update()
 {
-	ShowCursor(FALSE);
+	if (!isCursorHidden)
+	{
+		ShowCursor(FALSE);
+		isCursorHidden = true;
+	}
+
 	POINT pt;
 	GetCursorPos(&pt);
 
@@ -55,20 +67,20 @@ void FPSCamera::SetFpsCamera(Transform &cam,float sensitivity)
 		cam.rotate_.y += DeltaX * sensitivity;
 		cam.rotate_.x += DeltaY * sensitivity;
 
-		if (cam.rotate_.x > 80.0f)
+		if (cam.rotate_.x > CAMERA_MAX_PITCH)
 		{
-			cam.rotate_.x = 80.0f;
+			cam.rotate_.x = CAMERA_MAX_PITCH;
 		}
 
-		if (cam.rotate_.x < -80.0f)
+		if (cam.rotate_.x < -CAMERA_MAX_PITCH)
 		{
-			cam.rotate_.x = -80.0f;
+			cam.rotate_.x = -CAMERA_MAX_PITCH;
 		}
 
 		XMMATRIX camRotate = XMMatrixRotationRollPitchYaw(XMConvertToRadians(cam.rotate_.x), XMConvertToRadians(cam.rotate_.y), 0);
 
 
-		XMVECTOR vCam = { 0,1.7f, 0, 0 };//カメラ位置ベクトル
+		XMVECTOR vCam = { 0,CAMERA_HEIGHT, 0, 0 };//カメラ位置ベクトル
 
 		XMVECTOR forward = XMVector3TransformNormal(XMVectorSet(0, 0, 1, 0), camRotate);
 
