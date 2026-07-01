@@ -18,19 +18,28 @@ NPCManager::~NPCManager()
 void NPCManager::Initialize()
 {
 	stageManager = (StageManager*)FindObject("StageManager");
+	auto spawnList = stageManager->GetBuildingList();
+
 	int mapH = stageManager->GetMapH();
 	int mapW = stageManager->GetMapW();
 
-	for (int i = 0;i < mapH;i++)
-	{
-		for (int j = 0;j < mapW;j++)
-		{
-			if (stageManager->GetMap(j, i) == 1)
-			{
-				Instantiate<Enemy>(this)->SetPosition(j * 29.0f, 0.0f, -i * 29.0f);
-			}
-		}
-	}
+	const int MAX_NPC = 7;
+	int npcCount = 0;
+
+    for (int i = 0; i < MAX_NPC && !spawnList.empty(); i++)
+    {
+        int index = rand() % spawnList.size();
+        int x = spawnList[index].second;
+        int z = spawnList[index].first;
+
+        Instantiate<Enemy>(this)->SetPosition(
+            x * 29.0f,
+            0.0f,
+            -z * 29.0f);
+
+        // 同じ場所に生成されないよう削除
+        spawnList.erase(spawnList.begin() + index);
+    }
 }
 
 void NPCManager::Update()

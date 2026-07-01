@@ -99,10 +99,20 @@ bool TownNPC::UpdateStart()
 
 void TownNPC::ResetRouteSearch()
 {
-	//スポーンしたマス
-	currentX = transform_.position_.x / 29.0f;
-	currentZ = transform_.position_.z / 29.0f;
-	currentZ = -currentZ;//マップの座標とワールド座標はz軸が逆なので
+	if (isGoal)
+	{
+		//ゴールに到達した際のリセットならスタート地点をゴールにする
+		currentX = goalX;
+		currentZ = goalZ;
+	}
+	else
+	{
+		//スポーンしたときのリセットなら現在の座標をスタート地点にする
+		currentX = transform_.position_.x / 29.0f;
+		currentZ = transform_.position_.z / 29.0f;
+		currentZ = -currentZ;//マップの座標とワールド座標はz軸が逆なので
+	}
+	
 
 	isGoal = false;
 
@@ -140,12 +150,16 @@ void TownNPC::MoveRoute()
 	{
 		transform_.position_ = targetPos;
 
-		currentX = path[routeIndex_ - 1].second;
-		currentZ = path[routeIndex_ - 1].first;
+		currentX = path[routeIndex_].second;
+		currentZ = path[routeIndex_].first;
 
-		direction_ = SetDirection();
-		SetTargetPos(direction_);
-		return;
+		routeIndex_++;
+
+		if (routeIndex_ < path.size())
+		{
+			direction_ = SetDirection();
+			SetTargetPos(direction_);
+		}
 	}
 
 }
@@ -240,25 +254,22 @@ void TownNPC::SetTargetPos(NPCDirection dir)
 
 	case NPC_RIGHT:
 		targetPos.x = nextTargetX;
-		targetPos.z = nextTargetZ +roadOffset;
+		targetPos.z = nextTargetZ + roadOffset;
 		transform_.rotate_.y = 90;
 		break;
 
 	case NPC_DOWN:
-		targetPos.x = nextTargetX-roadOffset;
+		targetPos.x = nextTargetX - roadOffset;
 		targetPos.z = nextTargetZ;
 		transform_.rotate_.y = 180;
 		break;
 
 	case NPC_LEFT:
 		targetPos.x = nextTargetX;
-		targetPos.z = nextTargetZ-roadOffset;
+		targetPos.z = nextTargetZ - roadOffset;
 		transform_.rotate_.y = 270;
 		break;
 	}
-
-	if (routeIndex_ < path.size()-1)
-		routeIndex_++;
 }
 
 void TownNPC::SetGoal()
@@ -299,5 +310,3 @@ NPCDirection TownNPC::SetDirection()
 	else if (dz < 0)
 		return  NPC_UP;
 }
-
-
