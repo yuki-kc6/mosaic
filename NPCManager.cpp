@@ -3,10 +3,13 @@
 #include "StageManager.h"
 #include "Enemy.h"
 
-
+namespace
+{
+	const int MAX_NPC = 7;
+}
 
 NPCManager::NPCManager(GameObject* parent)
-	:GameObject(parent,"NPCManager")
+	:GameObject(parent, "NPCManager")
 {
 
 }
@@ -19,10 +22,11 @@ NPCManager::~NPCManager()
 void NPCManager::Initialize()
 {
 	stageManager = (StageManager*)FindObject("StageManager");
-	auto spawnList = stageManager->GetBuildingList();
+	spawnList = stageManager->GetBuildingList();
 
-	int mapH = stageManager->GetMapH();
-	int mapW = stageManager->GetMapW();
+	gridSize = stageManager->GetGridSize();
+
+    SpawnNPC();
 }
 
 void NPCManager::Update()
@@ -42,7 +46,6 @@ void NPCManager::Release()
 
 void NPCManager::SpawnNPC()
 {
-    const int MAX_NPC = 7;
     int npcCount = 0;
 
     for (int i = 0; i < MAX_NPC && !spawnList.empty(); i++)
@@ -52,9 +55,9 @@ void NPCManager::SpawnNPC()
         int z = spawnList[index].first;
 
         Instantiate<Enemy>(this)->SetPosition(
-            x * 29.0f,
+            x * gridSize,
             0.0f,
-            -z * 29.0f);
+            -z * gridSize);
 
         // 同じ場所に生成されないよう削除
         spawnList.erase(spawnList.begin() + index);

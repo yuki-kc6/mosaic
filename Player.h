@@ -28,6 +28,8 @@ private:
 	FPSCamera* fpsCamera;
 	FPSgun* fpsGun;
 
+	float cameraSensitivity_;
+
 	float moveSpeed_;
 	
 	float centerX;

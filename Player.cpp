@@ -11,6 +11,17 @@
 #include "Engine/Audio.h"
 #include "FPSGun.h"
 
+namespace
+{
+    const XMFLOAT3 PLAYER_START_POS = { 70.0f, 1.0f, -70.0f };
+    constexpr float MOVE_SPEED = 0.5f;
+    constexpr float PLAYER_START_ROTATE = 90.0f;
+    constexpr float PLAYER_COLIDER_SIZE= 1.5f;
+    constexpr float CAMERA_SENSITIVITY = 1.5f;
+    constexpr float RAYCAST_DIST = 30.0f;
+}
+
+
 
 //コンストラクタ
 Player::Player(GameObject* parent)
@@ -29,28 +40,25 @@ Player::~Player()
 //初期化
 void Player::Initialize()
 {
-    //hModel_ = Model::Load("Models/PlayerKari.fbx");
-    //assert(hModel_ >= 0);
-
-   
+    
     isPlay = true;
 
     hCrossHair_ = Image::Load("crosshair.png");
     centerX = Direct3D::screenWidth_ / 2;
     centerY = Direct3D::screenHeight_ / 2;
 
+	transform_.position_ = PLAYER_START_POS;
+  
+    moveSpeed_ =MOVE_SPEED;
 
-    transform_.position_.y = 1;
-    transform_.position_.z = -70;
-    transform_.position_.x = 70;
-    moveSpeed_ =0.5;
+	cameraSensitivity_ = CAMERA_SENSITIVITY;
 
-    transform_.rotate_ = { 0,90,0 };
+    transform_.rotate_ = { 0,PLAYER_START_ROTATE,0 };
     
     Instantiate<FPSCamera>(this);
     Instantiate<FPSgun>(this);
 
-    SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), 1.5f);
+    SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), PLAYER_COLIDER_SIZE);
     AddCollider(collision);
 
 	//gunSoundID = Audio::Load("gun.wav");
@@ -127,7 +135,7 @@ void Player::Update()
 
         //this->OnGround();
 
-        fpsCamera->SetFpsCamera(transform_, 0.5f);
+        fpsCamera->SetFpsCamera(transform_, cameraSensitivity_);
     }
 }
 
@@ -170,7 +178,7 @@ void Player::OnGround()
 bool Player::RayCastToPaintObjects(RayCastData& data)
 {
     PaintObject* closestObj = nullptr;
-    float dist = 30.0;
+    float dist = RAYCAST_DIST;
     XMFLOAT2 UV = { 0,0 };
 	XMFLOAT3 normal = { 0,0,0 };
 	XMFLOAT3 hitPos = { 0,0,0 };

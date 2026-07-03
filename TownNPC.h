@@ -105,4 +105,5 @@ protected:
 	//移動速度
 	float moveSpeed_;
 
+	float gridSize;
 };

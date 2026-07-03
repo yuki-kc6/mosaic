@@ -7,10 +7,10 @@
 
 namespace
 {
-    constexpr float BUILDING_SCALE = 5.0f;
-    constexpr float BUILDING_Y = -1.0f;
-    constexpr float BRUSH_SIZE = 0.003f;
-    constexpr float COLLIDER_SIZE = 25.0f;
+    constexpr float BUILDING_SCALE = 5.0f;//ビルの大きさ
+    constexpr float BUILDING_Y = -1.0f;//ビルのY座標
+    constexpr float BRUSH_SIZE = 0.003f;//ビルに塗るブラシの大きさ
+	constexpr float COLLIDER_SIZE = 25.0f;//ビルの当たり判定の大きさ
 }
 
 
@@ -29,14 +29,16 @@ Building::~Building()
 void Building::Initialize()
 {
 
-    hModel_ = Model::Load("Models/building2.fbx");
+    hModel_ = Model::Load("Models/building2.fbx");//モデル読み込み
     assert(hModel_ >= 0);
     
+    //四角当たり判定の追加
     BoxCollider* collision = new BoxCollider(transform_.position_, XMFLOAT3(COLLIDER_SIZE, COLLIDER_SIZE, COLLIDER_SIZE));
     AddCollider(collision);
-    SetBrushSize(BRUSH_SIZE);
-	transform_.scale_ = { BUILDING_SCALE, BUILDING_SCALE, BUILDING_SCALE };
-    transform_.position_.y = BUILDING_Y;
+
+    SetBrushSize(BRUSH_SIZE);//ブラシサイズの設定
+	transform_.scale_ = { BUILDING_SCALE, BUILDING_SCALE, BUILDING_SCALE };//ビルの大きさを設定
+	transform_.position_.y = BUILDING_Y;//ビルのY座標を設定
 }
 
 //更新
@@ -48,7 +50,7 @@ void Building::Update()
 //描画
 void Building::Draw()
 {
-    Model::SetTransform(hModel_, transform_, this->GetMosaicRT()->GetShaderResourceView());
+	Model::SetTransform(hModel_, transform_, this->GetMosaicRT()->GetShaderResourceView());//ペイントオブジェクト用の描画関数を呼ぶ
     Model::Draw(hModel_);
 }
 

@@ -57,27 +57,27 @@ void FPSCamera::Release()
 {
 }
 
-void FPSCamera::SetFpsCamera(Transform &cam,float sensitivity)
+void FPSCamera::SetFpsCamera(Transform &transform,float sensitivity)
 {
 	if (isPlay)
 	{
 
-		XMVECTOR vPos = XMLoadFloat3(&cam.position_);
+		XMVECTOR vPos = XMLoadFloat3(&transform.position_);
 
-		cam.rotate_.y += DeltaX * sensitivity;
-		cam.rotate_.x += DeltaY * sensitivity;
+		transform.rotate_.y += DeltaX * sensitivity;
+		transform.rotate_.x += DeltaY * sensitivity;
 
-		if (cam.rotate_.x > CAMERA_MAX_PITCH)
+		if (transform.rotate_.x > CAMERA_MAX_PITCH)
 		{
-			cam.rotate_.x = CAMERA_MAX_PITCH;
+			transform.rotate_.x = CAMERA_MAX_PITCH;
 		}
 
-		if (cam.rotate_.x < -CAMERA_MAX_PITCH)
+		if (transform.rotate_.x < -CAMERA_MAX_PITCH)
 		{
-			cam.rotate_.x = -CAMERA_MAX_PITCH;
+			transform.rotate_.x = -CAMERA_MAX_PITCH;
 		}
 
-		XMMATRIX camRotate = XMMatrixRotationRollPitchYaw(XMConvertToRadians(cam.rotate_.x), XMConvertToRadians(cam.rotate_.y), 0);
+		XMMATRIX camRotate = XMMatrixRotationRollPitchYaw(XMConvertToRadians(transform.rotate_.x), XMConvertToRadians(transform.rotate_.y), 0);
 
 
 		XMVECTOR vCam = { 0,CAMERA_HEIGHT, 0, 0 };//カメラ位置ベクトル

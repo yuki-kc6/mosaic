@@ -44,6 +44,7 @@ void StageManager::Initialize()
 
 		maps.push_back(mapsLine);
 	}
+	BuildStage();
 }
 
 void StageManager::Update()

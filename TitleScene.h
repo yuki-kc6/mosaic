@@ -36,11 +36,7 @@ private:
 	XMFLOAT3 currentLook;
 
 
-	float currentAngleY = 0.0f;
-	const float rotateSpeed = 0.5f;  // 1フレームに何度回るか
-	const float targetAngle = 90.0f; // 真後ろ
-
-
+	float currentAngleY;
 
 	bool isStart;
 };

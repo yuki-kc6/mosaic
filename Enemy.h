@@ -1,5 +1,6 @@
 #include "TownNPC.h"
 
+// 敵キャラクタークラス(TownNPCから拡張)
 class Enemy : public TownNPC
 {
 public:

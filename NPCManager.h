@@ -31,5 +31,7 @@ private:
 
 	StageManager* stageManager;
     bool isSpawned;
-    float 
+    float gridSize;
+    std::vector<std::pair<int, int>> spawnList;
+
 };

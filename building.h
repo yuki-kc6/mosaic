@@ -1,7 +1,7 @@
 #pragma once
 #include "PaintObject.h"
 
-//◆◆◆を管理するクラス
+//ビルを管理するクラス
 class Building : public PaintObject
 {
 

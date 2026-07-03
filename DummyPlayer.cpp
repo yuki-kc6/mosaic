@@ -4,23 +4,21 @@
 
 namespace
 {
-	constexpr float DUMMY_PLAYER_SCALE = 0.05f;
-	constexpr float DUMMY_PLAYER_Y = 1.0f;
-	constexpr float DUMMY_PLAYER_Z = -70.0f;
-	constexpr float DUMMY_PLAYER_X = 70.0f;
-	constexpr float DUMMY_PLAYER_ROTATE = 60.0f;
+	constexpr float DUMMY_PLAYER_SCALE = 0.05f;//モデルのスケール
 
-	constexpr float ANIM_START_FRAME = 0.0f;
+	constexpr XMFLOAT3 DUMMY_PLAYER_POSITION = { 70.0f,1.0f,-70.0f };//モデルの座標
 
-	constexpr float WALK_ANIM_END = 60.0f;
-	constexpr float WALK_ANIM_SPEED = 1.0f;
+	constexpr float DUMMY_PLAYER_ROTATE = 90.0f;//モデルの回転角度
+	constexpr float ANIM_START_FRAME = 0.0f;//アニメーション開始フレーム
 
-	constexpr float CLEAR_ANIM_END = 30.0f;
-	constexpr float CLEAR_ANIM_SPEED = 0.75f;
+	constexpr float IDLE_ANIM_END = 60.0f;//待機アニメーション終了フレーム
+	constexpr float IDLE_ANIM_SPEED = 1.0f;//待機アニメーション速度
+	constexpr float CLEAR_ANIM_END = 30.0f;//クリア時のモーション終了フレーム
+	constexpr float CLEAR_ANIM_SPEED = 0.75f;//クリア時のモーション速度
 }
 
 DummyPlayer::DummyPlayer(GameObject* parent)
-	:GameObject(parent,"DummyPlayer")
+	:GameObject(parent, "DummyPlayer"), state_(IDLE),hClearModel_(0)
 {
 }
 
@@ -30,25 +28,25 @@ DummyPlayer::~DummyPlayer()
 
 void DummyPlayer::Initialize()
 {
-	hModel_ = Model::Load("Models/Player.fbx");
-	hClearModel_ = Model::Load("Models/Player_ClearDance.fbx");
-	transform_.position_.y = DUMMY_PLAYER_Y;
-	transform_.position_.z = DUMMY_PLAYER_Z;
-	transform_.position_.x = DUMMY_PLAYER_X;
-	transform_.scale_ = { DUMMY_PLAYER_SCALE, DUMMY_PLAYER_SCALE, DUMMY_PLAYER_SCALE };
-	transform_.rotate_ = { 0,DUMMY_PLAYER_ROTATE,0 };
-	state_ = IDLE;
-	Model::SetAnimFrame(hModel_, ANIM_START_FRAME, WALK_ANIM_END, WALK_ANIM_SPEED);
-	Model::SetAnimFrame(hClearModel_, ANIM_START_FRAME, CLEAR_ANIM_END, CLEAR_ANIM_SPEED);
+	hModel_ = Model::Load("Models/Player.fbx");//待機時のモデル
+	hClearModel_ = Model::Load("Models/Player_ClearDance.fbx");//クリア時のモーション用モデル
+
+	transform_.position_ = DUMMY_PLAYER_POSITION;//モデルの初期座標
+	transform_.scale_ = { DUMMY_PLAYER_SCALE, DUMMY_PLAYER_SCALE, DUMMY_PLAYER_SCALE };//モデルのスケール
+	transform_.rotate_ = { 0,DUMMY_PLAYER_ROTATE,0 };//モデルの回転角度
+
+	state_ = IDLE;//初期状態は待機状態
+
+	//親がPlaySceneの時は最初非表示にしてあげる
 	if (GetParent()->GetObjectName() == "PlayScene") {
 		Invisible();
-
 	}
 
 }
 
 void DummyPlayer::Update()
 {
+	//親がPlaySceneの時はプレイヤーの座標に追従する
 	if (GetParent()->GetObjectName() == "PlayScene") {
 		transform_.position_=FindObject("Player")->GetPosition();
 	}
@@ -58,6 +56,7 @@ void DummyPlayer::Update()
 
 void DummyPlayer::Draw()
 {
+	//状態に応じてモデルを描画する
 	if (state_ == IDLE) {
 		Model::SetTransform(hModel_, transform_);
 		Model::Draw(hModel_);
@@ -70,9 +69,4 @@ void DummyPlayer::Draw()
 
 void DummyPlayer::Release()
 {
-}
-void DummyPlayer::SetState(PlayerState state)
-{
-	 state_ = state; 
-	 
 }

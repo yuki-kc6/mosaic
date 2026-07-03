@@ -14,6 +14,16 @@
 #include "Engine/Audio.h"
 #include "Engine/Camera.h"
 
+namespace
+{
+	constexpr float END_CAMERA_DISTANCE = 30.0f;
+	constexpr float END_CAMERA_HEIGHT = 10.0f;
+	constexpr float END_CAMERA_TARGET_HEIGHT = 3.0f;
+
+	constexpr float END_CAMERA_MOVE_LERP = 0.03f;
+	constexpr float END_CAMERA_TARGET_LERP = 0.01f;
+}
+
 
 //コンストラクタ
 PlayScene::PlayScene(GameObject * parent)
@@ -158,13 +168,13 @@ void PlayScene::StartEndCamera()
 	XMFLOAT3 playerPos = player->GetPosition();
 
 
-	endCameraPos.x = playerPos.x - sinf(rad) * 30.0f;
-	endCameraPos.y = playerPos.y + 10.0f;
-	endCameraPos.z = playerPos.z - cosf(rad) * 30.0f;
+	endCameraPos.x = playerPos.x - sinf(rad) * END_CAMERA_DISTANCE;
+	endCameraPos.y = playerPos.y + END_CAMERA_HEIGHT;
+	endCameraPos.z = playerPos.z - cosf(rad) * END_CAMERA_DISTANCE;
 
 
 	endCameraTarget.x = playerPos.x;
-	endCameraTarget.y = playerPos.y + 3.0f;
+	endCameraTarget.y = playerPos.y + END_CAMERA_TARGET_HEIGHT;
 	endCameraTarget.z = playerPos.z;
 }
 
@@ -184,8 +194,8 @@ void PlayScene::UpdateEndCamera()
 	XMVECTOR vCameraPos;
 	XMVECTOR vCameraTarget;
 
-	vCameraPos = XMVectorLerp(vCurrentCameraPos, vEndCameraPos, 0.03f);
-	vCameraTarget = XMVectorLerp(vCurrentCameraTarget, vEndCameraTarget, 0.01f);
+	vCameraPos = XMVectorLerp(vCurrentCameraPos, vEndCameraPos, END_CAMERA_MOVE_LERP);
+	vCameraTarget = XMVectorLerp(vCurrentCameraTarget, vEndCameraTarget, END_CAMERA_TARGET_LERP);
 
 	XMFLOAT3 cameraPos;
 	XMFLOAT3 cameraTarget;

@@ -9,9 +9,23 @@
 #include "Ground.h"
 #include "Engine/Image.h"
 
+namespace
+{
+	const XMFLOAT3 CAMERA_START_POS = { 200.0f, 10.0f, -70.0f };
+	constexpr float CAMERA_TARGET_HEIGHT = 5.0f;
+	constexpr float CAMERA_MOVE_LERP = 0.05f;
+	constexpr float CAMERA_ROTATE_LERP = 0.03f;
+	constexpr float CAMERA_LOOK_DISTANCE = 10.0f;
+	constexpr float SCENE_CHANGE_DISTANCE = 0.1f;
+	constexpr float ROTATE_SPEED = 0.5f;  // 1フレームに何度回るか
+	constexpr float TARGET_ANGLE = 90.0f; // 真後ろ
+}
+
+
 //コンストラクタ
 TitleScene::TitleScene(GameObject* parent)
 	: GameObject(parent, "TitleScene")
+	, currentAngleY(0.0f)
 {
 
 }
@@ -31,21 +45,15 @@ void TitleScene::Initialize()
 
 	isStart = false;
 
-	XMFLOAT3 pos = FindObject("DummyPlayer")->GetPosition();
+	XMFLOAT3 dummyPlayerPos = FindObject("DummyPlayer")->GetPosition();
 
-	Camera::SetPosition({ 200, 10, -70 });
+	Camera::SetPosition(CAMERA_START_POS);
 
-	Camera::SetTarget(pos);
-
+	Camera::SetTarget(dummyPlayerPos);
 	currentPos = Camera::GetPosition();
 
-	
 
-	targetPos = {
-		pos.x,
-		5,
-		pos.z
-	};
+	targetPos = {dummyPlayerPos.x,CAMERA_TARGET_HEIGHT,dummyPlayerPos.z};
 }
 
 //更新
@@ -65,19 +73,18 @@ void TitleScene::Update()
 		// 位置のLerp
 		XMVECTOR vCurrentPos = XMLoadFloat3(&currentPos);
 		XMVECTOR vTargetPos = XMLoadFloat3(&targetPos);
-		vCurrentPos = XMVectorLerp(vCurrentPos, vTargetPos, 0.05f);
+		vCurrentPos = XMVectorLerp(vCurrentPos, vTargetPos, CAMERA_MOVE_LERP);
 		XMStoreFloat3(&currentPos, vCurrentPos);
 
 		//カメラを回転させる
-		currentAngleY += (targetAngle - currentAngleY) * 0.03f;
-
+		currentAngleY += (TARGET_ANGLE - currentAngleY) * CAMERA_ROTATE_LERP;
 		XMVECTOR vDir = XMVector3TransformNormal(
 			XMVectorSet(0, 0, 1, 0),
 			XMMatrixRotationY(XMConvertToRadians(currentAngleY))
 			);
 
 		XMFLOAT3 newLook;
-		XMStoreFloat3(&newLook, vTargetPos + vDir * 10.0f);
+		XMStoreFloat3(&newLook, vTargetPos + vDir * CAMERA_LOOK_DISTANCE);
 		currentLook = newLook;
 
 		Camera::SetPosition(currentPos);
@@ -87,7 +94,7 @@ void TitleScene::Update()
 		XMVECTOR vDiff = vTargetPos - vCurrentPos;
 		float dist = XMVectorGetX(XMVector3Length(vDiff));
 
-		if (dist < 0.1f)
+		if (dist < SCENE_CHANGE_DISTANCE)
 		{
 			SceneManager* sm = (SceneManager*)FindObject("SceneManager");
 			sm->ChangeScene(SCENE_ID_PLAY);

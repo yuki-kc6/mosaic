@@ -5,6 +5,23 @@
 #include "StageManager.h"
 #include "Player.h"
 
+namespace
+{
+	constexpr float MOVE_SPEED = 0.1f;
+	constexpr float NPC_SCALE = 0.05f;
+	constexpr float NPC_BRUSH_SIZE = 0.2f;
+	constexpr int NPC_ANIM_START = 0;
+	constexpr int NPC_ANIM_END = 30;
+	constexpr float NPC_ANIM_SPEED = 0.5f;
+	constexpr float NPC_MOVE_SPEED = 0.1f;
+	constexpr float WALK_OFFSET = 0.1f;
+	constexpr float NPC_ROTATE_UP = 0.0f;
+	constexpr float NPC_ROTATE_RIGHT = 90.0f;
+	constexpr float NPC_ROTATE_DOWN = 180.0f;
+	constexpr float NPC_ROTATE_LEFT = 270.0f;
+}
+
+
 TownNPC::TownNPC(GameObject* parent)
 	: PaintObject(parent, "TownNPC")
 {
@@ -20,24 +37,26 @@ void TownNPC::Initialize()
 	hModel_ = Model::Load("Models/manekin.fbx");
 	assert(hModel_ >= 0);
 
-	transform_.scale_ = { 0.05,0.05,0.05 };
+	transform_.scale_ = { NPC_SCALE,NPC_SCALE,NPC_SCALE };
 
 	state_ = NPC_START;
 
-	SetBrushSize(0.2f);
+	SetBrushSize(NPC_BRUSH_SIZE);
 
 	transform_.position_.y = 1;
 
 	stageManager = (StageManager*)FindObject("StageManager");
+
+	gridSize = stageManager->GetGridSize();
 
 	mapW = stageManager->GetMapW();
 	mapH = stageManager->GetMapH();
 
 	direction_ = NPC_RIGHT;
 
-	Model::SetAnimFrame(hModel_, 0, 30, 0.5);
+	Model::SetAnimFrame(hModel_, NPC_ANIM_START, NPC_ANIM_END, NPC_ANIM_SPEED);
 
-	moveSpeed_ = 0.1f;
+	moveSpeed_ = MOVE_SPEED;
 }
 
 void TownNPC::Update()
@@ -108,8 +127,8 @@ void TownNPC::ResetRouteSearch()
 	else
 	{
 		//スポーンしたときのリセットなら現在の座標をスタート地点にする
-		currentX = transform_.position_.x / 29.0f;
-		currentZ = transform_.position_.z / 29.0f;
+		currentX = transform_.position_.x / gridSize;
+		currentZ = transform_.position_.z / gridSize;
 		currentZ = -currentZ;//マップの座標とワールド座標はz軸が逆なので
 	}
 	
@@ -186,9 +205,9 @@ void TownNPC::SearchRoad()
 
 			int map = stageManager->GetMap(nx, nz);
 
-			if (map == 1 || map == 2)
+			if (map == MAP_BUILDING || map == MAP_ROAD)
 			{
-				// ゴールだけは許可したいなら別処理
+				// ゴールだけは許可したい
 				if (!(nx == goalX && nz == goalZ))
 				{
 					continue;
@@ -239,35 +258,33 @@ void TownNPC::CreateRoute()
 void TownNPC::SetTargetPos(NPCDirection dir)
 {
 
-	nextTargetX = path[routeIndex_].second * 29.0f;
-	nextTargetZ = -path[routeIndex_].first * 29.0f;
-
-	const float roadOffset = 5.0f;
+	nextTargetX = path[routeIndex_].second * gridSize;
+	nextTargetZ = -path[routeIndex_].first * gridSize;
 
 	switch (dir)
 	{
 	case NPC_UP:
-		targetPos.x = nextTargetX + roadOffset;
+		targetPos.x = nextTargetX + WALK_OFFSET;
 		targetPos.z = nextTargetZ;
-		transform_.rotate_.y = 0;
+		transform_.rotate_.y = NPC_ROTATE_UP;
 		break;
 
 	case NPC_RIGHT:
 		targetPos.x = nextTargetX;
-		targetPos.z = nextTargetZ + roadOffset;
-		transform_.rotate_.y = 90;
+		targetPos.z = nextTargetZ + WALK_OFFSET;
+		transform_.rotate_.y = NPC_ROTATE_RIGHT;
 		break;
 
 	case NPC_DOWN:
-		targetPos.x = nextTargetX - roadOffset;
+		targetPos.x = nextTargetX - WALK_OFFSET;
 		targetPos.z = nextTargetZ;
-		transform_.rotate_.y = 180;
+		transform_.rotate_.y = NPC_ROTATE_DOWN;
 		break;
 
 	case NPC_LEFT:
 		targetPos.x = nextTargetX;
-		targetPos.z = nextTargetZ - roadOffset;
-		transform_.rotate_.y = 270;
+		targetPos.z = nextTargetZ - WALK_OFFSET;
+		transform_.rotate_.y = NPC_ROTATE_LEFT;
 		break;
 	}
 }

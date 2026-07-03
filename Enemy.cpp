@@ -12,7 +12,7 @@ Enemy::~Enemy()
 void Enemy::Initialize()
 {
 	TownNPC::Initialize();
-	SetSensitive(true);
+	SetSensitive(true);//敵はセンシティブオブジェクト判定をオンにする
 }
 
 void Enemy::Update()

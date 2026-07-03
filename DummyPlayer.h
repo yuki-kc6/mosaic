@@ -3,13 +3,14 @@
 
 enum PlayerState
 {
-    IDLE,
-    CLEAR
+    IDLE,//待機状態
+    CLEAR//クリア時のモーション
 };
 
 class DummyPlayer :
     public GameObject
 {
+	//プレイヤーの見た目のみを表現するダミーオブジェクト
 public:
     //コンストラクタ
     DummyPlayer(GameObject* parent);
@@ -29,10 +30,11 @@ public:
     //開放
     void Release() override;
 
-    void SetState(PlayerState state);
+    //状態を設定する
+    void SetState(PlayerState state) { state_=state; }
 
 private:
-    PlayerState state_;
-    int hClearModel_;
+	PlayerState state_;//プレイヤーの状態
+	int hClearModel_;//クリア時のモーション用モデルハンドル
 };
 
