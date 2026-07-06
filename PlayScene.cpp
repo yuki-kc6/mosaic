@@ -1,9 +1,7 @@
 #include "PlayScene.h"
 #include "Ground.h"
 #include "Player.h"
-#include "Enemy.h"
 #include "MosaicPrinter.h"
-#include "Wall.h"
 #include "Engine/SceneManager.h"
 #include "StageTimer.h"
 #include "Building.h"
@@ -13,6 +11,9 @@
 #include "NPCManager.h"
 #include "Engine/Audio.h"
 #include "Engine/Camera.h"
+#include "GrayOut.h"
+#include "ClearEffect.h"
+
 
 namespace
 {
@@ -27,13 +28,15 @@ namespace
 
 //コンストラクタ
 PlayScene::PlayScene(GameObject * parent)
-	: GameObject(parent, "PlayScene")
+	: GameObject(parent, "PlayScene"),isEndCameraStarted(false), isGameOver(false)
 {
 }
 
 //初期化
 void PlayScene::Initialize()
 {
+	
+
 	MosaicPrinter::Initialize();
 	
 	Instantiate<Ground>(this);	
@@ -46,8 +49,11 @@ void PlayScene::Initialize()
 
 	Instantiate<Player>(this);
 
+	Instantiate<GrayOut>(this);
 
 	this->PushSensitive();
+
+	
 }
 
 //更新
@@ -59,16 +65,18 @@ void PlayScene::Update()
 			StartEndCamera();
 
 		}
-
-
 		UpdateEndCamera();
+		
 	}
+
 
 }
 
 //描画
 void PlayScene::Draw()
 {
+	
+
 }
 
 //開放
@@ -99,7 +107,6 @@ bool PlayScene::CheckMissionClear()
 			isClear = false;
 			break;
 		}
-		ClearEffect();
 		isClear = true;
     }
 	return isClear;
@@ -123,19 +130,13 @@ void PlayScene::TimerOverEffect()
 	
 }
 
-void PlayScene::ClearEffect()
-{
-	DummyPlayer* dummyPlayer = (DummyPlayer*)FindObject("DummyPlayer");
-	if (dummyPlayer) {
-		dummyPlayer->SetState(CLEAR);
-	}
 
-	
-	
-}
 
 void PlayScene::StartEndCamera()
 {
+	isGameOver = CheckTimeOver();
+	isMissionClear = CheckMissionClear();
+
 	FPSCamera* fpsCamera = (FPSCamera*)FindObject("FPSCamera");
 	if (fpsCamera) {
 		fpsCamera->SetIsPlay(false);
@@ -153,7 +154,11 @@ void PlayScene::StartEndCamera()
 	DummyPlayer* dummyPlayer = (DummyPlayer*)FindObject("DummyPlayer");
 	if (dummyPlayer) {
 		dummyPlayer->Visible();
+		if (isMissionClear)
+		{
+			dummyPlayer->SetState(PlayerState::CLEAR);
 
+		}
 	}
 	StageTimer* timer = (StageTimer*)FindObject("StageTimer");
 	if (timer) {
@@ -161,6 +166,17 @@ void PlayScene::StartEndCamera()
 		timer->Invisible();
 	}
 
+	
+	GrayOut* grayOut = (GrayOut*)FindObject("GrayOut");
+	if (grayOut) {
+		grayOut->SetTimeOver(isGameOver);
+	}
+
+	
+	ClearEffect* clearEffect = (ClearEffect*)FindObject("ClearEffect");
+	if(clearEffect) {
+		clearEffect->SetEffectActive(isMissionClear);
+	}
 
 	float rotY = player->GetRotate().y;
 	float rad = XMConvertToRadians(rotY);

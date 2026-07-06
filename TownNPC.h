@@ -34,6 +34,9 @@ public:
 	void Release() override;
 	//	void OnCollision(GameObject* pTarget) override;
 private:
+
+	static int hMoedl_;
+
 	//スポーンしたときの初期化
 	void ResetRouteSearch();
 
@@ -99,8 +102,6 @@ protected:
 	bool UpdateWait();
 	bool UpdatePainted();
 
-
-	int hEnemyModel_;
 
 	//移動速度
 	float moveSpeed_;

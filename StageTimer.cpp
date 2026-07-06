@@ -6,7 +6,7 @@
 
 namespace
 {
-	constexpr float TIMER_LIMIT = 50.0f;
+	constexpr float TIMER_LIMIT = 10.0f;
 
 	constexpr float TIMER_GAUGE_WIDTH = 550.0f;
 	constexpr float TIMER_GAUGE_HEIGHT = 64.0f;

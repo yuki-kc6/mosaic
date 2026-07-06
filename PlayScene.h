@@ -29,7 +29,6 @@ private:
 	bool CheckTimeOver();
 
 	void TimerOverEffect();
-	void ClearEffect();
 
 	void StartEndCamera();
 	void UpdateEndCamera();
@@ -40,6 +39,9 @@ private:
 	XMFLOAT3 endCameraTarget;
 	
 	bool isEndCameraStarted;
+
+	bool isGameOver;
+	bool isMissionClear;
 
 	int endFrame = 0;
 	const int kTitleChangeFrame = 180; // 3•b

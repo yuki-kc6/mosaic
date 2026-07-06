@@ -112,6 +112,8 @@
     <ClCompile Include="NPCManager.cpp" />
     <ClCompile Include="TownNPC.cpp" />
     <ClCompile Include="DummyPlayer.cpp" />
+    <ClCompile Include="GrayOut.cpp" />
+    <ClCompile Include="ClearEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -200,6 +202,8 @@
     <ClInclude Include="NPCManager.h" />
     <ClInclude Include="TownNPC.h" />
     <ClInclude Include="DummyPlayer.h" />
+    <ClInclude Include="GrayOut.h" />
+    <ClInclude Include="ClearEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

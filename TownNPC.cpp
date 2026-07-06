@@ -23,7 +23,7 @@ namespace
 
 
 TownNPC::TownNPC(GameObject* parent)
-	: PaintObject(parent, "TownNPC")
+	: PaintObject(parent, "TownNPC"),  state_(NPC_START), direction_(NPC_RIGHT), isGoal(false), routeIndex_(0)
 {
 
 }
@@ -54,7 +54,7 @@ void TownNPC::Initialize()
 
 	direction_ = NPC_RIGHT;
 
-	Model::SetAnimFrame(hModel_, NPC_ANIM_START, NPC_ANIM_END, NPC_ANIM_SPEED);
+	//Model::SetAnimFrame(hModel_, NPC_ANIM_START, NPC_ANIM_END, NPC_ANIM_SPEED);
 
 	moveSpeed_ = MOVE_SPEED;
 }

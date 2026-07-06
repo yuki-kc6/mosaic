@@ -58,10 +58,12 @@ namespace MosaicPrinter
 	{
 		Direct3D::SetDepthBafferWriteEnable(true);
 		Direct3D::pContext_->RSSetViewports(1, &originVP);
-
+		Direct3D::pContext_->OMSetRenderTargets(1, &originRTV, originDSV);
 
 		if (originRTV) { originRTV->Release(); originRTV = nullptr; }
 		if (originDSV) { originDSV->Release(); originDSV = nullptr; }
+		
+
 
 		float blendFactor[4] = { D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO };
 		Direct3D::pContext_->OMSetBlendState(pBlendState[Direct3D::BLEND_DEFAULT], blendFactor, 0xffffffff);
