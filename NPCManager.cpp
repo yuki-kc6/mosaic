@@ -5,7 +5,7 @@
 
 namespace
 {
-	const int MAX_NPC = 7;
+	const int MAX_NPC = 1;
 }
 
 NPCManager::NPCManager(GameObject* parent)

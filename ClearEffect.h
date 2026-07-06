@@ -19,9 +19,12 @@ public:
 	void Release() override;
 
 	void SetEffectActive(bool active) { isEffectActive = active; }
+
+    void EffectEnd();
 private:
     int hModel_;
 	EmitterData effectData_;
+    int hEffect_;
 	bool isEffectActive;
 
 };

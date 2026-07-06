@@ -51,6 +51,8 @@ void PlayScene::Initialize()
 
 	Instantiate<GrayOut>(this);
 
+	Instantiate<ClearEffect>(this);
+
 	this->PushSensitive();
 
 	
@@ -225,6 +227,9 @@ void PlayScene::UpdateEndCamera()
 
 	if (endFrame >= kTitleChangeFrame)
 	{
+		ClearEffect* clearEffect = (ClearEffect*)FindObject("ClearEffect");
+		clearEffect->EffectEnd();
+
 		SceneManager* sm = (SceneManager*)FindObject("SceneManager");
 		sm->ChangeScene(SCENE_ID_TITLE);
 	}

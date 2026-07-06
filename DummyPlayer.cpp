@@ -35,7 +35,11 @@ void DummyPlayer::Initialize()
 	transform_.scale_ = { DUMMY_PLAYER_SCALE, DUMMY_PLAYER_SCALE, DUMMY_PLAYER_SCALE };//モデルのスケール
 	transform_.rotate_ = { 0,DUMMY_PLAYER_ROTATE,0 };//モデルの回転角度
 
+	Model::SetAnimFrame(hModel_, ANIM_START_FRAME,IDLE_ANIM_END,IDLE_ANIM_SPEED);//待機時のアニメーション開始フレーム
+	Model::SetAnimFrame(hClearModel_, ANIM_START_FRAME,CLEAR_ANIM_END,CLEAR_ANIM_SPEED);//クリア時のアニメーション開始フレーム
+
 	state_ = IDLE;//初期状態は待機状態
+
 
 	//親がPlaySceneの時は最初非表示にしてあげる
 	if (GetParent()->GetObjectName() == "PlayScene") {
