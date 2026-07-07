@@ -31,6 +31,7 @@ public:
     void Release() override;
 
     //状態を設定する
+	//引数state、IDLE:待機状態、CLEAR:クリア時のモーション
     void SetState(PlayerState state) { state_=state; }
 
 private:

@@ -26,17 +26,16 @@ public:
 	//開放
 	void Release() override;
 private:
-	int hTitlePic_;
+	int hTitlePic_;//タイトル画像のハンドル
 
-	int goPic_;
+	int goPic_;//
 
-	XMFLOAT3 currentPos;
-	XMFLOAT3 targetPos;
+	XMFLOAT3 cameraCurrentPos_;//カメラの現在位置
+	XMFLOAT3 cameraGoalPos_;//カメラの目標位置
 
-	XMFLOAT3 currentLook;
+	XMFLOAT3 cameraCurrentTarget_;//カメラが今どこを見ているか
 
+	float currentAngleY_;//カメラが今Y座標をどれだけ回転しているか
 
-	float currentAngleY;
-
-	bool isStart;
+	bool isStart_;//startしているかのフラグ
 };

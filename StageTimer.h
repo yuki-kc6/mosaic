@@ -27,23 +27,23 @@ public:
     //開放
     void Release() override;
 
-    bool GetIsTimeOver() { return isTimeOver; }
+    bool GetIsTimeOver() { return isTimeOver_; }
 
-    void SetTimer(bool start) { isStart = start; }
+    void SetTimer(bool start) { isStart_ = start; }
 private:
 
-    float limitTime;//制限時間
-    float remainTime;//残り時間
+    float limitTime_;//制限時間
+    float remainTime_;//残り時間
 
-    std::chrono::steady_clock::time_point  startTime;//開始時刻
+    std::chrono::steady_clock::time_point  startTime_;//開始時刻
 
-    float timeGauge;
+    float timeGauge_;//残り時間の割合
 
-    int hTimerPic_;
-    int hOutLinePic_;
+    int hTimerPic_;//タイマーのハンドル
+    int hOutLinePic_;//アウトラインのハンドル
 
-    bool isTimeOver;
+    bool isTimeOver_;//タイムオーバーのフラグ
 
-    bool isStart;
+    bool isStart_;//開始しているか
 
 };

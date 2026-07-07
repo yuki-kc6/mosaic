@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine/GameObject.h"
+//タイトル画像用のクラス
 class TitleHeader :public GameObject
 {
 public:
@@ -10,7 +11,7 @@ public:
     void Draw()override;
     void Release()override;
 private:
-    int hPic_;
-    int hTitle_;
+    int hPic_;//PushtoStart画像用ハンドル
+    int hTitle_;//タイトル画像用ハンドル
 };
 

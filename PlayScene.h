@@ -24,26 +24,29 @@ public:
 	//開放
 	void Release() override;	
 private:
+	//センシティブオブジェクトをまとめる
 	void PushSensitive();
+	//センシティブオブジェクトが全て塗られたか判定する
 	bool CheckMissionClear();
+	//タイムオーバーになったか判定する
 	bool CheckTimeOver();
 
-	void TimerOverEffect();
-
+	//ゲーム終了時のカメラの処理の初期化
 	void StartEndCamera();
+	//ゲーム終了時のカメラの更新
 	void UpdateEndCamera();
 
 
 
-	XMFLOAT3 endCameraPos;
-	XMFLOAT3 endCameraTarget;
+	XMFLOAT3 endCameraPos_;
+	XMFLOAT3 endCameraTarget_;
 	
-	bool isEndCameraStarted;
+	bool isEndCameraStarted_;
 
-	bool isGameOver;
-	bool isMissionClear;
+	bool isGameOver_;
+	bool isMissionClear_;
 
-	int endFrame = 0;
-	const int kTitleChangeFrame = 180; // 3秒
+	int endFrame_;
+	int titleChangeFrame_;
 	std::list<PaintObject*> sensitiveList_;
 };

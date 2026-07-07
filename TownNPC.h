@@ -8,31 +8,36 @@ class StageManager;
 //敵の状態
 enum NPCState
 {
-	NPC_START,
-	NPC_MOVE,
-	NPC_WAIT,
-	NPC_PAINTED
+	NPC_START,//スターと
+	NPC_MOVE,//動く
+	NPC_WAIT,//待機
+	NPC_PAINTED//塗られた
 };
 
 //敵の移動する方向
 enum NPCDirection
 {
-	NPC_UP,
-	NPC_RIGHT,
-	NPC_DOWN,
-	NPC_LEFT
+	NPC_UP,//CSV上で上
+	NPC_RIGHT,//右
+	NPC_DOWN,//下
+	NPC_LEFT//左
 };
 
 class TownNPC :public PaintObject
 {
 public:
+	//コンストラクタ
 	TownNPC(GameObject* parent);
+	//デストラクタ
 	~TownNPC();
+	//初期化
 	void Initialize() override;
+	//更新
 	void Update() override;
+	//描画
 	void Draw() override;
+	//解放
 	void Release() override;
-	//	void OnCollision(GameObject* pTarget) override;
 private:
 
 	static int hMoedl_;
@@ -40,6 +45,7 @@ private:
 	//スポーンしたときの初期化
 	void ResetRouteSearch();
 
+	//ルートを歩く
 	void MoveRoute();
 
 	void SearchRoad();//ゴールまでBFS探索する関数
@@ -53,46 +59,44 @@ private:
 	XMFLOAT3 targetPos;
 
 	//次の目標地点のマス座標
-	int nextTargetX;
-	int nextTargetZ;
+	float nextTargetX_;
+	float nextTargetZ_;
 
 	//ゴールのマス座標
-	int goalX;
-	int goalZ;
+	int goalX_;
+	int goalZ_;
 
 	//スタートのマス座標
-	int startX;
-	int startZ;
+	int startX_;
+	int startZ_;
 
 	//現在のマス座標
-	int currentX;
-	int currentZ;
+	int currentX_;
+	int currentZ_;
 
 	//マップの大きさ
-	int mapW;
-	int mapH;
+	int mapW_;
+	int mapH_;
 
 	StageManager* stageManager;//ステージマネージャーへのポインタ
 	
 	//移動する方向
 	NPCDirection direction_;
 
-	bool isGoal;
+	bool isGoal_;
 	//BFS探索のための方向配列
 	int dx[4] = { 1,0,-1,0 };
 	int dz[4] = { 0,1,0,-1 };
 
 
-	std::vector<std::pair<int, int>> path;//最短経路を復元するための
-	std::vector<std::vector<std::pair<int, int>>> parent;//BFS探索のための親ノードを保存する配列
-	std::queue<std::pair<int, int>> routeQueue;//BFS探索のためのキュー
-	std::vector<std::vector<bool>> visited;//BFS探索のための訪問済み配列
+	std::vector<std::pair<int, int>> path_;//最短経路を復元するための
+	std::vector<std::vector<std::pair<int, int>>> parent_;//BFS探索のための親ノードを保存する配列
+	std::queue<std::pair<int, int>> routeQueue_;//BFS探索のためのキュー
+	std::vector<std::vector<bool>> visited_;//BFS探索のための訪問済み配列
 
-	bool isSerarchStarted = false;//BFS探索が始まったかどうか
-	bool isRouteDecided = false;//ルートが決まったかどうか
-	int routeIndex_ = 0;//現在のルートのどこにいるか
-
-	bool isInitialized_ = false;
+	bool isSerarchStarted_ ;//BFS探索が始まったかどうか
+	bool isRouteDecided_ ;//ルートが決まったかどうか
+	int routeIndex_;//現在のルートのどこにいるか
 
 protected:
 	//状態
@@ -106,5 +110,5 @@ protected:
 	//移動速度
 	float moveSpeed_;
 
-	float gridSize;
+	float gridSize_;
 };

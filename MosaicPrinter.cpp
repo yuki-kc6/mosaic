@@ -10,13 +10,16 @@ namespace MosaicPrinter
 	D3D11_VIEWPORT          originVP;
 	ID3D11BlendState* pBlendStateMax = nullptr;
 
+	//シェーダーの設定
 	ID3D11InputLayout* pVertexLayout = nullptr;
 	ID3D11VertexShader* pVertexShader = nullptr;
 	ID3D11PixelShader* pPixelShader = nullptr;
 	ID3D11RasterizerState* pRasterizerState = nullptr;
 
+	//ブレンドステートの設定
 	ID3D11BlendState* pBlendState[Direct3D::BLEND_MAX];
 
+	//定数バッファの設定
 	ID3D11Buffer* pConstantBuffer_;
 
 
@@ -37,6 +40,7 @@ namespace MosaicPrinter
 
 	void MosaicPrinter::BeginPaint(RenderTexture* target)
 	{
+		//シェーダーをモザイク書き込み用に変更
 		Direct3D::SetShader(Direct3D::SHADER_MASK);
 
 		//現在の設定の保存
@@ -56,18 +60,21 @@ namespace MosaicPrinter
 
 	void MosaicPrinter::EndPaint()
 	{
+		//元のRenderTargetに戻す
 		Direct3D::SetDepthBafferWriteEnable(true);
 		Direct3D::pContext_->RSSetViewports(1, &originVP);
 		Direct3D::pContext_->OMSetRenderTargets(1, &originRTV, originDSV);
 
+		//元のRenderTargetの解放
 		if (originRTV) { originRTV->Release(); originRTV = nullptr; }
 		if (originDSV) { originDSV->Release(); originDSV = nullptr; }
 		
 
-
+		//ブレンドステートの設定
 		float blendFactor[4] = { D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO };
 		Direct3D::pContext_->OMSetBlendState(pBlendState[Direct3D::BLEND_DEFAULT], blendFactor, 0xffffffff);
 
+		//シェーダーを戻す
 		Direct3D::SetShader(Direct3D::SHADER_3D);
 
 	}
@@ -78,13 +85,15 @@ namespace MosaicPrinter
 
 	void MosaicPrinter::Paint(RenderTexture* targetRT, XMFLOAT2 hitUV,float brushSize,float paintAll)
 	{
+		
 		Direct3D::pContext_->PSSetConstantBuffers(0, 1, &pConstantBuffer_);
 
+		// 定数バッファの設定
 		MOSAIC_CONSTANT_BUFFER cb;
 		D3D11_MAPPED_SUBRESOURCE pdata;
-		cb.center = hitUV;
-		cb.radius = brushSize;
-		cb.isCompleted = paintAll;
+		cb.center = hitUV;// 中心座標を設定
+		cb.radius = brushSize;// 半径を設定
+		cb.isCompleted = paintAll;// 全部塗るかどうかを設定
 
 
 		Direct3D::pContext_->Map(pConstantBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);
@@ -108,15 +117,4 @@ namespace MosaicPrinter
 
 	}
 
-	void ShaderSet()
-	{
-		Direct3D::SetShader(Direct3D::SHADER_MASK);
-	}
-
-	void InitShader()
-	{
-		Direct3D::SetShader(Direct3D::SHADER_MASK);
-	}
-
-	
 }

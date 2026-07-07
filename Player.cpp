@@ -13,19 +13,19 @@
 
 namespace
 {
-    const XMFLOAT3 PLAYER_START_POS = { 70.0f, 1.0f, -70.0f };
-    constexpr float MOVE_SPEED = 0.5f;
-    constexpr float PLAYER_START_ROTATE = 90.0f;
-    constexpr float PLAYER_COLIDER_SIZE= 1.5f;
-    constexpr float CAMERA_SENSITIVITY = 1.5f;
-    constexpr float RAYCAST_DIST = 30.0f;
+    const XMFLOAT3 PLAYER_START_POS = { 70.0f, 1.0f, -70.0f };//プレイヤーの初期位置
+    constexpr float MOVE_SPEED = 0.5f;//プレイヤーの移動速度
+    constexpr float PLAYER_START_ROTATE = 90.0f;//プレイヤーのスタート時の回転
+    constexpr float PLAYER_COLIDER_SIZE= 1.5f;//プレイヤーのコライダーのサイズ
+    constexpr float CAMERA_SENSITIVITY = 1.5f;//プレイヤーのカメラ感度
+    constexpr float RAYCAST_DIST = 30.0f;//レイキャストの最大距離
 }
 
 
 
 //コンストラクタ
 Player::Player(GameObject* parent)
-    :GameObject(parent, "Player"), hModel_(-1),moveSpeed_(0)
+    :GameObject(parent, "Player"), moveSpeed_(0),hCrossHair_(-1),cameraSensitivity_(0),centerX_(0),centerY_(0),gunSoundID_(0),isPlay_(false)
 {
 
 }
@@ -41,23 +41,25 @@ Player::~Player()
 void Player::Initialize()
 {
     
-    isPlay = true;
+    isPlay_ = true;
 
     hCrossHair_ = Image::Load("crosshair.png");
-    centerX = Direct3D::screenWidth_ / 2;
-    centerY = Direct3D::screenHeight_ / 2;
 
+    //画面中央の座標を取得
+    centerX_ = Direct3D::screenWidth_ / 2;
+    centerY_ = Direct3D::screenHeight_ / 2;
+
+    //各種初期化
 	transform_.position_ = PLAYER_START_POS;
-  
-    moveSpeed_ =MOVE_SPEED;
-
+    moveSpeed_ = MOVE_SPEED;
 	cameraSensitivity_ = CAMERA_SENSITIVITY;
-
     transform_.rotate_ = { 0,PLAYER_START_ROTATE,0 };
     
+    //FPS視点用
     Instantiate<FPSCamera>(this);
     Instantiate<FPSgun>(this);
 
+    //コライダーの追加
     SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), PLAYER_COLIDER_SIZE);
     AddCollider(collision);
 
@@ -70,10 +72,12 @@ void Player::Update()
 {
     //カメラ
 	fpsCamera = (FPSCamera*)FindChildObject("FPSCamera");
+
+    //銃
     fpsGun= (FPSgun*)FindChildObject("FPSgun");
 
  
-    if (isPlay) {
+    if (isPlay_) {
         //プレイヤーの移動
         {
             XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
@@ -105,6 +109,7 @@ void Player::Update()
         }
 
 
+        //レイキャストを飛ばす方向の計算
         XMVECTOR ganTarget;
         XMFLOAT3 camPos = Camera::GetPosition();
         XMFLOAT3 camTar = Camera::GetTarget();
@@ -117,10 +122,10 @@ void Player::Update()
         XMStoreFloat3(&gan.dir, ganTarget);
 
 
-
+        //マウスのボタンが押されたら
         if (Input::IsMouseButton(0))
         {
-            fpsGun->BangEffect();
+            fpsGun->BangEffect();//エフェクトを出す
             if (this->RayCastToPaintObjects(gan))
             {
 
@@ -133,17 +138,18 @@ void Player::Update()
             }
         }
 
-        //this->OnGround();
+        this->OnGround();
 
-        fpsCamera->SetFpsCamera(transform_, cameraSensitivity_);
+        fpsCamera->SetFpsCamera(transform_, cameraSensitivity_);//カメラの更新
     }
 }
 
 //描画
 void Player::Draw()
 {
+    //クロスヘアの表示
     Transform ch;
-    ch.matTranslate_ = XMMatrixTranslation(centerX, centerY, 0);
+    ch.matTranslate_ = XMMatrixTranslation(centerX_, centerY_, 0);
     ch.scale_ = { 1.0,1.0,0 };
     Image::SetTransform(hCrossHair_, ch);
     Image::Draw(hCrossHair_);
@@ -192,15 +198,16 @@ bool Player::RayCastToPaintObjects(RayCastData& data)
         // GameObject の hModel_ 使用して判定 
         Model::RayCast(pObj->GetModelHandle(), &ray);
 
+        //レイがヒットしたら
         if (ray.hit)
         {
             if (dist > ray.dist)
             {
-                dist = ray.dist;
+                dist = ray.dist;//距離を入れる
                 closestObj = pObj;
-                UV = ray.uv;
-                normal = ray.normal;
-                hitPos = XMFLOAT3(
+                UV = ray.uv;//uvを入手
+                normal = ray.normal;//法線を入手
+                hitPos = XMFLOAT3(//hitposの計算
                     data.start.x + data.dir.x * ray.dist,
                     data.start.y + data.dir.y * ray.dist,
                     data.start.z + data.dir.z * ray.dist
@@ -210,9 +217,9 @@ bool Player::RayCastToPaintObjects(RayCastData& data)
 
         }
     }
+    //ポインタがnullじゃなくなったら
     if (closestObj != nullptr)
     {
-
         //オブジェクトにモザイクを塗る
        closestObj->PaintMosaic(UV,hitPos,normal);
 	   return true;
@@ -222,6 +229,7 @@ bool Player::RayCastToPaintObjects(RayCastData& data)
 
 void Player::OnCollision(GameObject* pTarget,HitResult result)
 {
+    //ビルと当たったら跳ね返す
     if (pTarget->GetObjectName() == "Building")
     {
 		XMVECTOR vPos = XMLoadFloat3(&transform_.position_);

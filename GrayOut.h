@@ -24,11 +24,12 @@ public:
     //開放
     void Release() override;
 
-	void SetTimeOver(bool state) { isTimeOver = state; }
+	//時間切れかどうかを設定
+	void SetTimeOver(bool state) { isTimeOver_ = state; }
 
 private:
-	int hGrayPic_;
-	int grayAlpha;
-    bool isTimeOver;
+	int hGrayPic_;//グレーアウト用の画像のハンドル
+	int grayAlpha_;//グレーアウト用の画像のアルファ値
+	bool isTimeOver_;//時間切れかどうかのフラグ
 
 };

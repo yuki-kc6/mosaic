@@ -23,12 +23,13 @@ public:
     //開放
     void Release() override;
 
+	//銃を撃ったときのエフェクトを出す
     void BangEffect();
 
 private:
-    XMFLOAT3 GetMazzlePosition();
-    int hmit;
-    int hModel_;
-    EmitterData effectData_;
+	XMFLOAT3 GetMazzlePosition();//銃口の位置を取得する関数
+	int hEffect_;//エフェクトのハンドル
+	int hModel_;//モデルのハンドル
+	EmitterData effectData_;//エフェクトのデータ
 }; 
 

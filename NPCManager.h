@@ -26,12 +26,12 @@ public:
     //開放
     void Release() override;
 private:
+	//NPCを生成する関数
     void SpawnNPC();
-    std::vector<std::vector<int>> enemyList;
+	StageManager* stageManager;//ステージマネージャーのポインタ
 
-	StageManager* stageManager;
-    bool isSpawned;
-    float gridSize;
-    std::vector<std::pair<int, int>> spawnList;
+
+	float gridSize;//ステージのグリッドサイズ
+	std::vector<std::pair<int, int>> spawnList;//NPCを生成する座標のリスト
 
 };

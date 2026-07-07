@@ -9,109 +9,117 @@ namespace
 	constexpr int TEXTURE_SIZE = 512;//モザイクのテクスチャサイズ
 	constexpr int DEFAULT_BRUSH_SIZE = 512;//デフォルトのブラシの大きさ
 
-	constexpr float RENDER_NEAR = 0.1f;
-	constexpr float RENDER_FAR = 1000.0f;
-	constexpr int RENDER_SAMPLE_COUNT = 1;
+	constexpr float RENDER_NEAR = 0.1f;//レンダリングの近距離
+	constexpr float RENDER_FAR = 1000.0f;//レンダリングの遠距離
+	constexpr int RENDER_SAMPLE_COUNT = 1;//レンダリングのサンプル数
 
-	constexpr int GRID_DIVISION = 4;
-	constexpr float COMPLETE_SCORE = 0.7f;
+	constexpr int GRID_DIVISION = 4;//モザイクの分割数
+	constexpr float COMPLETE_SCORE = 0.7f;//塗り終わったと判定するスコア
 
-	constexpr float PAINT_EFFECT_DIRECTION_RANDOM = 60.0f;
-	constexpr float PAINT_EFFECT_SPEED = 0.5f;
-	constexpr float PAINT_EFFECT_SPEED_RANDOM = 0.5f;
-	constexpr float PAINT_EFFECT_ACCEL = 0.9f;
-	constexpr float PAINT_EFFECT_GRAVITY = 0.05f;
-
-	constexpr float PAINT_EFFECT_SIZE = 1.0f;
-	constexpr float PAINT_EFFECT_SIZE_RANDOM = 0.5f;
-	constexpr float PAINT_EFFECT_SCALE = 0.95f;
-
-	constexpr float PAINT_EFFECT_LIFETIME = 20.0f;
-	constexpr int PAINT_EFFECT_NUMBER = 10;
-	constexpr int PAINT_EFFECT_DELAY = 0;
-	constexpr XMFLOAT4 PAINT_EFFECT_DELTA_COLOR = { 0,0,0,-0.05f };
+	constexpr float PAINT_EFFECT_DIRECTION_RANDOM = 60.0f;// 法線方向に飛ぶが、少し散らばるようにする
+	constexpr float PAINT_EFFECT_SPEED = 0.5f;// 遅めに
+	constexpr float PAINT_EFFECT_SPEED_RANDOM = 0.5f;// 速度をバラバラに
+	constexpr float PAINT_EFFECT_ACCEL = 0.9f;// 徐々に減速
+	constexpr float PAINT_EFFECT_GRAVITY = 0.05f;// 重力で落ちる
+	constexpr float PAINT_EFFECT_SIZE = 1.0f;//そのまま
+	constexpr float PAINT_EFFECT_SIZE_RANDOM = 0.5f;// 少しバラバラに
+	constexpr float PAINT_EFFECT_SCALE = 0.95f;// 徐々に小さく
+	constexpr float PAINT_EFFECT_LIFETIME = 20.0f;// 20フレームで消える
+	constexpr int PAINT_EFFECT_NUMBER = 10;// 一度に10粒
+	constexpr int PAINT_EFFECT_DELAY = 0;// 1回だけ発生
+	constexpr XMFLOAT4 PAINT_EFFECT_DELTA_COLOR = { 0,0,0,-0.05f };// 徐々に透明に
 }
 
 
-std::list<PaintObject*> PaintObject::paintObjectList;
+std::list<PaintObject*> PaintObject::paintObjectList;//静的変数の初期化
 
 PaintObject::PaintObject()
-	:GameObject(), mosaicRT(nullptr)
+	:GameObject(), mosaicRT(nullptr), textureSize_(TEXTURE_SIZE), paintRate_(0), paintedCount_(0), gridSize_(0), paintAll_(0),
+	isAllPainted_(false), isSensitive_(false), brushSize_(DEFAULT_BRUSH_SIZE)
 {
 
 } 
 
 PaintObject::PaintObject(GameObject* parent)
-	:GameObject(parent), mosaicRT(nullptr)
+	:GameObject(parent), mosaicRT(nullptr), textureSize_(TEXTURE_SIZE), paintRate_(0), paintedCount_(0), gridSize_(0), paintAll_(0),
+	isAllPainted_(false), isSensitive_(false), brushSize_(DEFAULT_BRUSH_SIZE)
 {
 	
 }
 
 PaintObject::PaintObject(GameObject* parent, const std::string& name)
-	:GameObject(parent,name), mosaicRT(nullptr),textureSize(TEXTURE_SIZE),
-	isAllPainted(false),score_(0),
-	paintedCount(0),isSensitive(false),isOK(false),brushSize(DEFAULT_BRUSH_SIZE)
+	:GameObject(parent, name), mosaicRT(nullptr), textureSize_(TEXTURE_SIZE), paintRate_(0), paintedCount_(0), gridSize_(0), paintAll_(0),
+	isAllPainted_(false),isSensitive_(false),brushSize_(DEFAULT_BRUSH_SIZE)
 {
-	paintObjectList.push_back(this);
-	mosaicRT = new RenderTexture();
-	mosaicRT->Initialize(Direct3D::pDevice_, textureSize, textureSize, RENDER_NEAR, RENDER_FAR, RENDER_SAMPLE_COUNT);
-	mosaicRT->ClearRenderTarget(Direct3D::pContext_, 0.0, 0.0, 0.0, 1);
+	paintObjectList.push_back(this);//塗れるオブジェクトのリストに追加
+	mosaicRT = new RenderTexture();//RenderTextureの作成
+	mosaicRT->Initialize(Direct3D::pDevice_, textureSize_, textureSize_, RENDER_NEAR, RENDER_FAR, RENDER_SAMPLE_COUNT);//RenderTextureの初期化
+	mosaicRT->ClearRenderTarget(Direct3D::pContext_, 0.0, 0.0, 0.0, 1);//RenderTextureを黒で初期化
 
-	gridSize = textureSize / GRID_DIVISION;
+	gridSize_ = textureSize_ / GRID_DIVISION;//塗られた割合の計算のためのグリッドのサイズを計算
 
-	isPaint = std::vector<std::vector<bool>>(gridSize, std::vector<bool>(gridSize, false));
+	isPaint_ = std::vector<std::vector<bool>>(gridSize_, std::vector<bool>(gridSize_, false));//グリッドを用いてisPaintの初期化
 }
 
 PaintObject::~PaintObject()
 {
-	paintObjectList.remove(this);
+	paintObjectList.remove(this);//塗れるオブジェクトのリストから削除
 
-	SAFE_DELETE(mosaicRT);
+	SAFE_DELETE(mosaicRT);//RenderTextureの解放
 }
 
 void PaintObject::PaintMosaic(XMFLOAT2 uv,XMFLOAT3 hitPos,XMFLOAT3 normal)
 {
-	this->CalculateScore(uv, brushSize);
-	score_= (float)paintedCount / (float)((gridSize * gridSize));
+	this->CountPaintedPixels(uv, brushSize_);//塗られたためカウントの更新
+	paintRate_ = (float)paintedCount_ / (float)((gridSize_ * gridSize_));//塗られた割合を計算
 
-	if (score_> COMPLETE_SCORE)
+	// 一定以上塗られたら全て塗った状態にする
+	if (paintRate_> COMPLETE_SCORE)
 	{
-		paintAll = 1.0;
-		isAllPainted = true;
-		isOK = true;
+		paintAll_ = 1.0;
+		isAllPainted_ = true;
 	}
-	PaintEffect(hitPos,normal);
+	
+	PaintEffect(hitPos, normal);//塗った場所にエフェクトを発生させる
+	// モザイクをシェーダーで塗る
 	MosaicPrinter::BeginPaint(mosaicRT);
-	MosaicPrinter::Paint(mosaicRT, uv, brushSize, paintAll);
+	MosaicPrinter::Paint(mosaicRT, uv, brushSize_, paintAll_);
 	MosaicPrinter::EndPaint();
 	
 }
 
-void PaintObject::CalculateScore(XMFLOAT2 uv,float brush)
+void PaintObject::CountPaintedPixels(XMFLOAT2 uv,float brush)
 {
-	int centerX = (int)(uv.x * (gridSize-1));
-	int centerY = (int)((1.0f - uv.y) * (gridSize - 1));
+	// UV座標をグリッド座標に変換
+	int centerX = (int)(uv.x * (gridSize_-1));
+	int centerY = (int)((1.0f - uv.y) * (gridSize_ - 1));
 
-	int brushPixel = (int)(brush * gridSize);
+	// ブラシの半径をグリッド座標に変換
+	int brushPixel = (int)(brush * gridSize_);
 
+	// ブラシの半径の二乗を計算（円形の範囲を判定するため）
 	int radiusSq = brushPixel * brushPixel;
 
+	// ブラシの範囲内のグリッドを走査
 	for(int x = -brushPixel; x <= brushPixel; x++)
 	{
 		for (int y = -brushPixel; y <= brushPixel; y++)
 		{
+			// 円形のブラシ範囲外は無視
 			if (x * x + y * y > radiusSq) continue;
 
 			int px = centerX + x;
 			int py = centerY + y;
 
-			if (px<0 || px>gridSize-1)continue;
-			if (py<0 || py>gridSize-1)continue;
+			// グリッドの範囲外は無視
+			if (px<0 || px>gridSize_-1)continue;
+			if (py<0 || py>gridSize_-1)continue;
 			
-			if (!isPaint[py][px])
+			//初めて塗られたなら記録
+			if (!isPaint_[py][px])
 			{
-				isPaint[py][px] = true;
-				paintedCount++;
+				isPaint_[py][px] = true;
+				paintedCount_++;
 			}
 		}
 	}
@@ -119,6 +127,7 @@ void PaintObject::CalculateScore(XMFLOAT2 uv,float brush)
 
 void PaintObject::PaintEffect(XMFLOAT3 hitPos,XMFLOAT3 normal)
 {
+	// エフェクトのデータを設定
 	EmitterData data;
 	data.textureFileName = "cloudA.png";
 	data.position = hitPos;

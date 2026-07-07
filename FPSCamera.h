@@ -33,24 +33,21 @@ public:
 	void SetFpsCamera(Transform &transform, float sensitivity);
 
 	//FPS視点のオンオフ
-	void SetIsPlay(bool state) { isPlay = state; }
+	void SetIsPlay(bool state) { isPlay_ = state; }
 
 	//マウスの移動量を取得
-	const int GetMouseDeltaX()const { return DeltaX; }
-	const int GetMouseDeltaY()const { return DeltaY; }
+	const int GetMouseDeltaX()const { return deltaX_; }
+	const int GetMouseDeltaY()const { return deltaY_; }
+private:
+	//マウスの移動量
+	int deltaX_;
+	int deltaY_;
 
-	XMFLOAT3 currentMousePos;
+	//画面中央の座標
+	int centerX_;
+	int centerY_;
 
-	//
-	int DeltaX;
-	int DeltaY;
-
-	//
-	int centerX;
-	int centerY;
-
-	//
-	bool isPlay;
-	bool isCursorHidden = false;
+	bool isPlay_;//今はプレイ中かどうか
+	bool isCursorHidden_;//カーソルが非表示かどうか
 };
 

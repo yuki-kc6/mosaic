@@ -8,9 +8,11 @@ class PaintObject :
 	public GameObject
 {
 public:
+	//コンストラクタ
 	PaintObject();
 	PaintObject(GameObject* parent);
 	PaintObject(GameObject* parent, const std::string& name);
+	//デストラクタ
 	 ~PaintObject();
 	//GameObjectからそのまま引き継ぐ
 	virtual void Initialize(void)override = 0;
@@ -19,42 +21,56 @@ public:
 	virtual void Release(void)override = 0;
 
 	//モザイクを塗るための関数
+	//uv:塗る場所のUV座標
+	//hitPos:塗る場所のワールド座標
+	//normal:塗る場所の法線ベクトル
 	void PaintMosaic(XMFLOAT2 uv, XMFLOAT3 hitPos, XMFLOAT3 normal);
 
-	void CalculateScore(XMFLOAT2 uv, float brushSize);
+	//オブジェクトにどれだけ塗られたかを計算するための関数
+	//uv:塗る場所のUV座標
+	//ブラシの半径
+	void CountPaintedPixels(XMFLOAT2 uv, float brushSize);
 
-	float getScore() { return score_; }
+	//を取得するための関数
+	float getScore() { return paintRate_; }
 
+	//モザイクのRenderTextureを取得するための関数
 	virtual RenderTexture* GetMosaicRT() { return mosaicRT; }
 
+	//塗れるオブジェクトのリストを取得するための関数
 	static const std::list<PaintObject*>& GetPaintObjectList() { return paintObjectList; }
 	
-	bool IsSensitive() { return isSensitive; }
-	void SetSensitive(bool sen) { isSensitive = sen; }
+	//このオブジェクトが現在センシティブかどうかを取得するための関数
+	bool IsSensitive() { return isSensitive_; }
 
-	bool IsClear() { return isOK; }
+	//このオブジェクトがセンシティブかどうかを設定するための関数
+	//size:センシティブかどうか　true:センシティブ　false:センシティブでない
+	void SetSensitive(bool sen) { isSensitive_ = sen; }
 
-	bool IsAllPainted() { return isAllPainted; }
+	//このオブジェクトがすべて塗られたかどうかを取得するためお関数
+	bool IsAllPainted() { return isAllPainted_; }
 
-	void SetBrushSize(float size) { brushSize = size; }
+	//オブジェクトのブラシサイズを設定するための関数
+	//size:ブラシの半径
+	void SetBrushSize(float size) { brushSize_= size; }
 
 private:
 	void PaintEffect(XMFLOAT3 hitPos,XMFLOAT3 normal);
 	RenderTexture* mosaicRT;//オブジェクトごとにRenderTextureを作成
-	static std::list<PaintObject*> paintObjectList;
-	int textureSize;
-	float score_;
-	int paintedCount;
-	int gridSize;
-	std::vector<std::vector<bool>> isPaint;
-	float paintAll;//シェーダーに塗られたら1.0fを渡すための変数
+	static std::list<PaintObject*> paintObjectList;//塗れるオブジェクトのリスト
+	int textureSize_;//RenderTextureのサイズ
+	float paintRate_;//塗られた割合
+	int paintedCount_;//どれだけ塗られたかのカウント
+	int gridSize_;//塗られた割合の計算のためのグリッドのサイズ
 
-	bool isAllPainted;//全て塗られたかどうか
+	std::vector<std::vector<bool>> isPaint_;//塗り判定用グリッドの状態を管理する配列.ピクセルだと大きくなるのでグリッドサイズで分割
 
-	bool isSensitive;
-	bool isOK;
+	float paintAll_;//シェーダーに一定以上塗られたら1.0fを渡し全て塗らせるためfloatで状態を保持する
 
-	float brushSize;
+	bool isAllPainted_;//全て塗られたかどうか
+
+	bool isSensitive_;//このオブジェクトがセンシティブかどうか
+	float brushSize_;//ブラシの半径
 
 
 	

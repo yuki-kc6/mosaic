@@ -11,7 +11,7 @@ namespace
 }
 
 StageManager::StageManager(GameObject* parent)
-	:GameObject(parent, "StageManager")
+	:GameObject(parent, "StageManager"),gridSize_(0)
 {
 
 }
@@ -23,10 +23,10 @@ StageManager::~StageManager()
 
 void StageManager::Initialize()
 {
-	gridSize = GRID_SIZE;
+	gridSize_ = GRID_SIZE;
 	CsvReader csv;
 	csv.Load("StageData.csv");
-	maps.clear();
+	maps_.clear();
 
 	int w = csv.GetWidth();
 	int h = csv.GetHeight();
@@ -42,7 +42,7 @@ void StageManager::Initialize()
 
 		}
 
-		maps.push_back(mapsLine);
+		maps_.push_back(mapsLine);
 	}
 	BuildStage();
 }
@@ -62,37 +62,39 @@ void StageManager::Release()
 
 int StageManager::GetMap(int x, int z)
 {
-	if (z < 0 || z >= maps.size())
+	//マップが正しく入っているなら返す
+
+	if (z < 0 || z >= maps_.size())
 		return -1;
 
-	if (x < 0 || x >= maps[z].size())
+	if (x < 0 || x >= maps_[z].size())
 		return -1;
 
-	return maps[z][x];
+	return maps_[z][x];
 }
 
 void StageManager::BuildStage()
 {
-	for (int z = 0; z < maps.size(); z++)
+	for (int z = 0; z < maps_.size(); z++)
 	{
-		for (int x = 0; x < maps[z].size(); x++)
+		for (int x = 0; x < maps_[z].size(); x++)
 		{
-			if (maps[z][x] == MAP_SIDEWALK)
+			if (maps_[z][x] == MAP_SIDEWALK)
 			{
 				//歩道、特に模様などなし
 			}
-			if (maps[z][x] == MAP_BUILDING)
+			if (maps_[z][x] == MAP_BUILDING)
 			{
 				//ビル
-				Instantiate<Building>(this)->SetPosition(x * gridSize, 0.0f, -z * gridSize);
-				buildingList.push_back({ z,x });
+				Instantiate<Building>(this)->SetPosition(x * gridSize_, 0.0f, -z * gridSize_);
+				buildingList_.push_back({ z,x });
 
 			}
-			if (maps[z][x] == MAP_ROAD)
+			if (maps_[z][x] == MAP_ROAD)
 			{
 				//道路
 			}
-			if (maps[z][x] == MAP_CROSSWALK)
+			if (maps_[z][x] == MAP_CROSSWALK)
 			{
 				//横断歩道
 			}

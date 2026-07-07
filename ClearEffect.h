@@ -17,15 +17,13 @@ public:
     void Draw() override;
     //開放
 	void Release() override;
-
+    //エフェクトの有効化・無効化
 	void SetEffectActive(bool active) { isEffectActive = active; }
-
-    void EffectEnd();
+    //エフェクトの終了
+	void EffectEnd();
 private:
-    int hModel_;
-	EmitterData effectData_;
-    int hEffect_;
-	bool isEffectActive;
+	EmitterData effectData_;//エフェクトのデータ
+	int hEffect_;//エフェクトのハンドル
+	bool isEffectActive;//エフェクトが有効かどうか
 
 };
-

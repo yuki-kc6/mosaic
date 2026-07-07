@@ -5,8 +5,8 @@
 
 namespace
 {
-    constexpr float GROUND_SCALE = 10.0f;
-    constexpr float BRUSH_SIZE = 0.001f;
+	constexpr float GROUND_SCALE = 10.0f;//地面の拡大率
+	constexpr float BRUSH_SIZE = 0.001f;//ブラシの大きさ
  
 }
 
@@ -26,7 +26,7 @@ void Ground::Initialize()
 {
     hModel_ = Model::Load("Models/map1.fbx");
     assert(hModel_ >= 0);
-    SetBrushSize(BRUSH_SIZE);
+	SetBrushSize(BRUSH_SIZE);//ブラシの大きさを設定
 	transform_.scale_ = { GROUND_SCALE, GROUND_SCALE, GROUND_SCALE };
 }
 
