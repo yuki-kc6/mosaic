@@ -24,6 +24,5 @@ public:
     //開放
     void Release() override;
 private:
-
 };
 

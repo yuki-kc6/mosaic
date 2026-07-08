@@ -5,7 +5,7 @@
 
 namespace
 {
-	const int MAX_NPC = 1;//最大生成数
+	const int MAX_NPC = 5;//最大生成数
 }
 
 NPCManager::NPCManager(GameObject* parent)

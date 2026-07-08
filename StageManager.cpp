@@ -8,6 +8,7 @@
 namespace
 {
 	const float GRID_SIZE = 29.0f;
+	constexpr float BUILDING_Y = -2.0f;//ビルのY座標
 }
 
 StageManager::StageManager(GameObject* parent)
@@ -23,6 +24,8 @@ StageManager::~StageManager()
 
 void StageManager::Initialize()
 {
+	
+
 	gridSize_ = GRID_SIZE;
 	CsvReader csv;
 	csv.Load("StageData.csv");
@@ -45,6 +48,8 @@ void StageManager::Initialize()
 		maps_.push_back(mapsLine);
 	}
 	BuildStage();
+
+	
 }
 
 void StageManager::Update()
@@ -86,7 +91,7 @@ void StageManager::BuildStage()
 			if (maps_[z][x] == MAP_BUILDING)
 			{
 				//ビル
-				Instantiate<Building>(this)->SetPosition(x * gridSize_, 0.0f, -z * gridSize_);
+				Instantiate<Building>(this)->SetPosition(x * gridSize_, BUILDING_Y, -z * gridSize_);
 				buildingList_.push_back({ z,x });
 
 			}

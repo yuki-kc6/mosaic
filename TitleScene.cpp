@@ -32,6 +32,8 @@ TitleScene::TitleScene(GameObject* parent)
 //初期化
 void TitleScene::Initialize()
 {
+	
+
 	//背景用のオブジェクトを呼び出す
 	Instantiate<Ground>(this);
 	Instantiate<StageManager>(this);
@@ -57,17 +59,18 @@ void TitleScene::Initialize()
 //更新
 void TitleScene::Update()
 {
-	//最初にスペースが押されたら
-	if (Input::IsKeyDown(DIK_SPACE))
+	if (!isStart_) 
 	{
-		//タイトルを消す
-		if(isStart_=false)
-			FindObject("TitleHeader")->KillMe();
-		isStart_ = true;
-		
-	}
 
-	if (isStart_)
+		//最初にスペースが押されたら
+		if (Input::IsKeyDown(DIK_SPACE))
+		{
+
+			FindObject("TitleHeader")->Invisible();
+			isStart_ = true;
+		}
+	}
+	else
 	{
 		//カメラ位置をcurrentからgoalへ補完する
 		XMVECTOR vCurrentPos = XMLoadFloat3(&cameraCurrentPos_);
@@ -82,7 +85,7 @@ void TitleScene::Update()
 		XMVECTOR vDir = XMVector3TransformNormal(
 			XMVectorSet(0, 0, 1, 0),
 			XMMatrixRotationY(XMConvertToRadians(currentAngleY_))
-			);
+		);
 
 		// 上のベクトルからカメラのターゲットを更新する
 		XMFLOAT3 newLook;
@@ -103,7 +106,6 @@ void TitleScene::Update()
 			sm->ChangeScene(SCENE_ID_PLAY);
 		}
 	}
-
 }
 
 //描画

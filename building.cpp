@@ -8,7 +8,6 @@
 namespace
 {
     constexpr float BUILDING_SCALE = 5.0f;//ビルの大きさ
-    constexpr float BUILDING_Y = -3.0f;//ビルのY座標
     constexpr float BRUSH_SIZE = 0.003f;//ビルに塗るブラシの大きさ
 	constexpr float COLLIDER_SIZE = 25.0f;//ビルの当たり判定の大きさ
 }
@@ -38,7 +37,6 @@ void Building::Initialize()
 
     SetBrushSize(BRUSH_SIZE);//ブラシサイズの設定
 	transform_.scale_ = { BUILDING_SCALE, BUILDING_SCALE, BUILDING_SCALE };//ビルの大きさを設定
-	transform_.position_.y = BUILDING_Y;//ビルのY座標を設定
 }
 
 //更新

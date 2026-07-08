@@ -27,9 +27,6 @@ public:
 	void Release() override;
 private:
 	int hTitlePic_;//タイトル画像のハンドル
-
-	int goPic_;//
-
 	XMFLOAT3 cameraCurrentPos_;//カメラの現在位置
 	XMFLOAT3 cameraGoalPos_;//カメラの目標位置
 
