@@ -38,15 +38,15 @@ private:
 
 
 
-	XMFLOAT3 endCameraPos_;
-	XMFLOAT3 endCameraTarget_;
+	XMFLOAT3 endCameraPos_;//終了時のカメラの位置座標
+	XMFLOAT3 endCameraTarget_;//終了時のカメラのターゲット座標
 	
-	bool isEndCameraStarted_;
+	bool isEndCameraStarted_;//終了カメラが始まったかのフラグ
 
-	bool isGameOver_;
-	bool isMissionClear_;
+	bool isGameOver_;//ゲームオーバーのなったかのフラグ
+	bool isMissionClear_;//クリアしたかのフラグ
 
-	int endFrame_;
-	int titleChangeFrame_;
-	std::list<PaintObject*> sensitiveList_;
+	int endFrame_;//終了までのフレーム
+	int titleChangeFrame_;//タイトルにいくフレーム
+	std::list<PaintObject*> sensitiveList_;//センシティブなオブジェクトを入れるリスト
 };

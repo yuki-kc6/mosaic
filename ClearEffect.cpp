@@ -8,8 +8,8 @@ namespace
 	constexpr float EFFECT_SPEED = 1.0f;//エフェクトの速度
 	constexpr float EFFECT_ACCEL = 1.0f;//エフェクトの加速度
 	constexpr float EFFECT_LIFETIME = 10.0f;//エフェクトの寿命
-	constexpr float EFFECT_NUMBER = 10.0f;//エフェクトの数
-	constexpr float EFFECT_DELAY = 30.0f;//エフェクトの遅延
+	constexpr float EFFECT_NUMBER = 30.0f;//エフェクトの数
+	constexpr float EFFECT_DELAY = 1.0f;//エフェクトの遅延
 	constexpr float EFFECT_SIZE = 2.0f;//エフェクトのサイズ
 }
 
@@ -20,7 +20,7 @@ ClearEffect::ClearEffect(GameObject* parent)
 
 ClearEffect::~ClearEffect()
 {
-    EffectEnd();
+    
 }
 
 void ClearEffect::Initialize()
@@ -56,12 +56,10 @@ void ClearEffect::Update()
         XMStoreFloat3(&effectPos, XMLoadFloat3(&camPos) + vForward * 5.0f);
         effectData_.position = effectPos;
 
-        if(hEffect_ != -1)
-		{
-			VFX::End(hEffect_);
-		}
 		// エフェクトを開始
-        hEffect_ = VFX::Start(effectData_);
+        hEffect_ = VFX::Start(effectData_); 
+
+        isEffectActive = false;
     }
 }
 
@@ -73,7 +71,7 @@ void ClearEffect::Draw()
 
 void ClearEffect::Release()
 {
-
+ 
 }
 
 void ClearEffect::EffectEnd()

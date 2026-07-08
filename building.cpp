@@ -8,7 +8,7 @@
 namespace
 {
     constexpr float BUILDING_SCALE = 5.0f;//ビルの大きさ
-    constexpr float BUILDING_Y = -1.0f;//ビルのY座標
+    constexpr float BUILDING_Y = -3.0f;//ビルのY座標
     constexpr float BRUSH_SIZE = 0.003f;//ビルに塗るブラシの大きさ
 	constexpr float COLLIDER_SIZE = 25.0f;//ビルの当たり判定の大きさ
 }

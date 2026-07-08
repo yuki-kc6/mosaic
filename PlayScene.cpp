@@ -65,7 +65,7 @@ void PlayScene::Update()
 		//まだcameraがスタートしていないなら初期化
 		if (!isEndCameraStarted_) {
 			StartEndCamera();
-
+			isEndCameraStarted_ = true;
 		}
 		UpdateEndCamera();//カメラの更新
 		
