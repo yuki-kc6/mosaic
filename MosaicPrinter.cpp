@@ -22,7 +22,7 @@ namespace MosaicPrinter
 	//定数バッファの設定
 	ID3D11Buffer* pConstantBuffer_;
 
-
+	 
 	void MosaicPrinter::Initialize()
 	{
 		//必要な設定項目
@@ -81,6 +81,11 @@ namespace MosaicPrinter
 
 	void MosaicPrinter::Release()
 	{
+		if (pConstantBuffer_)
+		{
+			pConstantBuffer_->Release();
+			pConstantBuffer_ = nullptr;
+		}
 	}
 
 	void MosaicPrinter::Paint(RenderTexture* targetRT, XMFLOAT2 hitUV,float brushSize,float paintAll)

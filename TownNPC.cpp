@@ -4,19 +4,21 @@
 #include "Engine/CsvReader.h"
 #include "StageManager.h"
 #include "Player.h"
+
 namespace
 {
-	constexpr float MOVE_SPEED = 0.1f;//NPCの移動速度
-	constexpr float NPC_SCALE = 0.05f;//NPCの大きさ
-	constexpr float NPC_BRUSH_SIZE = 0.2f;//NPCのブラシサイズ
-	constexpr int NPC_ANIM_START = 0;//NPCのアニメーション開始フレーム
-	constexpr int NPC_ANIM_END = 30;//NPCのアニメーション終了フレーム
-	constexpr float NPC_ANIM_SPEED = 0.5f;//NPCのアニメ速度
-	constexpr float WALK_OFFSET = 0.1f;//歩く場所をずらすためのオフセット
-	constexpr float NPC_ROTATE_UP = 0.0f;//STATE:UPの時の回転
-	constexpr float NPC_ROTATE_RIGHT = 90.0f;//STATE:RIGHTの時の回転
-	constexpr float NPC_ROTATE_DOWN = 180.0f;//STATE:DOWNの時の回転
-	constexpr float NPC_ROTATE_LEFT = 270.0f;//STATE:LEFTの時の回転
+	constexpr float MOVE_SPEED			= 0.1f;//NPCの移動速度
+	constexpr float NPC_SCALE			= 0.05f;//NPCの大きさ
+	constexpr float NPC_BRUSH_SIZE		= 0.2f;//NPCのブラシサイズ
+	constexpr int NPC_ANIM_START		= 0;//NPCのアニメーション開始フレーム
+	constexpr int NPC_ANIM_END			= 30;//NPCのアニメーション終了フレーム
+	constexpr float NPC_ANIM_SPEED		= 0.5f;//NPCのアニメ速度
+	constexpr float NPC_Y				= -1.0;//NPCのY座標
+	constexpr float WALK_OFFSET			= 0.1f;//歩く場所をずらすためのオフセット
+	constexpr float NPC_ROTATE_UP		= 0.0f;//STATE:UPの時の回転
+	constexpr float NPC_ROTATE_RIGHT	= 90.0f;//STATE:RIGHTの時の回転
+	constexpr float NPC_ROTATE_DOWN		= 180.0f;//STATE:DOWNの時の回転
+	constexpr float NPC_ROTATE_LEFT		= 270.0f;//STATE:LEFTの時の回転
 }
 
 
@@ -43,7 +45,9 @@ void TownNPC::Initialize()
 
 	SetBrushSize(NPC_BRUSH_SIZE);//ブラシサイズの設定
 
-	transform_.position_.y = 1;
+	transform_.position_.y = NPC_Y;
+
+	targetPos.y = NPC_Y;
 
 	stageManager = (StageManager*)FindObject("StageManager");
 

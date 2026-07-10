@@ -138,7 +138,7 @@ bool PlayScene::CheckTimeOver()
 void PlayScene::StartEndCamera()
 {
 	//BGM‚ðŽ~‚ß‚é
-	Audio::Stop(hPlayBGM_);
+	//Audio::Stop(hPlayBGM_);
 
 	//Œ‹‰Ê‚ð“ü‚ê‚é
 	isMissionClear_ = CheckMissionClear();

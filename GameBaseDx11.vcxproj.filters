@@ -115,6 +115,7 @@
     <ClCompile Include="GrayOut.cpp" />
     <ClCompile Include="ClearEffect.cpp" />
     <ClCompile Include="Controller.cpp" />
+    <ClCompile Include="Transition.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -206,6 +207,7 @@
     <ClInclude Include="GrayOut.h" />
     <ClInclude Include="ClearEffect.h" />
     <ClInclude Include="Controller.h" />
+    <ClInclude Include="Transition.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">
@@ -221,6 +223,9 @@
       <Filter>02Shader</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\Simple3D.hlsl">
+      <Filter>02Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Transition.hlsl">
       <Filter>02Shader</Filter>
     </FxCompile>
   </ItemGroup>

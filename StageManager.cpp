@@ -8,7 +8,7 @@
 namespace
 {
 	const float GRID_SIZE = 29.0f;
-	constexpr float BUILDING_Y = -2.0f;//ビルのY座標
+	constexpr float BUILDING_Y = -1.0f;//ビルのY座標
 }
 
 StageManager::StageManager(GameObject* parent)

@@ -5,7 +5,8 @@
 
 namespace
 {
-	const int MAX_NPC = 5;//最大生成数
+	const int MAX_NPC = 3;//最大生成数
+	constexpr float NPC_Y = -1.0;//NPCのY座標
 }
 
 NPCManager::NPCManager(GameObject* parent)
@@ -55,7 +56,7 @@ void NPCManager::SpawnNPC()
         int x = spawnList[index].second;
         int z = spawnList[index].first;
 
-        Instantiate<Enemy>(this)->SetPosition(x * gridSize,0.0f,-z * gridSize);//NPC生成
+        Instantiate<Enemy>(this)->SetPosition(x * gridSize,NPC_Y,-z * gridSize);//NPC生成
 
         // 同じ場所に生成されないよう削除
         spawnList.erase(spawnList.begin() + index);
