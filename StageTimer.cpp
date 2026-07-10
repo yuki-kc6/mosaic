@@ -6,7 +6,7 @@
 
 namespace
 {
-	constexpr float TIMER_LIMIT = 100.0f;         // 制限時間（秒）
+	constexpr float TIMER_LIMIT = 30.0f;         // 制限時間（秒）
 
 	constexpr float TIMER_GAUGE_WIDTH = 550.0f;   // タイマーゲージ画像の横幅
 	constexpr float TIMER_GAUGE_HEIGHT = 64.0f;   // タイマーゲージ画像の高さ

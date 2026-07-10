@@ -1,3 +1,4 @@
+/*
 Texture2D SceneTexture : register(t0);
 SamplerState Sampler : register(s0);
 
@@ -23,3 +24,4 @@ float4 PS(VS_OUT input) : SV_TARGET
 
     return SceneTexture.Sample(Sampler, uv);
 }
+*/

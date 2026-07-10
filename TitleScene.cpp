@@ -16,9 +16,11 @@ namespace
 	constexpr float CAMERA_MOVE_LERP = 0.05f;//カメラの補間率
 	constexpr float CAMERA_ROTATE_RATE= 0.03f;//回転の補間率
 	constexpr float CAMERA_LOOK_DISTANCE = 10.0f;//カメラの注視点までの距離
+	constexpr float PLAYER_INVISIBLE_DISTANCE = 0.3f;//プレイヤーが移りこまないよう透明にする距離
 	constexpr float SCENE_CHANGE_DISTANCE = 0.1f;//シーン切り替えを行う距離の閾値
 	constexpr float ROTATE_SPEED = 0.5f;  // 1フレームに何度回るか
 	constexpr float TARGET_ANGLE = 90.0f; // 真後ろ
+
 }
 
 
@@ -101,6 +103,11 @@ void TitleScene::Update()
 		//距離の計算
 		XMVECTOR vDiff = vGoalPos - vCurrentPos;
 		float dist = XMVectorGetX(XMVector3Length(vDiff));
+
+		if (dist < PLAYER_INVISIBLE_DISTANCE)
+		{
+			FindObject("DummyPlayer")->Invisible();//ダミープレイヤーを透明にする
+		}
 
 		//一定以上近づいたらシーンチェンジ
 		if (dist < SCENE_CHANGE_DISTANCE)
