@@ -6,6 +6,7 @@
 class RenderTexture;
 class PaintObject;
 class FPSgun;
+class Controller;
 
 class Player:public GameObject
 {
@@ -37,6 +38,7 @@ private:
 
 	FPSCamera* fpsCamera;//fps視点にするためのカメラ
 	FPSgun* fpsGun;//FPS視点でひょうじする武器
+	Controller* controller;//プレイヤーの操作用クラス
 
 	float cameraSensitivity_;//カメラにわたす用の感度
 
@@ -45,8 +47,6 @@ private:
 	//クロスヘア用の画面中央座標
 	float centerX_;
 	float centerY_;
-
-	int gunSoundID_;
 
 	bool isPlay_;//プレイ中かのフラグ
 

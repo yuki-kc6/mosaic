@@ -1,7 +1,7 @@
 #pragma once
-#include "PaintObject.h"
+#include "Engine/GameObject.h"
 
-class Controller : public PaintObject
+class Controller : public GameObject
 {
 
 public:
@@ -22,10 +22,11 @@ public:
 
     //開放
     void Release() override;
-private:
-    bool MoveForward();
-    bool MoveBack();
 
-    float moveSpeed_;
+    //プレイヤーが進む方向を返す
+    XMFLOAT2 GetMoveInput();
+
+private:
+    
 
 };

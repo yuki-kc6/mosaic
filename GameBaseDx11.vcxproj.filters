@@ -114,6 +114,7 @@
     <ClCompile Include="DummyPlayer.cpp" />
     <ClCompile Include="GrayOut.cpp" />
     <ClCompile Include="ClearEffect.cpp" />
+    <ClCompile Include="Controller.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -204,6 +205,7 @@
     <ClInclude Include="DummyPlayer.h" />
     <ClInclude Include="GrayOut.h" />
     <ClInclude Include="ClearEffect.h" />
+    <ClInclude Include="Controller.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

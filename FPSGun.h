@@ -30,6 +30,7 @@ private:
 	XMFLOAT3 GetMazzlePosition();//銃口の位置を取得する関数
 	int hEffect_;//エフェクトのハンドル
 	int hModel_;//モデルのハンドル
+    int hSound_;//銃声のハンドル
 	EmitterData effectData_;//エフェクトのデータ
 }; 
 

@@ -127,6 +127,7 @@
   <ItemGroup>
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="ClearEffect.cpp" />
+    <ClCompile Include="Controller.cpp" />
     <ClCompile Include="DummyPlayer.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GrayOut.cpp" />
@@ -171,6 +172,7 @@
   <ItemGroup>
     <ClInclude Include="Building.h" />
     <ClInclude Include="ClearEffect.h" />
+    <ClInclude Include="Controller.h" />
     <ClInclude Include="DummyPlayer.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GrayOut.h" />

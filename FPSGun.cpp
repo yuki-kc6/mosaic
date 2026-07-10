@@ -1,6 +1,7 @@
 #include "FPSGun.h"
 #include "Engine/Model.h"
 #include "Engine/Camera.h"
+#include "Engine/Audio.h"
 
 namespace
 {
@@ -19,7 +20,7 @@ namespace
 }
 
 FPSgun::FPSgun(GameObject* parent)
-	:GameObject(parent, "FPSgun"),hModel_(-1),hEffect_(-1)
+	:GameObject(parent, "FPSgun"),hModel_(-1),hEffect_(-1),hSound_(-1)
 {
 
 }
@@ -31,6 +32,7 @@ FPSgun::~FPSgun()
 void FPSgun::Initialize()
 {
 	hModel_ = Model::Load("Models/gun.fbx");
+   //hSound_ = Audio::Load("", false);
 	SetScale(XMFLOAT3(GUN_SCALE,GUN_SCALE,GUN_SCALE));
 
 	transform_.pParent_ = nullptr;//親の影響を受けないようにする
@@ -94,6 +96,8 @@ void FPSgun::BangEffect()
         VFX::End(hEffect_);
     }
 	effectData_.position = GetMazzlePosition();// 銃口の位置をエフェクトの位置に設定
+
+    //Audio::Play(hSound_);//音も鳴らす
 	hEffect_ = VFX::Start(effectData_);// エフェクトを開始
 }
 

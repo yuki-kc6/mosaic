@@ -7,7 +7,7 @@
 #include "DummyPlayer.h"
 #include "Engine/Camera.h"
 #include "Ground.h"
-#include "Engine/Image.h"
+#include "Engine/Audio.h"
 
 namespace
 {
@@ -24,7 +24,7 @@ namespace
 
 //コンストラクタ
 TitleScene::TitleScene(GameObject* parent)
-	: GameObject(parent, "TitleScene"), currentAngleY_(0.0f),hTitlePic_(-1),cameraCurrentPos_(0,0,0),cameraGoalPos_(0,0,0),cameraCurrentTarget_(0,0,0),isStart_(false)
+	: GameObject(parent, "TitleScene"), currentAngleY_(0.0f),cameraCurrentPos_(0,0,0),cameraGoalPos_(0,0,0),cameraCurrentTarget_(0,0,0),isStart_(false),hTitleBGM_(-1)
 {
 
 }
@@ -44,7 +44,10 @@ void TitleScene::Initialize()
 
 
 	isStart_ = false;
-
+	//hTitleBGM_=Audio::Load("",true);//タイトル画面BGMを流す
+	// assert(hTitleBGM_ >= 0);
+	//Audio::Play(hTitleBGM_);
+	
 	XMFLOAT3 dummyPlayerPos = FindObject("DummyPlayer")->GetPosition();//ダミープレイヤーの位置を取得
 
 	//カメラの初期化
@@ -102,6 +105,7 @@ void TitleScene::Update()
 		//一定以上近づいたらシーンチェンジ
 		if (dist < SCENE_CHANGE_DISTANCE)
 		{
+			//Audio::Stop(hTitleBGM_);//BGMを止める
 			SceneManager* sm = (SceneManager*)FindObject("SceneManager");
 			sm->ChangeScene(SCENE_ID_PLAY);
 		}

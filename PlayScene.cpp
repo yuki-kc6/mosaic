@@ -31,7 +31,7 @@ namespace
 //コンストラクタ
 PlayScene::PlayScene(GameObject * parent)
 	: GameObject(parent, "PlayScene"),isEndCameraStarted_(false), isGameOver_(false),isMissionClear_(false),endFrame_(0),titleChangeFrame_(0)
-	,endCameraPos_(0,0,0),endCameraTarget_(0,0,0)
+	,endCameraPos_(0,0,0),endCameraTarget_(0,0,0),hPlayBGM_(-1),hClearFanfarel_(-1),hTimeOverSound_(-1)
 {
 }
 
@@ -53,7 +53,13 @@ void PlayScene::Initialize()
 
 	this->PushSensitive();
 
-	
+	//サウンドのロード
+	//hPlayBGM_ = Audio::Load("", true);
+	//hClearFanfarel_= Audio::Load("", false);
+	//hTimeOverSound_= Audio::Load("", false);
+
+	//BGＭを流す
+	//Audio::Play(hPlayBGM_);
 }
 
 //更新
@@ -85,7 +91,6 @@ void PlayScene::Draw()
 void PlayScene::Release()
 {
 	MosaicPrinter::Release();
-	Audio::Release();
 }
 
 void PlayScene::PushSensitive()
@@ -132,9 +137,30 @@ bool PlayScene::CheckTimeOver()
 
 void PlayScene::StartEndCamera()
 {
+	//BGMを止める
+	Audio::Stop(hPlayBGM_);
+
 	//結果を入れる
-	isGameOver_ = CheckTimeOver();
 	isMissionClear_ = CheckMissionClear();
+	isGameOver_ = CheckTimeOver();
+
+	//両方trueになっていた場合はクリアを優先
+	if (isGameOver_ && isMissionClear_)
+	{
+		isMissionClear_ = true;
+		isGameOver_ = false;
+	}
+
+	//合わせたサウンドを鳴らす
+	if (isMissionClear_)
+	{
+		//Audio::Play(hClearFanfarel_);
+	}
+	else if (isGameOver_)
+	{
+		//Audio::Play(hTimeOverSound_);
+	}
+
 
 	//各種オブジェクトを終了画面仕様に更新
 

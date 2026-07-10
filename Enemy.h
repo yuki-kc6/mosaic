@@ -11,6 +11,7 @@ public:
 	void Draw() override;
 	void Release() override;
 private:
-	bool isUpdatePainted = false;
+	int hSound_;
+	bool isPainted_;//塗られたかの確認用フラグ
 };
 

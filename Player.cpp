@@ -10,6 +10,7 @@
 #include "Engine/Image.h"
 #include "Engine/Audio.h"
 #include "FPSGun.h"
+#include "Controller.h"
 
 namespace
 {
@@ -25,7 +26,8 @@ namespace
 
 //コンストラクタ
 Player::Player(GameObject* parent)
-    :GameObject(parent, "Player"), moveSpeed_(0),hCrossHair_(-1),cameraSensitivity_(0),centerX_(0),centerY_(0),gunSoundID_(0),isPlay_(false)
+    :GameObject(parent, "Player"), moveSpeed_(0),hCrossHair_(-1),cameraSensitivity_(0),centerX_(0),centerY_(0)
+    ,isPlay_(false),fpsCamera(nullptr),fpsGun(nullptr),controller(nullptr)
 {
 
 }
@@ -33,7 +35,6 @@ Player::Player(GameObject* parent)
 //デストラクタ
 Player::~Player()
 {
-    //Image::Release(hCrossHair_);
     ShowCursor(TRUE);
 }
 
@@ -58,25 +59,25 @@ void Player::Initialize()
     //FPS視点用
     Instantiate<FPSCamera>(this);
     Instantiate<FPSgun>(this);
+    Instantiate<Controller>(this);
 
     //コライダーの追加
     SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), PLAYER_COLIDER_SIZE);
     AddCollider(collision);
 
-	//gunSoundID = Audio::Load("gun.wav");
+    //カメラ
+    fpsCamera = (FPSCamera*)FindChildObject("FPSCamera");
 
+    //銃
+    fpsGun = (FPSgun*)FindChildObject("FPSgun");
+
+    //コントローラー
+    controller = (Controller*)FindObject("Controller");
 }
 
 //更新
 void Player::Update()
 {
-    //カメラ
-	fpsCamera = (FPSCamera*)FindChildObject("FPSCamera");
-
-    //銃
-    fpsGun= (FPSgun*)FindChildObject("FPSgun");
-
- 
     if (isPlay_) {
         //プレイヤーの移動
         {
@@ -88,26 +89,12 @@ void Player::Update()
             vMoveForward = XMVector3TransformNormal(vMoveForward, mRotate);
             vMoveRight = XMVector3TransformNormal(vMoveRight, mRotate);
 
-            //WASD移動
-            if (Input::IsKey(DIK_W))
-            {
-                vPos += vMoveForward * moveSpeed_;
-            }
-            if (Input::IsKey(DIK_S))
-            {
-                vPos -= vMoveForward * moveSpeed_;
-            }
-            if (Input::IsKey(DIK_D))
-            {
-                vPos += vMoveRight * moveSpeed_;
-            }
-            if (Input::IsKey(DIK_A))
-            {
-                vPos -= vMoveRight * moveSpeed_;
-            }
+            XMFLOAT2 move = controller->GetMoveInput();
+
+            vPos += vMoveForward * move.y * moveSpeed_;
+            vPos += vMoveRight * move.x * moveSpeed_;
             XMStoreFloat3(&transform_.position_, vPos);
         }
-
 
         //レイキャストを飛ばす方向の計算
         XMVECTOR ganTarget;
@@ -126,16 +113,8 @@ void Player::Update()
         if (Input::IsMouseButton(0))
         {
             fpsGun->BangEffect();//エフェクトを出す
-            if (this->RayCastToPaintObjects(gan))
-            {
-
-                //Audio::Stop(gunSoundID);
-                //Audio::Play(gunSoundHit);
-            }
-            else
-            {
-                //Audio::Play(gunSoundMiss);
-            }
+            this->RayCastToPaintObjects(gan);
+            
         }
 
         this->OnGround();

@@ -36,7 +36,9 @@ private:
 	//ゲーム終了時のカメラの更新
 	void UpdateEndCamera();
 
-
+	int hPlayBGM_;//BGM用ハンドル
+	int hClearFanfarel_;//クリア時サウンド用ハンドル
+	int hTimeOverSound_;//タイムオーバー時サウンド用ハンドル
 
 	XMFLOAT3 endCameraPos_;//終了時のカメラの位置座標
 	XMFLOAT3 endCameraTarget_;//終了時のカメラのターゲット座標
