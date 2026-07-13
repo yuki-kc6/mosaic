@@ -10,8 +10,10 @@ public:
     void Update()override;
     void Draw()override;
     void Release()override;
+    void ButtonClick(XMFLOAT3 mousePos);
 private:
     int hPic_;//PushtoStart画像用ハンドル
     int hTitle_;//タイトル画像用ハンドル
+    int hEndButton_;//終了ボタン用ハンドル
 };
 

@@ -57,7 +57,6 @@ void TitleScene::Initialize()
 	Camera::SetTarget(dummyPlayerPos);
 	cameraCurrentPos_ = Camera::GetPosition();
 
-
 	cameraGoalPos_ = {dummyPlayerPos.x,CAMERA_TARGET_HEIGHT,dummyPlayerPos.z};
 }
 
@@ -66,6 +65,12 @@ void TitleScene::Update()
 {
 	if (!isStart_) 
 	{
+		if (Input::IsMouseButtonDown(0))
+		{
+			TitleHeader* header = (TitleHeader*)FindObject("TitleHeader");
+			header->ButtonClick(Input::GetMousePosition());
+		}
+
 
 		//最初にスペースが押されたら
 		if (Input::IsKeyDown(DIK_SPACE))
@@ -123,11 +128,9 @@ void TitleScene::Update()
 void TitleScene::Draw()
 {
 
-
 }
 
 //開放
 void TitleScene::Release()
 {
-
 }

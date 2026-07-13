@@ -164,6 +164,14 @@ namespace Input
 		return result;
 	}
 
+	XMFLOAT2 GetMousePosition2D()
+	{
+		float mouseX = mousePos_.x - 1920.0f * 0.5f;
+		float mouseY = 1080.0f * 0.5f - mousePos_.y;
+		XMFLOAT2 result = XMFLOAT2(mouseX, mouseY);
+		return result;
+	}
+
 	//マウスカーソルの位置をセット
 	void SetMousePosition(int x, int y)
 	{

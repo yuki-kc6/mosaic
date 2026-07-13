@@ -62,6 +62,9 @@ namespace Input
 	//戻値：マウスカーソルの位置
 	XMFLOAT3 GetMousePosition();
 
+	//画面中央を0と見たマウスカーソルの取得
+	XMFLOAT2 GetMousePosition2D();
+
 	//マウスカーソルの位置をセット
 	//引数：マウスカーソルの位置
 	void SetMousePosition(int x, int y);
