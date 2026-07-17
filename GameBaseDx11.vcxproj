@@ -130,7 +130,7 @@
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="DummyPlayer.cpp" />
     <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="GrayOut.cpp" />
+    <ClCompile Include="TimeOverEffect.cpp" />
     <ClCompile Include="NPCManager.cpp" />
     <ClCompile Include="Engine\Audio.cpp" />
     <ClCompile Include="Engine\BillBoard.cpp" />
@@ -168,7 +168,6 @@
     <ClCompile Include="TitleHeader.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="TownNPC.cpp" />
-    <ClCompile Include="Transition.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Building.h" />
@@ -176,7 +175,7 @@
     <ClInclude Include="Controller.h" />
     <ClInclude Include="DummyPlayer.h" />
     <ClInclude Include="Enemy.h" />
-    <ClInclude Include="GrayOut.h" />
+    <ClInclude Include="TimeOverEffect.h" />
     <ClInclude Include="NPCManager.h" />
     <ClInclude Include="Engine\Audio.h" />
     <ClInclude Include="Engine\BillBoard.h" />
@@ -214,7 +213,6 @@
     <ClInclude Include="TitleHeader.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="TownNPC.h" />
-    <ClInclude Include="Transition.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\BillBoard.hlsl">

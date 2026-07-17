@@ -1,5 +1,6 @@
 #include "ClearEffect.h"
 #include "Engine/Camera.h"
+#include "Engine/Image.h"
 
 namespace
 {
@@ -11,10 +12,13 @@ namespace
 	constexpr float EFFECT_NUMBER = 30.0f;//エフェクトの数
 	constexpr float EFFECT_DELAY = 1.0f;//エフェクトの遅延
 	constexpr float EFFECT_SIZE = 2.0f;//エフェクトのサイズ
+
+    constexpr int CLEAR_ALPHA_MAX = 255;//クリア画像の透明度の最大値
+    constexpr int CLEAR_ALPHA_SPEED = 5;//クリア画像の透明度が足される数
 }
 
 ClearEffect::ClearEffect(GameObject* parent)
-	: GameObject(parent, "ClearEffect"), hEffect_(-1), isEffectActive(false)
+	: GameObject(parent, "ClearEffect"), hEffect_(-1), isEffectActive(false),hClearPic_(-1),isClear(false),picAlpha_(0)
 {
 }
 
@@ -37,11 +41,17 @@ void ClearEffect::Initialize()
     effectData_.delay = EFFECT_DELAY;//エフェクトの遅延
     effectData_.size = XMFLOAT2(EFFECT_SIZE, EFFECT_SIZE);
     effectData_.isBillBoard = true;
+
+    hClearPic_ = Image::Load("CLEAR.png");
+    assert(hClearPic_ >= 0);
 }
 
 void ClearEffect::Update()
 {
     if (isEffectActive) {
+
+        isClear = true;
+
 		// カメラの位置とターゲットを取得
         XMFLOAT3 camPos = Camera::GetPosition();
         XMFLOAT3 camTarget = Camera::GetTarget();
@@ -61,12 +71,26 @@ void ClearEffect::Update()
 
         isEffectActive = false;
     }
+    if (isClear)
+    {
+        if (picAlpha_ < CLEAR_ALPHA_MAX)
+        {
+            picAlpha_ += CLEAR_ALPHA_SPEED;
+        }
+        else
+        {
+            picAlpha_ = CLEAR_ALPHA_MAX;
+        }
+    }
 }
 
 void ClearEffect::Draw()
 {
-	
-
+    Transform clear;
+    clear.position_ = { 0,0,0 };
+    Image::SetTransform(hClearPic_, clear);
+    Image::SetAlpha(hClearPic_, picAlpha_);
+    Image::Draw(hClearPic_);
 }
 
 void ClearEffect::Release()

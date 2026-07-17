@@ -65,10 +65,11 @@ void TitleScene::Update()
 {
 	if (!isStart_) 
 	{
+		//終了ボタン押したら終わる
 		if (Input::IsMouseButtonDown(0))
 		{
 			TitleHeader* header = (TitleHeader*)FindObject("TitleHeader");
-			header->ButtonClick(Input::GetMousePosition());
+			header->ButtonClick(Input::GetMousePosition2D());
 		}
 
 

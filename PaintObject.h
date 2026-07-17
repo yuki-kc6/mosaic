@@ -54,6 +54,10 @@ public:
 	//size:ブラシの半径
 	void SetBrushSize(float size) { brushSize_= size; }
 
+	//全て塗られた時のエフェクト
+	//クリア判定がある子オブジェクトのUpdateで呼び出す
+	void AllPaintEffect();
+
 private:
 	void PaintEffect(XMFLOAT3 hitPos,XMFLOAT3 normal);
 	RenderTexture* mosaicRT;//オブジェクトごとにRenderTextureを作成

@@ -36,6 +36,9 @@ private:
 	//ゲーム終了時のカメラの更新
 	void UpdateEndCamera();
 
+	void MissionClearStart();
+	void TimeOverStart();
+
 	int hPlayBGM_;//BGM用ハンドル
 	int hClearFanfarel_;//クリア時サウンド用ハンドル
 	int hTimeOverSound_;//タイムオーバー時サウンド用ハンドル

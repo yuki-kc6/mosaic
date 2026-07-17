@@ -11,7 +11,7 @@
 #include "NPCManager.h"
 #include "Engine/Audio.h"
 #include "Engine/Camera.h"
-#include "GrayOut.h"
+#include "TimeOverEffect.h"
 #include "ClearEffect.h"
 
 
@@ -48,8 +48,8 @@ void PlayScene::Initialize()
 	Instantiate<DummyPlayer>(this);
 	Instantiate<StageTimer>(this);
 	Instantiate<Player>(this);
-	Instantiate<GrayOut>(this);
-	Instantiate<ClearEffect>(this);
+	Instantiate<TimeOverEffect>(this)->Invisible();
+	Instantiate<ClearEffect>(this)->Invisible();
 
 	this->PushSensitive();
 
@@ -151,13 +151,15 @@ void PlayScene::StartEndCamera()
 		isGameOver_ = false;
 	}
 
-	//合わせたサウンドを鳴らす
+	//合わせたサウンドを鳴らす&演出を出す
 	if (isMissionClear_)
 	{
+		MissionClearStart();
 		//Audio::Play(hClearFanfarel_);
 	}
 	else if (isGameOver_)
 	{
+		TimeOverStart();
 		//Audio::Play(hTimeOverSound_);
 	}
 
@@ -193,18 +195,6 @@ void PlayScene::StartEndCamera()
 	if (timer) {
 		timer->SetTimer(false);//タイマーを止める
 		timer->Invisible();//タイマーを非表示
-	}
-
-	
-	GrayOut* grayOut = (GrayOut*)FindObject("GrayOut");
-	if (grayOut) {
-		grayOut->SetTimeOver(isGameOver_);//ゲームオーバーならグレーアウトさせる
-	}
-
-	
-	ClearEffect* clearEffect = (ClearEffect*)FindObject("ClearEffect");
-	if(clearEffect) {
-		clearEffect->SetEffectActive(isMissionClear_);//ミッションクリアならクリアエフェクトを出す
 	}
 
 	//プレイヤーの向きを取得
@@ -271,4 +261,24 @@ void PlayScene::UpdateEndCamera()
 		sm->ChangeScene(SCENE_ID_TITLE);
 	}
 
+}
+
+void PlayScene::MissionClearStart()
+{
+	//クリア時の演出
+	ClearEffect* clearEffect = (ClearEffect*)FindObject("ClearEffect");
+	if (clearEffect) {
+		clearEffect->Visible();
+		clearEffect->SetEffectActive(isMissionClear_);//ミッションクリアならクリアエフェクトを出す
+	}
+}
+
+void PlayScene::TimeOverStart()
+{
+	//タイムオーバー時の演出
+	TimeOverEffect* timeoverEffect = (TimeOverEffect*)FindObject("TimeOverEffect");
+	if (timeoverEffect) {
+		timeoverEffect->Visible();
+		timeoverEffect->SetTimeOver(isGameOver_);//ゲームオーバーならグレーアウトさせる
+	}
 }

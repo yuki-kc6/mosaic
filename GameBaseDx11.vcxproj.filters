@@ -112,10 +112,9 @@
     <ClCompile Include="NPCManager.cpp" />
     <ClCompile Include="TownNPC.cpp" />
     <ClCompile Include="DummyPlayer.cpp" />
-    <ClCompile Include="GrayOut.cpp" />
+    <ClCompile Include="TimeOverEffect.cpp" />
     <ClCompile Include="ClearEffect.cpp" />
     <ClCompile Include="Controller.cpp" />
-    <ClCompile Include="Transition.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -204,10 +203,9 @@
     <ClInclude Include="NPCManager.h" />
     <ClInclude Include="TownNPC.h" />
     <ClInclude Include="DummyPlayer.h" />
-    <ClInclude Include="GrayOut.h" />
+    <ClInclude Include="TimeOverEffect.h" />
     <ClInclude Include="ClearEffect.h" />
     <ClInclude Include="Controller.h" />
-    <ClInclude Include="Transition.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

@@ -22,8 +22,11 @@ public:
     //エフェクトの終了
 	void EffectEnd();
 private:
+    int hClearPic_;//クリアの文字用のハンドル
 	EmitterData effectData_;//エフェクトのデータ
 	int hEffect_;//エフェクトのハンドル
 	bool isEffectActive;//エフェクトが有効かどうか
+    bool isClear;//クリアしたかどうか
+    int picAlpha_;//クリアの画像のアルファ値
 
 };

@@ -2,15 +2,15 @@
 #include "Engine/GameObject.h"
 
 
-class GrayOut : public GameObject
+class TimeOverEffect : public GameObject
 {
 
 public:
     //コンストラクタ
-    GrayOut(GameObject* parent);
+    TimeOverEffect(GameObject* parent);
 
     //デストラクタ
-    ~GrayOut();
+    ~TimeOverEffect();
 
     //初期化
     void Initialize() override;
@@ -28,8 +28,9 @@ public:
 	void SetTimeOver(bool state) { isTimeOver_ = state; }
 
 private:
+    int hTimeOver_;//タイムオーバー画像用ハンドル
 	int hGrayPic_;//グレーアウト用の画像のハンドル
 	int grayAlpha_;//グレーアウト用の画像のアルファ値
 	bool isTimeOver_;//時間切れかどうかのフラグ
-
+    int timeOverAlpha_;//タイムオーバー画像のアルファ値
 };

@@ -16,6 +16,7 @@ namespace
 	constexpr int GRID_DIVISION = 4;//モザイクの分割数
 	constexpr float COMPLETE_SCORE = 0.7f;//塗り終わったと判定するスコア
 
+	//ペイントとクリア時に出るエフェクトの定数
 	constexpr float PAINT_EFFECT_DIRECTION_RANDOM = 60.0f;// 法線方向に飛ぶが、少し散らばるようにする
 	constexpr float PAINT_EFFECT_SPEED = 0.5f;// 遅めに
 	constexpr float PAINT_EFFECT_SPEED_RANDOM = 0.5f;// 速度をバラバラに
@@ -28,6 +29,13 @@ namespace
 	constexpr int PAINT_EFFECT_NUMBER = 10;// 一度に10粒
 	constexpr int PAINT_EFFECT_DELAY = 0;// 1回だけ発生
 	constexpr XMFLOAT4 PAINT_EFFECT_DELTA_COLOR = { 0,0,0,-0.05f };// 徐々に透明に
+
+	//クリア時のみのエフェクトの定数
+	constexpr float CLEAR_EFFECT_POSITION_Y_OFFSET = 5.0f;//Y座標のオフセット
+	constexpr XMFLOAT3 CLEAR_EFFECT_DIRECTION_RANDOM = { 100.0f,100.0f,100.0f };//散らばるようにする
+	constexpr float CLEAR_EFFECT_SIZE = 6.0f;//大きめ
+	constexpr float CLEAR_EFFECT_NUMBER = 30;//一度に30個
+
 }
 
 
@@ -123,6 +131,41 @@ void PaintObject::CountPaintedPixels(XMFLOAT2 uv,float brush)
 			}
 		}
 	}
+}
+
+void PaintObject::AllPaintEffect()
+{
+	// エフェクトのデータを設定
+	EmitterData data;
+	data.textureFileName = "Star.png";
+	data.position = XMFLOAT3{//位置はtransform.positionに高さを加える
+		transform_.position_.x,
+		(float)(transform_.position_.y+CLEAR_EFFECT_POSITION_Y_OFFSET),
+		transform_.position_.z
+	};
+
+	data.directionRnd = CLEAR_EFFECT_DIRECTION_RANDOM; //かなり広めに散らばる
+
+	//ペイントエフェクトと同じ速度で
+	data.speed = PAINT_EFFECT_SPEED; 
+	data.speedRnd = PAINT_EFFECT_SPEED_RANDOM; //速度をある程度バラバラに
+	data.accel = PAINT_EFFECT_ACCEL;      // 徐々に減速
+	data.gravity = PAINT_EFFECT_GRAVITY;   // 重力で落ちる
+
+
+	data.size = XMFLOAT2(CLEAR_EFFECT_SIZE, CLEAR_EFFECT_SIZE); //ペイントエフェクトと違い大きく表示する
+
+	//ペイントエフェクトと同じ
+	data.sizeRnd = XMFLOAT2(PAINT_EFFECT_SIZE_RANDOM, PAINT_EFFECT_SIZE_RANDOM);
+	data.scale = XMFLOAT2(PAINT_EFFECT_SCALE, PAINT_EFFECT_SCALE); // 徐々に小さく
+
+	data.lifeTime = PAINT_EFFECT_LIFETIME;
+	data.number = CLEAR_EFFECT_NUMBER;       // 一度に10粒
+	data.delay = PAINT_EFFECT_DELAY;         // 1回だけ発生
+
+	data.deltaColor = PAINT_EFFECT_DELTA_COLOR; // 徐々に透明に
+
+	VFX::Start(data);
 }
 
 void PaintObject::PaintEffect(XMFLOAT3 hitPos,XMFLOAT3 normal)

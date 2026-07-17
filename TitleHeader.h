@@ -10,7 +10,7 @@ public:
     void Update()override;
     void Draw()override;
     void Release()override;
-    void ButtonClick(XMFLOAT3 mousePos);
+    void ButtonClick(XMFLOAT2 mousePos);//終了ボタン用クリック判定
 private:
     int hPic_;//PushtoStart画像用ハンドル
     int hTitle_;//タイトル画像用ハンドル

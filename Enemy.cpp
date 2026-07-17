@@ -26,6 +26,7 @@ void Enemy::Update()
 		if (!isPainted_)
 		{
 			//Audio::Play(hSound_);
+			AllPaintEffect();
 			isPainted_ = true;
 		}
 	}

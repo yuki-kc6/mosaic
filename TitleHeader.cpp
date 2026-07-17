@@ -1,5 +1,10 @@
-#include "TitleHeader.h"
+ #include "TitleHeader.h"
 #include "Engine/Image.h"
+#include "Engine/Camera.h"
+#include "Engine/Direct3D.h"
+
+#include <sstream>
+#include <Windows.h>
 
 namespace
 {
@@ -10,7 +15,7 @@ namespace
 	constexpr XMFLOAT3 PUSH_START_SCALE = { 0.2f, 0.2f, 1.0f };
 
 	constexpr XMFLOAT3 END_BUTTON_POSITION = { 1500.0f, -850.0f, 0.0f };
-	constexpr XMFLOAT3 END_BUTTON_SCALE = { 0.2f, 0.2f, 1.0f };
+	constexpr XMFLOAT3 END_BUTTON_SCALE = { 0.2f, 0.2f, 0.0f };
 	constexpr float END_BUTTON_IMAGE_WIDTH = 1024;
 	constexpr float END_BUTTON_IMAGE_HEIGHT = 512;
 }
@@ -59,8 +64,9 @@ void TitleHeader::Draw()
 	Transform button;
 	button.position_ = END_BUTTON_POSITION;
 	button.scale_ = END_BUTTON_SCALE;
+	button.Calclation();
 	Image::SetTransform(hEndButton_, button);
-	//Image::Draw(hEndButton_);
+	Image::Draw(hEndButton_);
 	
 	
 }
@@ -69,24 +75,38 @@ void TitleHeader::Release()
 {
 }
 
-void TitleHeader::ButtonClick(XMFLOAT3 mousePos)
+void TitleHeader::ButtonClick(XMFLOAT2 mousePos)
 {
+	//終了ボタンをクリックしたときの当たり判定
+
+	//ボタンのポジション
+	XMFLOAT3 pos = END_BUTTON_POSITION;
+
+	//横と縦を計算
 	float width = END_BUTTON_IMAGE_WIDTH * END_BUTTON_SCALE.x;
 	float height = END_BUTTON_IMAGE_HEIGHT * END_BUTTON_SCALE.y;
 
-	float left = END_BUTTON_POSITION.x - width * 0.5f;
-	float right = END_BUTTON_POSITION.x + width * 0.5f;
-	float top = END_BUTTON_POSITION.y + height * 0.5f;
-	float bottom = END_BUTTON_POSITION.y - height * 0.5f;
+	float left = pos.x - width * 0.5f;
+	float right = pos.x + width * 0.5f;
 
+	float top = pos.y + height * 0.5f;
+	float bottom = pos.y - height * 0.5f;
+
+	//マウス座標をもらってくる
 	POINT mouse;
 	mouse.x = mousePos.x;
-	mouse.y = -mousePos.y;
+	mouse.y = mousePos.y;
 
-	if (mouse.x >= left &&
-		mouse.x <= right &&
-		mouse.y >= top &&
-		mouse.y <= bottom)
+	//二倍で	Transformと合わせる
+	float mx = mousePos.x *2;
+	float my = mousePos.y * 2;
+
+
+	//判定で終了
+	if (mx >= left &&
+		mx <= right &&
+		my <= top &&
+		my >= bottom)
 	{
 		PostQuitMessage(0);
 	}
