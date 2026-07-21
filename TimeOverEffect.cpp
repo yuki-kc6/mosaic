@@ -13,7 +13,7 @@ namespace
 
 
 TimeOverEffect::TimeOverEffect(GameObject* parent)
-	:GameObject(parent, "TimeOverEffect"), isTimeOver_(false), hGrayPic_(-1), grayAlpha_(0),hTimeOver_(-1)
+	:GameObject(parent, "TimeOverEffect"), isTimeOver_(false), hGrayPic_(-1), grayAlpha_(0),hTimeOver_(-1),timeOverAlpha_(0)
 {
 }
 
@@ -23,7 +23,7 @@ TimeOverEffect::~TimeOverEffect()
 
 void TimeOverEffect::Initialize()
 {
-	hGrayPic_ = Image::Load("TimeOverEffect.png");
+	hGrayPic_ = Image::Load("GrayOut.png");
 	assert(hGrayPic_ >= 0);
 	hTimeOver_ = Image::Load("GameOver.png");
 	assert(hTimeOver_ >= 0);
