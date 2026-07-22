@@ -136,7 +136,7 @@ void PaintObject::CountPaintedPixels(XMFLOAT2 uv,float brush)
 void PaintObject::AllPaintEffect()
 {
 	// エフェクトのデータを設定
-	EmitterData data;
+	EmitterData data = {};
 	data.textureFileName = "Star.png";
 	data.position = XMFLOAT3{//位置はtransform.positionに高さを加える
 		transform_.position_.x,
