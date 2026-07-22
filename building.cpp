@@ -28,7 +28,7 @@ Building::~Building()
 void Building::Initialize()
 {
 
-    hModel_ = Model::Load("Models/building2.fbx");//モデル読み込み
+    hModel_ = Model::Load("Models/building.fbx");//モデル読み込み
     assert(hModel_ >= 0);
     
     //四角当たり判定の追加
