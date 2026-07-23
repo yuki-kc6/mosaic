@@ -171,7 +171,7 @@ void PaintObject::AllPaintEffect()
 void PaintObject::PaintEffect(XMFLOAT3 hitPos,XMFLOAT3 normal)
 {
 	// エフェクトのデータを設定
-	EmitterData data;
+	EmitterData data = {};
 	data.textureFileName = "cloudA.png";
 	data.position = hitPos;
 
