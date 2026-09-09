@@ -62,6 +62,9 @@ namespace Direct3D
 		scDesc.BufferDesc.RefreshRate.Numerator = 60;
 		scDesc.BufferDesc.RefreshRate.Denominator = 1;
 
+		scDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED; // モニター側のアスペクト比維持設定に委ねる
+		scDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+
 		//その他
 		scDesc.Windowed = FALSE;				//ウィンドウモードかフルスクリーンか
 		scDesc.OutputWindow = hWnd;			//ウィンドウハンドル

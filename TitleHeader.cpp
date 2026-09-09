@@ -83,8 +83,8 @@ void TitleHeader::ButtonClick(XMFLOAT2 mousePos)
 	XMFLOAT3 pos = END_BUTTON_POSITION;
 
 	//横と縦を計算
-	float width = END_BUTTON_IMAGE_WIDTH * END_BUTTON_SCALE.x;
-	float height = END_BUTTON_IMAGE_HEIGHT * END_BUTTON_SCALE.y;
+	float width = END_BUTTON_IMAGE_WIDTH * END_BUTTON_SCALE.x*2;
+	float height = END_BUTTON_IMAGE_HEIGHT * END_BUTTON_SCALE.y*2;
 
 	float left = pos.x - width * 0.5f;
 	float right = pos.x + width * 0.5f;
@@ -92,15 +92,9 @@ void TitleHeader::ButtonClick(XMFLOAT2 mousePos)
 	float top = pos.y + height * 0.5f;
 	float bottom = pos.y - height * 0.5f;
 
-	//マウス座標をもらってくる
-	POINT mouse;
-	mouse.x = mousePos.x;
-	mouse.y = mousePos.y;
-
 	//二倍で	Transformと合わせる
 	float mx = mousePos.x *2;
-	float my = mousePos.y * 2;
-
+	float my = mousePos.y *2;
 
 	//判定で終了
 	if (mx >= left &&
