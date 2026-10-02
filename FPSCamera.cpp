@@ -5,7 +5,7 @@
 
 namespace
 {
-	constexpr float CAMERA_SENSITIVITY = 0.2f;//カメラの感度
+	constexpr float CAMERA_SENSITIVITY = 0.1f;//カメラの感度
 	constexpr float CAMERA_MAX_PITCH = 80.0f;//カメラの最大ピッチ角度
 	constexpr float CAMERA_HEIGHT = 1.7f;//カメラの高さ
 }

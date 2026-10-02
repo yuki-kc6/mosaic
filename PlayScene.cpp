@@ -46,8 +46,8 @@ void PlayScene::Initialize()
 	Instantiate<StageManager>(this);
 	Instantiate<NPCManager>(this);
 	Instantiate<DummyPlayer>(this);
-	Instantiate<StageTimer>(this);
 	Instantiate<Player>(this);
+	Instantiate<StageTimer>(this);
 	Instantiate<TimeOverEffect>(this)->Invisible();
 	Instantiate<ClearEffect>(this)->Invisible();
 
@@ -83,7 +83,6 @@ void PlayScene::Update()
 //•`‰æ
 void PlayScene::Draw()
 {
-	
 
 }
 

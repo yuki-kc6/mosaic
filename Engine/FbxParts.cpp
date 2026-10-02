@@ -639,6 +639,12 @@ void FbxParts::RayCast(RayCastData * data)
 				data->dist = dist;
 				data->uv = hitUV;
 
+				XMVECTOR edge1 = XMLoadFloat3(&ver[1]) - XMLoadFloat3(&ver[0]);
+				XMVECTOR edge2 = XMLoadFloat3(&ver[2]) - XMLoadFloat3(&ver[0]);
+
+				XMVECTOR normal = XMVector3Normalize(XMVector3Cross(edge1, edge2));
+				
+				XMStoreFloat3(&data->normal, normal);
 
 				//std::memcpy(data->ver, &ver, sizeof(ver));
 				//std::memcpy(data->uv, &uv, sizeof(uv));

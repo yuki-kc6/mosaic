@@ -29,11 +29,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 //	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 //#endif
 
-	SetProcessDPIAware();
+	
 
-	srand((unsigned)time(NULL));
+	srand((unsigned int)time(NULL));
 	SetCurrentDirectory("Assets");
-
+	SetProcessDPIAware();
 	//初期化ファイル（setup.ini）から必要な情報を取得
 	//int screenWidth = GetPrivateProfileInt("SCREEN", "Width", 800, ".\\setup.ini");		//スクリーンの幅
 	//int screenHeight = GetPrivateProfileInt("SCREEN", "Height", 600, ".\\setup.ini");	//スクリーンの高さ
